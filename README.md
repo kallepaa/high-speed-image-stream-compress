@@ -1,4 +1,4 @@
-# Highspeed kameran kuvavirran pakkaaminen ajantaisesti ja häviöttämästi
+# Highspeed kameran kuvavirran pakkaaminen ajantasaisesti ja häviöttämästi
 
 * [Viikkoraportit](viikkoraportit.md)
 * [Määrittelydokumentti](maarittelydokumentti.md)
