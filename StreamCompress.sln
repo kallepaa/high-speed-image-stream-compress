@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamCompress", "StreamCompress\StreamCompress.csproj", "{313A3A3B-5B69-4977-B345-559CE9A3F820}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBench", "TestBench\TestBench.csproj", "{18E422F1-9C4A-45C0-85ED-6FB5A3E76630}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
