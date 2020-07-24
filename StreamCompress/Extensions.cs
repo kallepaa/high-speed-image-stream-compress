@@ -6,39 +6,6 @@ using System.Text;
 namespace StreamCompress {
 	public static class Extensions {
 
-		public static MacroBlock GrayAs16x16MacroBlocks(this ImageFrame image) {
-
-			var blocks = new byte[image.Image.Length - image.HeaderBytesLength];
-			var horizontalBlockCount = image.ImageWidthPx / 16;
-			var verticalBlockCount = image.ImageHeightPx / 16;
-
-			var blockCount = 0;
-			var pixelCount = 0;
-
-			//move "block cursor" from bottom to up
-			for (int v = 0; v < verticalBlockCount; v++) {
-
-				var rowStartPos = v * image.ImageWidthPx * 16 + image.HeaderBytesLength;
-
-				//moves "block cursor" from left to right
-				for (int h = 0; h < horizontalBlockCount; h++) {
-
-					var blockStartPos = h * 16 + rowStartPos;
-
-					//read one macro block to dest
-					for (int r = 0; r < 16; r++) {
-						var sourceOffSet = r * image.ImageWidthPx + blockStartPos;
-						Buffer.BlockCopy(image.Image, sourceOffSet, blocks, pixelCount, 16);
-						pixelCount += 16;
-					}
-
-					blockCount++;
-				}
-			}
-
-			return new MacroBlock(blocks);
-		}
-
 		public static ImageFrame AsGrayScale(this ImageFrame image) {
 
 			const int headerSize = 54;
