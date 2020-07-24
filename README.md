@@ -1,5 +1,4 @@
-# high-speed-image-stream-compress
-## Tiralabra - 2020 - Loppukesä
+# Highspeed kameran kuvavirran pakkaaminen ajantaisesti ja häviöttämästi
 
 * [Viikkoraportit](viikkoraportit.md)
 * [Määrittelydokumentti](maarittelydokumentti.md)
