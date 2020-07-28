@@ -1,40 +1,45 @@
 ﻿using System;
 
 namespace StreamCompress {
+
+	/// <summary>
+	/// Domain extensions for domain objects manipulation
+	/// </summary>
 	public static class Extensions {
 
-		public static ImageFrame AsGrayScale(this ImageFrame image, int colors = 256) {
+		public static ImageFrameGrayScale AsGrayScale(this ImageFrame image, int colors = 256) {
+
+			//--------- write gray scale image header -----------------
 
 			const int headerSize = ImageFrame.HEADER_BYTES;
 			const int colorTableSize = ImageFrame.HEADER_256_COLOR_TABLE_SIZE;
 			var headerAndColorTable = headerSize + colorTableSize;
 			var newImage = new byte[image.ImageWidthPx * image.ImageHeightPx + headerAndColorTable];
 
-			Buffer.BlockCopy(image.Image, 0, newImage, 0, 2);
+			//magic bits
+			image.Image.CopyBytesTo(0, newImage, 0, 2);
 
 			//file size
-			var fileSize = BitConverter.GetBytes((uint)newImage.Length);
-			Buffer.BlockCopy(fileSize, 0, newImage, 2, fileSize.Length);
+			((uint)(newImage.Length)).AsBytes().CopyBytesTo(newImage,2);
 
 			//pixel data offset 54 (old header) + 1024 (color table) = 1078
-			Buffer.SetByte(newImage, 10, 0x36);
-			Buffer.SetByte(newImage, 11, 0x04);
+			newImage[10] = 54;
+			newImage[11] = 4;
 
 			//header size
-			Buffer.SetByte(newImage, 14, 0x28);//40
+			newImage[14] = 40;
 
 			//image width and height
-			Buffer.BlockCopy(image.Image, 18, newImage, 18, 4);
-			Buffer.BlockCopy(image.Image, 22, newImage, 22, 4);
+			image.Image.CopyBytesTo(18, newImage, 18, 4);
+			image.Image.CopyBytesTo(22, newImage, 22, 4);
 
 			//planes
-			Buffer.BlockCopy(image.Image, 26, newImage, 26, 2);
+			image.Image.CopyBytesTo(26, newImage, 26, 2);
 
 			//bits per pixel
-			Buffer.SetByte(newImage, 28, 0x08);
+			newImage[28] = 8;
 
-			//color table
-			newImage.SetGrayScaleColorTable();
+			//--------- convert rgb pixels to gray scale
 
 			//linear conversion consts
 			const double redLinear = 0.2126;
@@ -62,7 +67,12 @@ namespace StreamCompress {
 				}
 			}
 
-			return new ImageFrame(newImage);
+			var ret = new ImageFrameGrayScale(newImage);
+
+			//color table
+			ret.SetColorTable();
+
+			return ret;
 		}
 
 		public static ImageFrame AsCroppedImage(this ImageFrame image, CropSetup cropSetup) {
@@ -85,10 +95,7 @@ namespace StreamCompress {
 
 			//copy header from source and ...
 			image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
-
-			//.. adjust header with new width and size
-			image.Image.SetSizeInfo(newImage.Length, newWidthPx, newHeightPx);
-
+	
 			//copy image bytes from source to new image
 			var leftCropBytes = (cropSetup.LeftPx * 3);
 			var imageWidthBytes = image.ImageWidthPx * 3;
@@ -102,11 +109,13 @@ namespace StreamCompress {
 				image.Image.CopyBytesTo(srcOffSet, newImage, destOffSet, newImageWidthBytes);
 			}
 
-			return new ImageFrame(newImage);
-
+			var ret = new ImageFrame(newImage);
+			//.. adjust header with new width and size
+			ret.SetSizeInfo((uint)newImage.Length, newWidthPx, newHeightPx);
+			return ret;
 		}
 
-		public static HuffmanImageFrame AsHuffmanEncoded(this ImageFrame image) {
+		public static HuffmanImageFrame AsHuffmanEncoded(this ImageFrameGrayScale image) {
 
 			if (image.BitsPerPixel != 8) {
 				throw new NotSupportedException("Only 8 bits per pixel images are supported");
@@ -217,7 +226,7 @@ namespace StreamCompress {
 			return ret;
 		}
 
-		public static ImageFrame AsImageFrame(this HuffmanImageFrame encodedImage) {
+		public static ImageFrameGrayScale AsImageFrame(this HuffmanImageFrame encodedImage) {
 
 			//---------- generate tree from color codes -----------------
 
@@ -279,9 +288,6 @@ namespace StreamCompress {
 				0,
 				encodedImage.OriginalImageHeaderLength);
 
-			//generate color table
-			imageData.SetGrayScaleColorTable();
-
 			//--------------- decode image -----------------------
 
 			var node = rootNode;
@@ -300,38 +306,45 @@ namespace StreamCompress {
 				}
 			}
 
-			return new ImageFrame(imageData);
+			var ret =  new ImageFrameGrayScale(imageData);
+			//generate color table
+			ret.SetColorTable();
+
+			return ret;
 		}
 
-		public static ImageFrame AsSize(this ImageFrame image, int widthPx, int heightPx) {
-			throw new NotImplementedException();
-			//if (image.BitsPerPixel != 8) {
-			//	throw new NotSupportedException("Only 8 bits per pixel images are supported");
-			//}
+		public static ImageFrameGrayScale AsPlanted(this ImageFrameGrayScale image, int plantWidthPx, int plantHeightPx) {
 
-			////copy header
-			//var newImage = new byte[image.HeaderBytesLength + widthPx * heightPx];
-			//image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
-
-
-
-			//return new ImageFrame(newImage);
-		}
-
-		public static void SetSizeInfo(this byte[] image, int length, int widthPx, int heightPx) {
-			((uint)(length)).AsBytes().CopyBytesTo(image, 2);
-			widthPx.AsBytes().CopyBytesTo(image, 18);
-			heightPx.AsBytes().CopyBytesTo(image, 22);
-		}
-
-		public static void SetGrayScaleColorTable(this byte[] image) {
-			//color table
-			for (int i = 0; i < 255; i++) {
-				var bytes = new byte[4] { (byte)i, (byte)i, (byte)i, 0 };
-				Buffer.BlockCopy(bytes, 0, image, i * 4 + ImageFrame.HEADER_BYTES, 4);
+			if (image.BitsPerPixel != 8) {
+				throw new NotSupportedException("Only 8 bits per pixel images are supported");
 			}
-		}
 
+			var newImage = new byte[image.HeaderBytesLength + plantWidthPx * plantHeightPx];
+
+			//copy header from source and ...
+			image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
+
+			var leftPx = plantWidthPx / 2 - image.ImageWidthPx / 2;
+			var bottomPx = (plantHeightPx / 2 - image.ImageHeightPx / 2) ;
+
+			//fill image into plant center
+			for (int ir = 0; ir < image.ImageHeightPx; ir++) {
+				var rowOffSet = ir * image.ImageWidthPx + image.HeaderBytesLength;
+				var newImageRowOffSet = (bottomPx + ir) * plantWidthPx + image.HeaderBytesLength + leftPx;
+				for (int ipx = 0; ipx < image.ImageWidthPx; ipx++) {
+					var pxIndex = rowOffSet + ipx;
+					var px = image.Image[pxIndex];
+					var newPxIndex = newImageRowOffSet + ipx;
+					newImage[newPxIndex] = px;
+				}
+			}
+
+			var ret = new ImageFrameGrayScale(newImage);
+			//.. adjust header with new width and size
+			ret.SetSizeInfo((uint)newImage.Length, plantWidthPx, plantHeightPx);
+
+			return ret;
+		}
 
 
 	}

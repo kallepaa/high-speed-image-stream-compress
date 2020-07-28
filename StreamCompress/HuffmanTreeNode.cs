@@ -1,7 +1,19 @@
 ﻿namespace StreamCompress {
+
+	/// <summary>
+	/// Presents one node in huffman tree
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public class HuffmanTreeNode<T> {
 
+		/// <summary>
+		/// Node left child
+		/// </summary>
 		public HuffmanTreeNode<T> LeftChild { get; internal set; }
+
+		/// <summary>
+		/// Node right child
+		/// </summary>
 		public HuffmanTreeNode<T> RightChild { get; internal set; }
 
 		/// <summary>
@@ -35,7 +47,6 @@
 				code = code >> 1;
 			}
 		}
-
 
 		/// <summary>
 		/// Is node or internal node
@@ -101,6 +112,10 @@
 			rightChild.SetParent(this, true);
 		}
 
+		/// <summary>
+		/// Sets child as child node to this node
+		/// </summary>
+		/// <param name="childNode"></param>
 		public void SetChild(HuffmanTreeNode<T> childNode) {
 			if (childNode.IsRightChild) {
 				RightChild = childNode;
@@ -109,6 +124,12 @@
 			}
 		}
 
+		/// <summary>
+		/// Sets given node as parent to this node and defines if this node is left or right of parent
+		/// </summary>
+		/// <param name="parent">Parent node</param>
+		/// <param name="isRightChild">Is right child</param>
+		/// <returns></returns>
 		public HuffmanTreeNode<T> SetParent(HuffmanTreeNode<T> parent, bool isRightChild) {
 			Parent = parent;
 			IsRightChild = isRightChild;

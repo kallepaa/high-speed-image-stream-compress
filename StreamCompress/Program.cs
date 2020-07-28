@@ -11,6 +11,10 @@ namespace StreamCompress {
 		}
 
 		private static void _imageConversion() {
+
+			var sourcePath = @"T:\Kalle\Videos\WebCamStreams\1\source";
+			var destPath = @"T:\Kalle\Videos\WebCamStreams\1\tmp";
+
 			var cropSetup = new CropSetup {
 				LeftPx = 27 * 16,
 				RightPx = 29 * 16,
@@ -20,22 +24,24 @@ namespace StreamCompress {
 
 			for (int i = 401; i < 402; i++) {
 
-				var inputFileName = $@"T:\Kalle\Videos\WebCamStreams\1\source\{i.ToString("00000")}-first-frame-color.bmp";
+				var sourceFile = FileExtensions.PathCombine(sourcePath, $"{i.ToString("00000")}-first-frame-color.bmp");
 
-				var croppedOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped.bmp";
-				var grayOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped-gray.bmp";
-				var grayEncodedOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped-gray-encoded";
-				var grayRoundTripOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped-gray-round-trip.bmp";
+				var originalFile = FileExtensions.PathCombine(destPath, $"000-{i.ToString("00000")}-original.bmp");
+				var croppedFile = FileExtensions.PathCombine(destPath, $"001-{i.ToString("00000")}-cropped.bmp");
+				var grayFile = FileExtensions.PathCombine(destPath, $"002-{i.ToString("00000")}-gray.bmp");
+				var grayEncodedFile = FileExtensions.PathCombine(destPath, $"003-{i.ToString("00000")}-gray-encoded");
+				var grayDecodedFile = FileExtensions.PathCombine(destPath, $"004-{i.ToString("00000")}-gray-decoded.bmp");
+				var plantedFile = FileExtensions.PathCombine(destPath, $"005-{i.ToString("00000")}-planted.bmp");
+				var plantedEncodedFile = FileExtensions.PathCombine(destPath, $"006-{i.ToString("00000")}-planted-encoded");
 
-				var image = ImageFrame.FromFile(inputFileName);
-
-				var croppedImage = image
-					.AsCroppedImage(cropSetup);
-
-				var grayImage = croppedImage
-					.AsGrayScale(64);
-
-				var grayImageAs1280x720 = grayImage.AsSize(1280, 720);
+				var image = 
+					ImageFrame.FromFile(sourceFile).Save<ImageFrame>(originalFile)
+					.AsCroppedImage(cropSetup).Save<ImageFrame>(croppedFile)
+					.AsGrayScale(64).Save<ImageFrameGrayScale>(grayFile)
+					.AsHuffmanEncoded().Save(grayEncodedFile)
+					.AsImageFrame().Save<ImageFrameGrayScale>(grayDecodedFile)
+					.AsPlanted(1280, 720).Save<ImageFrameGrayScale>(plantedFile)
+					.AsHuffmanEncoded().Save(plantedEncodedFile);
 
 			}
 		}

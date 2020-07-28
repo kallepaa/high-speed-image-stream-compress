@@ -1,4 +1,9 @@
 ﻿namespace StreamCompress {
+
+
+	/// <summary>
+	/// Presents single image frame as Huffman encoded
+	/// </summary>
 	public class HuffmanImageFrame {
 
 
@@ -90,7 +95,6 @@
 			return b.GetBitFromByte(bitPos);
 		}
 
-
 		public class HeaderColorItem {
 
 			public const int HEADER_COLOR_SYMBOL_BYTES = 1;
@@ -119,6 +123,12 @@
 				return HEADER_COLOR_SYMBOL_BYTES + HEADER_COLOR_CODE_BIT_COUNT_BYTES + HEADER_COLOR_CODE_BIT_CODE_BYTES;
 			}
 		}
+
+		public HuffmanImageFrame Save(string path) {
+			Data.SaveToFile(path);
+			return this;
+		}
+
 
 	}
 }

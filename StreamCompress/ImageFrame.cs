@@ -1,18 +1,50 @@
 ﻿using System;
 
 namespace StreamCompress {
+
+	/// <summary>
+	/// Presents single image frame 
+	/// </summary>
 	public class ImageFrame {
 
+		/// <summary>
+		/// Bitmap image fixed header size
+		/// </summary>
 		public const int HEADER_BYTES = 54;
+		/// <summary>
+		/// Color table size when it contains 256 colors
+		/// </summary>
 		public const int HEADER_256_COLOR_TABLE_SIZE = 256 * 4;
 
+		/// <summary>
+		/// Image data with header
+		/// </summary>
 		public byte[] Image { get; }
-		public int HeaderBytesLength { get; set; }
-		public int ImageWidthPx { get; }
-		public int ImageHeightPx { get; }
+		/// <summary>
+		/// Header total bytes
+		/// </summary>
+		public int HeaderBytesLength { get; }
+		/// <summary>
+		/// Image width in pixels
+		/// </summary>
+		public int ImageWidthPx { get; internal set; }
+		/// <summary>
+		/// Image height in pixels
+		/// </summary>
+		public int ImageHeightPx { get; internal set; }
+		/// <summary>
+		/// How many bits is used to prsent single pixel
+		/// </summary>
 		public int BitsPerPixel { get; }
+		/// <summary>
+		/// Image bit count without header
+		/// </summary>
 		public int ImageBits => ImageWidthPx * ImageHeightPx * BitsPerPixel;
 
+		/// <summary>
+		/// Constructor to create image frame from byte array
+		/// </summary>
+		/// <param name="image">Bitmap image byte array</param>
 		public ImageFrame(byte[] image) {
 			Image = image;
 			HeaderBytesLength = (int)BitConverter.ToUInt32(image, 10);
@@ -21,58 +53,38 @@ namespace StreamCompress {
 			BitsPerPixel = (int)BitConverter.ToUInt16(image, 28);
 		}
 
+		/// <summary>
+		/// Sets size information to header
+		/// </summary>
+		/// <param name="length">Image total length</param>
+		/// <param name="widthPx">Image width in pixels</param>
+		/// <param name="heightPx">Image height in pixels</param>
+		public void SetSizeInfo(uint length, int widthPx, int heightPx) {
+			ImageHeightPx = heightPx;
+			ImageWidthPx = widthPx;
+			length.AsBytes().CopyBytesTo(Image, 2);
+			widthPx.AsBytes().CopyBytesTo(Image, 18);
+			heightPx.AsBytes().CopyBytesTo(Image, 22);
+		}
+
+		/// <summary>
+		/// Reads image frame from file
+		/// </summary>
+		/// <param name="path">Filename</param>
+		/// <returns>Image frame with image data</returns>
 		public static ImageFrame FromFile(string path) {
 			return new ImageFrame(FileExtensions.ReadAllBytes(path));
 		}
 
-		public void Save(string path) {
+		/// <summary>
+		/// Saves image frame image to file
+		/// </summary>
+		/// <typeparam name="T">Image frame type</typeparam>
+		/// <param name="path">Filename</param>
+		/// <returns>Image frame</returns>
+		public T Save<T>(string path) where T : ImageFrame {
 			Image.SaveToFile(path);
+			return (T)this;
 		}
-
-		//public string HeaderInfo() {
-
-		//	var ret = new StringBuilder();
-
-		//	ret.AppendLine($"Filetype: {BitConverter.ToUInt16(Image, 0)}");
-		//	ret.AppendLine($"Filesize : {BitConverter.ToUInt32(Image, 2)}");
-		//	ret.AppendLine($"Reserved : {BitConverter.ToUInt16(Image, 6)}");
-		//	ret.AppendLine($"Reserved : {BitConverter.ToUInt16(Image, 8)}");
-		//	ret.AppendLine($"PixelDataOffSet : {BitConverter.ToUInt32(Image, 10)}");
-		//	ret.AppendLine($"HeaderSize : {BitConverter.ToUInt32(Image, 14)}");
-		//	ret.AppendLine($"ImageWidth : {BitConverter.ToUInt32(Image, 18)}");
-		//	ret.AppendLine($"ImageHeight : {BitConverter.ToUInt32(Image, 22)}");
-		//	ret.AppendLine($"Planes : {BitConverter.ToUInt16(Image, 26)}");
-		//	ret.AppendLine($"BitsPerPixel : {BitConverter.ToUInt16(Image, 28)}");
-		//	ret.AppendLine($"Compression : {BitConverter.ToUInt32(Image, 30)}");
-		//	ret.AppendLine($"ImageSize : {BitConverter.ToUInt32(Image, 34)}");
-		//	ret.AppendLine($"XpixelsPerMeter : {BitConverter.ToUInt32(Image, 38)}");
-		//	ret.AppendLine($"YpixelsPerMeter : {BitConverter.ToUInt32(Image, 42)}");
-		//	ret.AppendLine($"TotalColors : {BitConverter.ToUInt32(Image, 46)}");
-		//	ret.AppendLine($"ImportantColors : {BitConverter.ToUInt32(Image, 50)}");
-
-		//	//				var colorBytes = (int)pixelDataOffSet - header.Length;
-
-		//	//				if (colorBytes > 0 && true) {
-
-		//	//					var colors = new byte[colorBytes];
-		//	//					file.Read(colors, 0, colors.Length);
-		//	//					var colorIndexes = colorBytes / 4;
-
-		//	//					Console.WriteLine($"COLOR TABLE Colors {colorIndexes}");
-
-		//	//					for (int colorIndex = 0; colorIndex < colorIndexes; colorIndex++) {
-		//	//						var colorIndexStartPos = 4 * colorIndex;
-		//	//						Console.WriteLine($"rgb({((int)colors[colorIndexStartPos])}, {((int)colors[colorIndexStartPos + 1])}, {((int)colors[colorIndexStartPos + 2])})");
-
-		//	////						Console.WriteLine($"#{((int)colors[colorIndexStartPos]).ToString("X2")}{((int)colors[colorIndexStartPos+1]).ToString("X2")}{((int)colors[colorIndexStartPos+2]).ToString("X2")}");
-		//	//					}
-		//	//				}
-
-
-		//	return ret.ToString();
-		//}
-
-
-
 	}
 }

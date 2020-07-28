@@ -25,6 +25,11 @@
 			_heapData = new T[n];
 		}
 
+		/// <summary>
+		/// Inserts new node to heap
+		/// </summary>
+		/// <param name="nodeKey"></param>
+		/// <param name="nodeData"></param>
 		public void Insert(int nodeKey, T nodeData) {
 
 			HeapSize++;//increase heap size
