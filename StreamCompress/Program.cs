@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 
 namespace StreamCompress {
 	class Program {
@@ -16,19 +12,20 @@ namespace StreamCompress {
 
 		private static void _imageConversion() {
 			var cropSetup = new CropSetup {
-				LeftPx = 20 * 16,
-				RightPx = 25 * 16,
-				TopPx = 0,
+				LeftPx = 27 * 16,
+				RightPx = 29 * 16,
+				TopPx = 1 * 16,
 				BottomPx = 6 * 16
 			};
 
-			for (int i = 0; i < 1; i++) {
+			for (int i = 401; i < 402; i++) {
 
 				var inputFileName = $@"T:\Kalle\Videos\WebCamStreams\1\source\{i.ToString("00000")}-first-frame-color.bmp";
-				var iFrameOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-iframe.bmp";
-				var pFrameOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-pframe.bmp";
 
-				var croppedOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-first-frame-cropped.bmp";
+				var croppedOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped.bmp";
+				var grayOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped-gray.bmp";
+				var grayEncodedOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped-gray-encoded";
+				var grayRoundTripOutputFile = $@"T:\Kalle\Videos\WebCamStreams\1\tmp\{i.ToString("00000")}-cropped-gray-round-trip.bmp";
 
 				var image = ImageFrame.FromFile(inputFileName);
 
@@ -36,9 +33,10 @@ namespace StreamCompress {
 					.AsCroppedImage(cropSetup);
 
 				var grayImage = croppedImage
-					.AsGrayScale();
+					.AsGrayScale(64);
 
-				var huffmanEncoded = grayImage.AsHuffmanEncoded();
+				var grayImageAs1280x720 = grayImage.AsSize(1280, 720);
+
 			}
 		}
 

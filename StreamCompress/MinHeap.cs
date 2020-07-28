@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace StreamCompress {
+﻿namespace StreamCompress {
 
 	/// <summary>
 	/// Min heap implementation
@@ -19,12 +14,7 @@ namespace StreamCompress {
 		/// nodes data
 		/// </summary>
 		private readonly T[] _heapData;
-
-		/// <summary>
-		/// Heap current size
-		/// </summary>
-		private int _heapSize;
-		public int HeapSize { get => _heapSize;}
+		public int HeapSize { get; private set; }
 
 		/// <summary>
 		/// Constructor for new heap
@@ -37,9 +27,9 @@ namespace StreamCompress {
 
 		public void Insert(int nodeKey, T nodeData) {
 
-			_heapSize++;//increase heap size
+			HeapSize++;//increase heap size
 
-			var i = _heapSize - 1; //empty slot for new node from end of heap
+			var i = HeapSize - 1; //empty slot for new node from end of heap
 
 			var parentNodeIndex = _getParentIndex(i);//new node parent index
 			var parentNodeKey = _heap[parentNodeIndex];//parent key value
@@ -71,9 +61,9 @@ namespace StreamCompress {
 		public T DelMin() {
 			var max = _heapData[0];
 			if (max != null) {
-				_swapNodeLocations(0, --_heapSize); //move last node to root
-				_heap[_heapSize] = null;//clean last node index
-				_heapData[_heapSize] = null;
+				_swapNodeLocations(0, --HeapSize); //move last node to root
+				_heap[HeapSize] = null;//clean last node index
+				_heapData[HeapSize] = null;
 				_heapify(0);//do heapify from root
 			}
 			return max;
@@ -89,7 +79,7 @@ namespace StreamCompress {
 			var rightChildIndex = _rightChildNodeIndex(i);
 			var smallerChildIndex = 0;
 
-			if (rightChildIndex < _heapSize) {
+			if (rightChildIndex < HeapSize) {
 				//i has child also on right side
 				if (_heap[leftChildIndex] < _heap[rightChildIndex]) {
 					smallerChildIndex = leftChildIndex; //left child has smaller key
@@ -103,7 +93,7 @@ namespace StreamCompress {
 					//then do heapify from new location
 					_heapify(smallerChildIndex);
 				}
-			} else if (leftChildIndex == _heapSize - 1 && _heap[i] > _heap[leftChildIndex]) {
+			} else if (leftChildIndex == HeapSize - 1 && _heap[i] > _heap[leftChildIndex]) {
 				//when node has only left child then and child value is smaller than given node key then swap nodes location
 				_swapNodeLocations(i, leftChildIndex);
 			}

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-
-namespace StreamCompress {
+﻿namespace StreamCompress {
 	public class HuffmanTreeNode<T> {
+
+		public HuffmanTreeNode<T> LeftChild { get; internal set; }
+		public HuffmanTreeNode<T> RightChild { get; internal set; }
 
 		/// <summary>
 		/// internal cursor to keep track which bit in code value has not been set yet
@@ -18,7 +18,7 @@ namespace StreamCompress {
 		/// </summary>
 		public int TotalBits => CodeBits * Frequency;
 		/// <summary>
-		/// Contains code bits in array
+		/// Contains code bits in array and most significant bit is last one
 		/// </summary>
 		public bool[] CodeBitTable { get; internal set; }
 
@@ -36,30 +36,6 @@ namespace StreamCompress {
 			}
 		}
 
-		/// <summary>
-		/// For debuging reasons to get code as string presentation
-		/// </summary>
-		/// <returns></returns>
-		public string GetCodeBitsAsString() {
-
-			var sb = new StringBuilder();
-			var code = Code;
-
-			while (code > 0) {
-				sb.Append(code & 1);
-				code = code >> 1;
-			}
-
-			var str = new char[sb.Length];
-			//reverse order
-			var j = 0;
-
-			for (int i = sb.Length - 1; i >= 0; i--) {
-				str[j++] = sb[i];
-			}
-
-			return new string(str).PadLeft(CodeBits, '0');
-		}
 
 		/// <summary>
 		/// Is node or internal node
@@ -92,6 +68,28 @@ namespace StreamCompress {
 		}
 
 		/// <summary>
+		/// To create leaf when decoding
+		/// </summary>
+		/// <param name="symbol"></param>
+		/// <param name="frequency"></param>
+		public HuffmanTreeNode(T symbol, int code, int codeBits) {
+			Symbol = symbol;
+			Leaf = true;
+			Code = code;
+			_codeBitPos = codeBits + 1;
+		}
+
+		/// <summary>
+		/// To create internal node when decoding
+		/// </summary>
+		/// <param name="symbol"></param>
+		/// <param name="frequency"></param>
+		public HuffmanTreeNode() {
+			Leaf = false;
+		}
+
+
+		/// <summary>
 		/// To create internal node
 		/// </summary>
 		/// <param name="symbol"></param>
@@ -99,11 +97,19 @@ namespace StreamCompress {
 		public HuffmanTreeNode(int frequency, HuffmanTreeNode<T> leftChild, HuffmanTreeNode<T> rightChild) {
 			Frequency = frequency;
 			Leaf = false;
-			leftChild._setParent(this, false);
-			rightChild._setParent(this, true);
+			leftChild.SetParent(this, false);
+			rightChild.SetParent(this, true);
 		}
 
-		private HuffmanTreeNode<T> _setParent(HuffmanTreeNode<T> parent, bool isRightChild) {
+		public void SetChild(HuffmanTreeNode<T> childNode) {
+			if (childNode.IsRightChild) {
+				RightChild = childNode;
+			} else {
+				LeftChild = childNode;
+			}
+		}
+
+		public HuffmanTreeNode<T> SetParent(HuffmanTreeNode<T> parent, bool isRightChild) {
 			Parent = parent;
 			IsRightChild = isRightChild;
 			return this;

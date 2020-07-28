@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace StreamCompress {
 	public static class Extensions {
 
-		public static ImageFrame AsGrayScale(this ImageFrame image) {
+		public static ImageFrame AsGrayScale(this ImageFrame image, int colors = 256) {
 
-			const int headerSize = 54;
-			const int colorTableSize = 4 * 256;//for bytes per color and 256 color from 0 - 255
+			const int headerSize = ImageFrame.HEADER_BYTES;
+			const int colorTableSize = ImageFrame.HEADER_256_COLOR_TABLE_SIZE;
 			var headerAndColorTable = headerSize + colorTableSize;
 			var newImage = new byte[image.ImageWidthPx * image.ImageHeightPx + headerAndColorTable];
 
@@ -37,15 +34,14 @@ namespace StreamCompress {
 			Buffer.SetByte(newImage, 28, 0x08);
 
 			//color table
-			for (int i = 0; i < 255; i++) {
-				var bytes = new byte[4] { (byte)i, (byte)i, (byte)i, 0 };
-				Buffer.BlockCopy(bytes, 0, newImage, i * 4 + headerSize, 4);
-			}
+			newImage.SetGrayScaleColorTable();
 
 			//linear conversion consts
 			const double redLinear = 0.2126;
 			const double greenLinear = 0.7152;
 			const double blueLinear = 0.0722;
+
+			var colorCount = 256 / colors;
 
 			var destIndex = image.HeaderBytesLength + 1024;
 
@@ -60,7 +56,7 @@ namespace StreamCompress {
 					var blue = image.Image[pixelPos];
 					var red = image.Image[pixelPos + 2];
 					var grayIndex = (int)(red * redLinear + green * greenLinear + blue * blueLinear);
-					grayIndex -= (grayIndex % 16);
+					grayIndex -= (grayIndex % colorCount);
 					var grayIndexByte = (byte)grayIndex;
 					newImage[destIndex++] = grayIndexByte;
 				}
@@ -88,16 +84,10 @@ namespace StreamCompress {
 			var newImage = new byte[(newWidthPx * 3 * newHeightPx) + image.HeaderBytesLength];
 
 			//copy header from source and ...
-			Buffer.BlockCopy(image.Image, 0, newImage, 0, image.HeaderBytesLength);
+			image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
 
 			//.. adjust header with new width and size
-			var headerNewFileSize = BitConverter.GetBytes((uint)newImage.Length);
-			var headerNewWidth = BitConverter.GetBytes(newWidthPx);
-			var headerNewHeight = BitConverter.GetBytes(newHeightPx);
-
-			Buffer.BlockCopy(headerNewFileSize, 0, newImage, 2, headerNewFileSize.Length);
-			Buffer.BlockCopy(headerNewWidth, 0, newImage, 18, headerNewWidth.Length);
-			Buffer.BlockCopy(headerNewHeight, 0, newImage, 22, headerNewHeight.Length);
+			image.Image.SetSizeInfo(newImage.Length, newWidthPx, newHeightPx);
 
 			//copy image bytes from source to new image
 			var leftCropBytes = (cropSetup.LeftPx * 3);
@@ -109,80 +99,94 @@ namespace StreamCompress {
 			for (var i = cropSetup.BottomPx; i < newHeightPx + cropSetup.BottomPx; i++) {
 				var srcOffSet = (leftCropBytes + (i * imageWidthBytes) + image.HeaderBytesLength);
 				var destOffSet = (destRow++ * newImageWidthBytes + image.HeaderBytesLength);
-				Buffer.BlockCopy(image.Image, srcOffSet, newImage, destOffSet, newImageWidthBytes);
+				image.Image.CopyBytesTo(srcOffSet, newImage, destOffSet, newImageWidthBytes);
 			}
 
 			return new ImageFrame(newImage);
 
 		}
 
-		public static byte[] AsHuffmanEncoded(this ImageFrame image) {
+		public static HuffmanImageFrame AsHuffmanEncoded(this ImageFrame image) {
 
 			if (image.BitsPerPixel != 8) {
-				throw new NotSupportedException("Only 8 bit per pixel images are supported");
+				throw new NotSupportedException("Only 8 bits per pixel images are supported");
 			}
 
 			var colors = (1 << image.BitsPerPixel);
 			var minHeap = new MinHeap<HuffmanTreeNode<int>>(colors);
 			var leafTable = new HuffmanTreeNode<int>[colors];
 
+			var leafNodeCount = 0;
+
 			//iterate through all bytes in image data and calculates color frequency
 			for (int i = image.HeaderBytesLength; i < image.Image.Length; i++) {
 				var colorCode = (int)image.Image[i];//between 0 - 255
 				if (leafTable[colorCode] == null) {
 					leafTable[colorCode] = new HuffmanTreeNode<int>(colorCode);
+					leafNodeCount++;
 				}
 				leafTable[colorCode].IncreaseFrequency();
 			}
 
-			//add leaf nodes to minheap
+			var leafTableShrink = new HuffmanTreeNode<int>[leafNodeCount];
+
+			var shrinkIndex = 0;
+			//add leaf nodes to minheap and shrink table
 			for (int i = 0; i < leafTable.Length; i++) {
 				var leafNode = leafTable[i];
 				if (leafNode != null) {
+					leafTableShrink[shrinkIndex++] = leafNode;
 					minHeap.Insert(leafNode.Frequency, leafNode);
 				}
 			}
 
+			var internalNodesCount = 0;
 			//create huffman tree from leaf nodes and internal nodes
 			while (minHeap.HeapSize > 1) {
 				var internalNode = HuffmanTreeNode<int>.InternalNodeCreate(minHeap.DelMin(), minHeap.DelMin());
 				minHeap.Insert(internalNode.Frequency, internalNode);
+				internalNodesCount++;
 			}
 
 			//traverse huffman tree from leaf to root and calculate code for node symbol
-			for (int i = 0; i < leafTable.Length; i++) {
-				var node = leafTable[i];
-				if (node != null) {
-					var leafNode = node;
-					leafNode.ResetCode();
-					while (node != null) {
-						leafNode.SetCodeNextBit(node.IsRightChild ? 1 : 0);
-						node = node.Parent;
-					}
+			for (int i = 0; i < leafTableShrink.Length; i++) {
+				var node = leafTableShrink[i];
+				var leafNode = node;
+				leafNode.ResetCode();
+				while (node != null) {
+					leafNode.SetCodeNextBit(node.IsRightChild ? 1 : 0);
+					node.Parent?.SetChild(node);
+					node = node.Parent;
 				}
 			}
 
 			var compressedBits = 0;
+			var maxCodeBits = 0;
+			var headerColorItems = new HuffmanImageFrame.HeaderColorItem[leafTableShrink.Length];
 
-			for (int i = 0; i < leafTable.Length; i++) {
-				if (leafTable[i] != null) {
-					//creates simple array of code bits which is easy iterate in encoding
-					leafTable[i].PopulateBitTable();
-					compressedBits += leafTable[i].TotalBits;
-				}
+			for (int i = 0; i < leafTableShrink.Length; i++) {
+				//creates simple array of code bits which is easy iterate in encoding
+				leafTableShrink[i].PopulateBitTable();
+				compressedBits += leafTableShrink[i].TotalBits;
+				maxCodeBits = leafTableShrink[i].CodeBits > maxCodeBits ? leafTableShrink[i].CodeBits : maxCodeBits;
+				headerColorItems[i] = new HuffmanImageFrame.HeaderColorItem(
+							i,
+							leafTableShrink[i].Symbol,
+							leafTableShrink[i].CodeBits,
+							leafTableShrink[i].Code);
 			}
 
-			//calculate how many bytes is needed for compressed bits
-			var totalBytes = (compressedBits / 8);
-			if (totalBytes * 8 != compressedBits) {
-				//add extra byte for uneven bits
-				totalBytes += 1;
-			}
+			//------------------ Build return starts --------------------------------------
 
-			var ret = new byte[totalBytes];
+			var originalImageHeader = new byte[ImageFrame.HEADER_BYTES];
+			image.Image.CopyBytesTo(0, originalImageHeader);
+
+			var originalImageDataLength = image.Image.Length - image.HeaderBytesLength;
+
+			var ret = new HuffmanImageFrame(compressedBits, headerColorItems, maxCodeBits, originalImageDataLength, originalImageHeader);
 
 			var retBitIndex = 7; //read bits from left to right
-			var retByteIndex = 0;//start begin of return bytes array
+			var retByteIndex = ret.ImageDataOffSet;//start begin of image section
 
 			//encode image bytes per byte using huffman code
 			for (int i = image.HeaderBytesLength; i < image.Image.Length; i++) {
@@ -203,18 +207,132 @@ namespace StreamCompress {
 
 					//dest byte bits are set initally to 0 only change byte value when bit is set to 1
 					if (leafNode.CodeBitTable[j]) {
-						//shift bit to left to get value for addition
-						var bitToAdd = (1 << retBitIndex);
-						var byteVal = (int)ret[retByteIndex];
-						//add bit existing byte
-						byteVal += bitToAdd;
-						ret[retByteIndex] = (byte)byteVal;
+						ret.Data[retByteIndex] = ret.Data[retByteIndex].SetBitToByte(retBitIndex);
 					}
+
 					retBitIndex--;
 				}
 			}
 
 			return ret;
 		}
+
+		public static ImageFrame AsImageFrame(this HuffmanImageFrame encodedImage) {
+
+			//---------- generate tree from color codes -----------------
+
+			var maxNodes = 0;
+			for (int i = 0; i <= encodedImage.MaxCodeBitsLength + 1; i++) {
+				maxNodes = 1 << i;
+			}
+
+			//simple help table for tree generation
+			var nodeTree = new HuffmanTreeNode<int>[maxNodes - 1];
+			var rootNode = new HuffmanTreeNode<int>();
+			nodeTree[0] = rootNode;
+
+			for (int i = 0; i < encodedImage.ColorCodeCount; i++) {
+
+				var colorCodeItem = encodedImage.GetColorCodeItemFromHeader(i);
+				var huffmanNode = new HuffmanTreeNode<int>(colorCodeItem.Symbol, colorCodeItem.Code, colorCodeItem.CodeBitsCount);
+				huffmanNode.PopulateBitTable();
+
+				//start always from root bit and go to leaf
+				var parentPos = 0;
+				var parent = nodeTree[0];
+
+				for (int j = huffmanNode.CodeBitTable.Length - 1; j >= 0; j--) {
+
+					var childPos = 0;
+					var isRightChild = huffmanNode.CodeBitTable[j];
+
+					if (isRightChild) {
+						childPos = ((parentPos + 1) * 2 + 1) - 1;
+					} else {
+						childPos = ((parentPos + 1) * 2) - 1;
+					}
+
+					if (j == 0) {
+						//leaf node
+						nodeTree[childPos] = huffmanNode;
+					} else if (nodeTree[childPos] == null) {
+						//create internal node
+						nodeTree[childPos] = new HuffmanTreeNode<int>();
+					}
+
+					nodeTree[childPos].SetParent(parent, isRightChild);
+					parent.SetChild(nodeTree[childPos]);
+					parent = nodeTree[childPos];
+					parentPos = childPos;
+				}
+			}
+
+			var imageHeaderSize = encodedImage.OriginalImageHeaderLength + ImageFrame.HEADER_256_COLOR_TABLE_SIZE;
+			var imageData = new byte[imageHeaderSize + encodedImage.OriginalImageDataLength];
+
+			//-------------   set header ------------------------
+
+			//copy original image non-encoded header to image
+			encodedImage.Data.CopyBytesTo(
+				encodedImage.FixedHeaderLength + encodedImage.ColorCodeHeaderLength,
+				imageData,
+				0,
+				encodedImage.OriginalImageHeaderLength);
+
+			//generate color table
+			imageData.SetGrayScaleColorTable();
+
+			//--------------- decode image -----------------------
+
+			var node = rootNode;
+			var destIndex = imageHeaderSize;
+
+			//read encoded stream bit by bit and travel tree using bit value
+			//until leaf node is reached. read original color code from leaf node
+			for (int i = 0; i < encodedImage.CompressedBits; i++) {
+				//read right or left child based bit in stream
+				node = encodedImage.GetBit(i) ? node.RightChild : node.LeftChild;
+				if (node.Leaf) {
+					//set decoded byte to image
+					imageData[destIndex++] = (byte)node.Symbol;
+					//move back to root node
+					node = rootNode;
+				}
+			}
+
+			return new ImageFrame(imageData);
+		}
+
+		public static ImageFrame AsSize(this ImageFrame image, int widthPx, int heightPx) {
+			throw new NotImplementedException();
+			//if (image.BitsPerPixel != 8) {
+			//	throw new NotSupportedException("Only 8 bits per pixel images are supported");
+			//}
+
+			////copy header
+			//var newImage = new byte[image.HeaderBytesLength + widthPx * heightPx];
+			//image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
+
+
+
+			//return new ImageFrame(newImage);
+		}
+
+		public static void SetSizeInfo(this byte[] image, int length, int widthPx, int heightPx) {
+			((uint)(length)).AsBytes().CopyBytesTo(image, 2);
+			widthPx.AsBytes().CopyBytesTo(image, 18);
+			heightPx.AsBytes().CopyBytesTo(image, 22);
+		}
+
+		public static void SetGrayScaleColorTable(this byte[] image) {
+			//color table
+			for (int i = 0; i < 255; i++) {
+				var bytes = new byte[4] { (byte)i, (byte)i, (byte)i, 0 };
+				Buffer.BlockCopy(bytes, 0, image, i * 4 + ImageFrame.HEADER_BYTES, 4);
+			}
+		}
+
+
+
 	}
 }
