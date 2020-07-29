@@ -68,13 +68,23 @@ namespace StreamCompress {
 		}
 
 		/// <summary>
-		/// Converts 16 bit integer to byte array
+		/// Converts 32 bit unsigned integer to byte array
 		/// </summary>
 		/// <param name="val">Value</param>
 		/// <returns>Value as byte array</returns>
 		public static byte[] AsBytes(this uint val) {
 			return BitConverter.GetBytes(val);
 		}
+
+		/// <summary>
+		/// Converts 16 bit unsigned integer to byte array
+		/// </summary>
+		/// <param name="val">Value</param>
+		/// <returns>Value as byte array</returns>
+		public static byte[] AsBytes(this ushort val) {
+			return BitConverter.GetBytes(val);
+		}
+
 
 		/// <summary>
 		/// Converts 4 bytes as 32 bit integer
@@ -92,7 +102,7 @@ namespace StreamCompress {
 		/// <param name="bytes">Source bytes</param>
 		/// <param name="offset">Source offset</param>
 		/// <returns>4 bytes as 16 bit integer</returns>
-		public static uint AsUInt16(this byte[] bytes, int offset) {
+		public static ushort AsUInt16(this byte[] bytes, int offset) {
 			return BitConverter.ToUInt16(bytes, offset);
 		}
 
@@ -126,6 +136,13 @@ namespace StreamCompress {
 		/// <param name="destOffSet">Destination offset</param>
 		public static void CopyBytesTo(this byte[] val, byte[] dest, int destOffSet) {
 			Buffer.BlockCopy(val, 0, dest, destOffSet, val.Length);
+		}
+
+		public static byte[] Concatenate(this byte[] bytes1, byte[] bytes2){
+			var ret = new byte[bytes1.Length + bytes2.Length];
+			bytes1.CopyBytesTo(ret, 0);
+			bytes2.CopyBytesTo(ret, bytes1.Length);
+			return ret;
 		}
 
 	}

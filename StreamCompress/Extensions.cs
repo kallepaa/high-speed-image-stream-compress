@@ -346,6 +346,96 @@ namespace StreamCompress {
 			return ret;
 		}
 
+		public static LZImageFrame AsLZEncoded(this ImageFrameGrayScale image) {
+
+			var encoderDic = new HashTable<ushort>(2287);
+
+			for (ushort i = 0; i < 256; i++) {
+				var searchKey = new[] { (byte)i };
+				var codeWord = i;
+				encoderDic.Insert(searchKey, codeWord);
+			}
+
+			var input = image.Image;
+
+			using (var encodedOutput = new ByteMemoryStream(1024)) {
+
+				var P = new byte[] { input[0] };
+
+				for (int i = 1; i < input.Length; i++) {
+
+					var C = new byte[] { input[i] };
+					var PC = P.Concatenate(C);
+
+					var item = encoderDic.Search(PC);
+
+					if (item != null) {
+						P = PC;
+					} else {
+						var item2 = encoderDic.Search(P);
+
+						encodedOutput.AddBytes(item2.CodeWord.AsBytes());
+						encoderDic.Insert(PC, (ushort)encoderDic.Count);
+						P = C;
+					}
+				}
+
+				var item3 = encoderDic.Search(P);
+				encodedOutput.AddBytes(item3.CodeWord.AsBytes());
+
+				return new LZImageFrame(encodedOutput.ReadBytes());
+			}
+		}
+
+		public static ImageFrameGrayScale AsImageFrame(this LZImageFrame encodedImage) {
+
+			var decoderDic = new HashTable<byte[]>(2287);
+
+			for (ushort i = 0; i < 256; i++) {
+				var searchKey = i.AsBytes();
+				var codeWord = new[] { (byte)i };
+				decoderDic.Insert(searchKey, new[] { (byte)i });
+			}
+
+			var codes = encodedImage.Codes;
+
+			using (var decodedOutPut = new ByteMemoryStream(1024)) {
+
+				var O = codes.AsUInt16(0).AsBytes();
+				var S = new byte[0];
+				var C2 = new byte[0];
+
+				var item = decoderDic.Search(O);
+
+				decodedOutPut.AddBytes(item.CodeWord);
+
+				for (int i = 2; i < codes.Length; i += 2) {
+
+					var N = codes.AsUInt16(i).AsBytes();
+
+					var itemN = decoderDic.Search(N);
+					var itemO = decoderDic.Search(O);
+
+					if (itemN == null) {
+						S = itemO.CodeWord.Concatenate(C2);
+					} else {
+						S = itemN.CodeWord;
+					}
+
+					decodedOutPut.AddBytes(S);
+
+					C2 = new byte[] { S[0] };
+
+					var C3 = itemO.CodeWord.Concatenate(C2);
+
+					decoderDic.Insert(((ushort)(decoderDic.Count)).AsBytes(), C3);
+
+					O = N;
+				}
+
+				return new ImageFrameGrayScale(decodedOutPut.ReadBytes());
+			}
+		}
 
 	}
 }
