@@ -87,12 +87,33 @@ namespace StreamCompress {
 
 
 		/// <summary>
+		/// Converts  5 - 8 bytes as 64 bit integer
+		/// </summary>
+		/// <param name="bytes">Source bytes</param>
+		/// <param name="offset">Source offset</param>
+		/// <returns> 5 - 8 bytes as 64 bit integer</returns>
+		public static long AsLong(this byte[] bytes, int offset) {
+			if (bytes.Length < 8) {
+				var b = new byte[8];
+				bytes.CopyBytesTo(b, 0);
+				return BitConverter.ToInt64(b, offset);
+			}
+			return BitConverter.ToInt64(bytes, offset);
+		}
+
+
+		/// <summary>
 		/// Converts 4 bytes as 32 bit integer
 		/// </summary>
 		/// <param name="bytes">Source bytes</param>
 		/// <param name="offset">Source offset</param>
 		/// <returns>4 bytes as 32 bit integer</returns>
 		public static int AsInt(this byte[] bytes, int offset) {
+			if (bytes.Length < 4) {
+				var b = new byte[4];
+				bytes.CopyBytesTo(b, 0);
+				return BitConverter.ToInt32(b, offset);
+			}
 			return BitConverter.ToInt32(bytes, offset);
 		}
 
@@ -138,7 +159,7 @@ namespace StreamCompress {
 			Buffer.BlockCopy(val, 0, dest, destOffSet, val.Length);
 		}
 
-		public static byte[] Concatenate(this byte[] bytes1, byte[] bytes2){
+		public static byte[] Concatenate(this byte[] bytes1, byte[] bytes2) {
 			var ret = new byte[bytes1.Length + bytes2.Length];
 			bytes1.CopyBytesTo(ret, 0);
 			bytes2.CopyBytesTo(ret, bytes1.Length);

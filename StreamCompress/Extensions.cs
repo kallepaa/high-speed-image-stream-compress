@@ -346,19 +346,16 @@ namespace StreamCompress {
 			return ret;
 		}
 
-		public static LZImageFrame AsLZEncoded(this ImageFrameGrayScale image) {
+		public static byte[] AsLZEncoded(this byte[] input, int hashPrime) {
+			var encoderDic = new HashTable<int>(hashPrime);
 
-			var encoderDic = new HashTable<ushort>(2287);
-
-			for (ushort i = 0; i < 256; i++) {
+			for (int i = 0; i < 256; i++) {
 				var searchKey = new[] { (byte)i };
 				var codeWord = i;
 				encoderDic.Insert(searchKey, codeWord);
 			}
 
-			var input = image.Image;
-
-			using (var encodedOutput = new ByteMemoryStream(1024)) {
+			using (var encodedOutput = new ByteMemoryStream((int)(input.Length / 0.6))) {
 
 				var P = new byte[] { input[0] };
 
@@ -375,7 +372,7 @@ namespace StreamCompress {
 						var item2 = encoderDic.Search(P);
 
 						encodedOutput.AddBytes(item2.CodeWord.AsBytes());
-						encoderDic.Insert(PC, (ushort)encoderDic.Count);
+						encoderDic.Insert(PC, (int)encoderDic.Count);
 						P = C;
 					}
 				}
@@ -383,25 +380,23 @@ namespace StreamCompress {
 				var item3 = encoderDic.Search(P);
 				encodedOutput.AddBytes(item3.CodeWord.AsBytes());
 
-				return new LZImageFrame(encodedOutput.ReadBytes());
+				return encodedOutput.ReadBytes();
 			}
 		}
 
-		public static ImageFrameGrayScale AsImageFrame(this LZImageFrame encodedImage) {
+		public static byte[] AsLZDecoded(this byte[] codes, int hashPrime) {
 
-			var decoderDic = new HashTable<byte[]>(2287);
+			var decoderDic = new HashTable<byte[]>(hashPrime);
 
-			for (ushort i = 0; i < 256; i++) {
+			for (int i = 0; i < 256; i++) {
 				var searchKey = i.AsBytes();
 				var codeWord = new[] { (byte)i };
-				decoderDic.Insert(searchKey, new[] { (byte)i });
+				decoderDic.Insert(searchKey, codeWord);
 			}
 
-			var codes = encodedImage.Codes;
+			using (var decodedOutPut = new ByteMemoryStream(codes.Length * 2)) {
 
-			using (var decodedOutPut = new ByteMemoryStream(1024)) {
-
-				var O = codes.AsUInt16(0).AsBytes();
+				var O = codes.AsInt(0).AsBytes();
 				var S = new byte[0];
 				var C2 = new byte[0];
 
@@ -409,9 +404,9 @@ namespace StreamCompress {
 
 				decodedOutPut.AddBytes(item.CodeWord);
 
-				for (int i = 2; i < codes.Length; i += 2) {
+				for (int i = 4; i < codes.Length; i += 4) {
 
-					var N = codes.AsUInt16(i).AsBytes();
+					var N = codes.AsInt(i).AsBytes();
 
 					var itemN = decoderDic.Search(N);
 					var itemO = decoderDic.Search(O);
@@ -428,13 +423,21 @@ namespace StreamCompress {
 
 					var C3 = itemO.CodeWord.Concatenate(C2);
 
-					decoderDic.Insert(((ushort)(decoderDic.Count)).AsBytes(), C3);
+					decoderDic.Insert(((int)(decoderDic.Count)).AsBytes(), C3);
 
 					O = N;
 				}
 
-				return new ImageFrameGrayScale(decodedOutPut.ReadBytes());
+				return decodedOutPut.ReadBytes();
 			}
+		}
+
+		public static LZImageFrame AsLZEncoded<T>(this T image, int hashPrime) where T : ImageFrame {
+			return new LZImageFrame(image.Image.AsLZEncoded(hashPrime));
+		}
+
+		public static ImageFrameGrayScale AsImageFrame(this LZImageFrame encodedImage, int hashPrime) {
+			return new ImageFrameGrayScale(encodedImage.Codes.AsLZDecoded(hashPrime));
 		}
 
 	}
