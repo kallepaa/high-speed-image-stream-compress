@@ -1,3 +1,35 @@
+# Viikko 2
+
+_Mitä olen tehnyt tällä viikolla?_
+
+* Viimeistellyt Huffman koodauksen
+* Selvittänyt LZ pakkausta
+* Toteuttanut ensimmäisen version LZ pakkauksesta
+* Testannut alustavasti pakkausten nopeutta ja kompressiosuhdetta
+* Lisännyt ensimmäiset yksikkötestit
+
+_Miten ohjelma on edistynyt?_
+
+*  Huffman koodauksen ja LZ koodauksen toteutukset tehty 
+
+_Mitä opin tällä viikolla / tänään?_
+
+* LZ pakkauksen enkoodauksen ja dekoodauksen periaatteet
+* LZ pakkauksesta on kaksi eri haaraa, jotka poikkeavat toisistaa.
+* LZ77 haarasta löytämäni [LZ4](https://github.com/lz4/lz4) toteutus pystyisi suorituskykystestausten perusteella pakkamaan riittävän nopeasti kuvavirtaa kahdesta 120FPS x 1280px x 720px kamerasta
+
+_Mikä jäi epäselväksi tai tuottanut vaikeuksia? Vastaa tähän kohtaan rehellisesti, koska saat tarvittaessa apua tämän kohdan perusteella._
+
+* Suurin ongelma tällä hetkellä on toteuttaa LZ pakkauksessa tarvittava nopea haku. 
+Siinä ongelmana on tarkemmin sanottuna löytää "variable-length" avaimelle (K) riittävän hyvä hajautus, jotta
+haku tapahtuisi vakioajassa. Tällä hetkellä olen käyttänyt "Stack ower flowsta" löytämääni esimerkkiä FNV laskennasta. Tarvitsin vinkkiä tehokkaamalle lisäys / haku algoritmin toteutukselle.
+
+_Mitä teen seuraavaksi?_
+
+* Lisään enemmän yksikkö testauksia
+* Lisään testauskattavuudet yksikkötestauksille
+* Pyrin selvittämään LZ77 pakkauksen toteutuksen
+
 # Viikko 1
 
 _Mitä olen tehnyt tällä viikolla?_
