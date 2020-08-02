@@ -35,11 +35,7 @@ namespace StreamCompress {
 		/// <summary>
 		/// How many bits is used to prsent single pixel
 		/// </summary>
-		public int BitsPerPixel { get; }
-		/// <summary>
-		/// Image bit count without header
-		/// </summary>
-		public int ImageBits => ImageWidthPx * ImageHeightPx * BitsPerPixel;
+		public int BitsPerPixel => BitConverter.ToUInt16(Image, 28);
 
 		/// <summary>
 		/// Constructor to create image frame from byte array
@@ -50,7 +46,6 @@ namespace StreamCompress {
 			HeaderBytesLength = (int)BitConverter.ToUInt32(image, 10);
 			ImageWidthPx = (int)BitConverter.ToUInt32(image, 18);
 			ImageHeightPx = (int)BitConverter.ToUInt32(image, 22);
-			BitsPerPixel = (int)BitConverter.ToUInt16(image, 28);
 		}
 
 		/// <summary>

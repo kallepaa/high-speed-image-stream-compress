@@ -9,31 +9,6 @@ namespace StreamCompress {
 	public static class BitAndByteExtensions {
 
 		/// <summary>
-		/// For debuging reasons to get code as string presentation
-		/// </summary>
-		/// <returns></returns>
-		public static string GetCodeBitsAsString<T>(this HuffmanTreeNode<T> node) {
-
-			var sb = new StringBuilder();
-			var code = node.Code;
-
-			while (code > 0) {
-				sb.Append(code & 1);
-				code = code >> 1;
-			}
-
-			var str = new char[sb.Length];
-			//reverse order
-			var j = 0;
-
-			for (int i = sb.Length - 1; i >= 0; i--) {
-				str[j++] = sb[i];
-			}
-
-			return new string(str).PadLeft(node.CodeBits, '0');
-		}
-
-		/// <summary>
 		/// Set bit value to 1 in byte using given index
 		/// </summary>
 		/// <param name="b">Byte</param>
@@ -83,22 +58,6 @@ namespace StreamCompress {
 		/// <returns>Value as byte array</returns>
 		public static byte[] AsBytes(this ushort val) {
 			return BitConverter.GetBytes(val);
-		}
-
-
-		/// <summary>
-		/// Converts  5 - 8 bytes as 64 bit integer
-		/// </summary>
-		/// <param name="bytes">Source bytes</param>
-		/// <param name="offset">Source offset</param>
-		/// <returns> 5 - 8 bytes as 64 bit integer</returns>
-		public static long AsLong(this byte[] bytes, int offset) {
-			if (bytes.Length < 8) {
-				var b = new byte[8];
-				bytes.CopyBytesTo(b, 0);
-				return BitConverter.ToInt64(b, offset);
-			}
-			return BitConverter.ToInt64(bytes, offset);
 		}
 
 
@@ -164,6 +123,20 @@ namespace StreamCompress {
 			bytes1.CopyBytesTo(ret, 0);
 			bytes2.CopyBytesTo(ret, bytes1.Length);
 			return ret;
+		}
+
+		public static bool Compare(this byte[] b1, byte[] b2) {
+			if (b2 == null || b1.Length != b2.Length) {
+				return false;
+			}
+
+			for (int i = 0; i < b1.Length; i++) {
+				if(b1[i] != b2[i]) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 	}

@@ -179,7 +179,6 @@ namespace StreamCompress {
 				compressedBits += leafTableShrink[i].TotalBits;
 				maxCodeBits = leafTableShrink[i].CodeBits > maxCodeBits ? leafTableShrink[i].CodeBits : maxCodeBits;
 				headerColorItems[i] = new HuffmanImageFrame.HeaderColorItem(
-							i,
 							leafTableShrink[i].Symbol,
 							leafTableShrink[i].CodeBits,
 							leafTableShrink[i].Code);
@@ -226,7 +225,7 @@ namespace StreamCompress {
 			return ret;
 		}
 
-		public static ImageFrameGrayScale AsImageFrame(this HuffmanImageFrame encodedImage) {
+		public static ImageFrameGrayScale AsImageGrayScaleFrame(this HuffmanImageFrame encodedImage) {
 
 			//---------- generate tree from color codes -----------------
 
@@ -314,6 +313,19 @@ namespace StreamCompress {
 		}
 
 		public static ImageFrameGrayScale AsPlanted(this ImageFrameGrayScale image, int plantWidthPx, int plantHeightPx) {
+
+
+			var widthCheck = plantWidthPx % 16;
+
+			if (widthCheck != 0) {
+				throw new ArgumentException("New width is not divisible by 16!");
+			}
+
+			var heightCheck = plantHeightPx % 16;
+
+			if (heightCheck != 0) {
+				throw new ArgumentException("New height is not divisible by 16!");
+			}
 
 			if (image.BitsPerPixel != 8) {
 				throw new NotSupportedException("Only 8 bits per pixel images are supported");

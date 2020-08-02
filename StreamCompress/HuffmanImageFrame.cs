@@ -101,7 +101,6 @@
 			public const int HEADER_COLOR_CODE_BIT_COUNT_BYTES = 1;
 			public const int HEADER_COLOR_CODE_BIT_CODE_BYTES = 2;
 
-			public int Index { get; }
 			public int Symbol { get; }
 			public int CodeBitsCount { get; }
 			public int Code { get; }
@@ -112,8 +111,7 @@
 				Code = (int)bytes.AsUInt16(startIndex);
 			}
 
-			public HeaderColorItem(int index, int symbol, int codeBitsCount, int code) {
-				Index = index;
+			public HeaderColorItem(int symbol, int codeBitsCount, int code) {
 				Symbol = symbol;
 				CodeBitsCount = codeBitsCount;
 				Code = code;
@@ -129,6 +127,9 @@
 			return this;
 		}
 
+		public static HuffmanImageFrame FromFile(string path) {
+			return new HuffmanImageFrame(FileExtensions.ReadAllBytes(path));
+		}
 
 	}
 }

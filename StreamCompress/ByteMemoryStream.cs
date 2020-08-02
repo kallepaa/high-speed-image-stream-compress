@@ -5,10 +5,9 @@ namespace StreamCompress {
 	public sealed class ByteMemoryStream : IDisposable {
 
 		private readonly MemoryStream _memoryStream;
-		public int Capacity { get; internal set; }
+		//public int Capacity { get; internal set; }
 		public int Count { get; internal set; }
 		public ByteMemoryStream(int initialSize) {
-			Capacity = initialSize;
 			_memoryStream = new MemoryStream(initialSize);
 		}
 
