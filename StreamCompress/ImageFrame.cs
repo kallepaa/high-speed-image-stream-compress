@@ -5,7 +5,7 @@ namespace StreamCompress {
 	/// <summary>
 	/// Presents single image frame 
 	/// </summary>
-	public class ImageFrame {
+	public class ImageFrame : ISaveable<ImageFrame> {
 
 		/// <summary>
 		/// Bitmap image fixed header size
@@ -71,15 +71,9 @@ namespace StreamCompress {
 			return new ImageFrame(FileExtensions.ReadAllBytes(path));
 		}
 
-		/// <summary>
-		/// Saves image frame image to file
-		/// </summary>
-		/// <typeparam name="T">Image frame type</typeparam>
-		/// <param name="path">Filename</param>
-		/// <returns>Image frame</returns>
-		public T Save<T>(string path) where T : ImageFrame {
-			Image.SaveToFile(path);
-			return (T)this;
+		public ImageFrame Save(string path) {
+			Image.SaveToFile(path + ".bmp");
+			return this;
 		}
 	}
 }

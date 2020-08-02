@@ -4,7 +4,7 @@
 	/// <summary>
 	/// Presents single image frame as Huffman encoded
 	/// </summary>
-	public class HuffmanImageFrame {
+	public class HuffmanImageFrame : ISaveable<HuffmanImageFrame> {
 
 
 		public const int HEADER_COMPRESSED_BITS_BYTES = 4;

@@ -1,5 +1,6 @@
 using StreamCompress;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
@@ -8,11 +9,12 @@ namespace StreamCompressTest {
 
 		const string sourcePath = @"T:\Kalle\Videos\WebCamStreams\1\source";
 		const string destPath = @"T:\Kalle\Videos\WebCamStreams\1\tmp";
+		const string sourceFileSuffix = "first-frame-color.bmp";
 
 		private readonly static CropSetup _cropSetupCorrect = new CropSetup { LeftPx = 27 * 16, RightPx = 29 * 16, TopPx = 1 * 16, BottomPx = 6 * 16 };
 
 		public static string GetSourceImagePath(int i) {
-			return FileExtensions.PathCombine(sourcePath, $"{i.ToString("00000")}-first-frame-color.bmp");
+			return FileExtensions.PathCombine(sourcePath, $"{i.ToString("00000")}-{sourceFileSuffix}");
 		}
 
 		public static string GetSaveImagePath(int i, string suffix) {
@@ -91,7 +93,7 @@ namespace StreamCompressTest {
 				image.AsHuffmanEncoded().Save(encodedFilename);
 				var encoded = HuffmanImageFrame.FromFile(encodedFilename);
 				var decodedFilename = GetSaveImagePath(i, "gray-huffman-decoded.bmp");
-				encoded.AsImageGrayScaleFrame().Save<ImageFrameGrayScale>(decodedFilename);
+				encoded.AsImageGrayScaleFrame().Save(decodedFilename);
 				var decoded = ImageFrame.FromFile(decodedFilename);
 				Assert.True(image.Image.Compare(decoded.Image));
 			}
@@ -234,6 +236,51 @@ namespace StreamCompressTest {
 			public void AsIntShorterByteArray() {
 				var b1 = new byte[] { 1 };
 				Assert.True(b1.AsInt(0) == 1);
+			}
+
+
+		}
+
+		public class CLITests {
+
+			[Theory]
+			[InlineData(Program.Method.AsGrayScale)]
+			//[InlineData(Program.Method.AsGrayScaleCropped)]
+			public void AllMethods(Program.Method method) {
+
+				var args = new List<string> {
+					"--source-path",
+					sourcePath,
+					"--source-file-suffix",
+					sourceFileSuffix,
+					"--destination-path",
+					destPath,
+					"--start-index",
+					"0",
+					"--count",
+					"1",
+					"--method",
+					method.ToString()
+				};
+
+				switch (method) {
+					case Program.Method.AsGrayScale:
+						break;
+					case Program.Method.AsGrayScaleCropped:
+						args.AddRange(new string[] {
+							"--crop-left-px", _cropSetupCorrect.LeftPx.ToString(),
+							"--crop-right-px", _cropSetupCorrect.RightPx.ToString(),
+							"--crop-top-px", _cropSetupCorrect.TopPx.ToString(),
+							"--crop-bottom-px", _cropSetupCorrect.BottomPx.ToString()
+						});
+						break;
+					default:
+						throw new ArgumentException();
+				}
+
+				var ret = Program.Main(args.ToArray());
+
+				Assert.True(ret == 0);
 			}
 
 
