@@ -448,9 +448,12 @@ namespace StreamCompress {
 			return new LZImageFrame(image.Image.AsLZEncoded(hashPrime));
 		}
 
-		public static ImageFrameGrayScale AsImageFrame(this LZImageFrame encodedImage, int hashPrime) {
-			return new ImageFrameGrayScale(encodedImage.Codes.AsLZDecoded(hashPrime));
+		public static T AsImageFrame<T>(this LZImageFrame encodedImage, int hashPrime) where T : ImageFrame, new() {
+			var ret = new T();
+			ret.FromBytes(encodedImage.Codes.AsLZDecoded(hashPrime));
+			return ret;
 		}
+
 
 	}
 }

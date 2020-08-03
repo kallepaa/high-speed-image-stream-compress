@@ -6,6 +6,10 @@ namespace StreamCompress {
 	/// </summary>
 	public class ImageFrameGrayScale : ImageFrame, ISaveable<ImageFrameGrayScale> {
 
+		public ImageFrameGrayScale() {
+
+		}
+
 		/// <summary>
 		/// Constructor to create image frame from byte array
 		/// </summary>
@@ -21,6 +25,11 @@ namespace StreamCompress {
 				var bytes = new byte[4] { (byte)i, (byte)i, (byte)i, 0 };
 				bytes.CopyBytesTo(0, Image, i * 4 + HEADER_BYTES, 4);
 			}
+		}
+
+		ImageFrameGrayScale ISaveable<ImageFrameGrayScale>.Open(string path) {
+			Open(path);
+			return this;
 		}
 
 		ImageFrameGrayScale ISaveable<ImageFrameGrayScale>.Save(string path) {

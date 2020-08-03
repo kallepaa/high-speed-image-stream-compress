@@ -19,11 +19,11 @@ namespace StreamCompress {
 		/// <summary>
 		/// Image data with header
 		/// </summary>
-		public byte[] Image { get; }
+		public byte[] Image { get; internal set; }
 		/// <summary>
 		/// Header total bytes
 		/// </summary>
-		public int HeaderBytesLength { get; }
+		public int HeaderBytesLength { get; internal set; }
 		/// <summary>
 		/// Image width in pixels
 		/// </summary>
@@ -37,11 +37,19 @@ namespace StreamCompress {
 		/// </summary>
 		public int BitsPerPixel => BitConverter.ToUInt16(Image, 28);
 
+		public ImageFrame() {
+
+		}
+
 		/// <summary>
 		/// Constructor to create image frame from byte array
 		/// </summary>
 		/// <param name="image">Bitmap image byte array</param>
 		public ImageFrame(byte[] image) {
+			FromBytes(image);
+		}
+
+		public void FromBytes(byte[] image) {
 			Image = image;
 			HeaderBytesLength = (int)BitConverter.ToUInt32(image, 10);
 			ImageWidthPx = (int)BitConverter.ToUInt32(image, 18);
@@ -72,7 +80,12 @@ namespace StreamCompress {
 		}
 
 		public ImageFrame Save(string path) {
-			Image.SaveToFile(path + ".bmp");
+			Image.SaveToFile(path);
+			return this;
+		}
+
+		public ImageFrame Open(string path) {
+			FromBytes(FileExtensions.ReadAllBytes(path));
 			return this;
 		}
 	}

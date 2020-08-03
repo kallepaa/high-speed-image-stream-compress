@@ -1,6 +1,8 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.CommandLine.IO;
+using System.Diagnostics;
 using System.IO;
 
 namespace StreamCompress {
@@ -8,7 +10,12 @@ namespace StreamCompress {
 
 		public enum Method {
 			AsGrayScale,
-			AsGrayScaleCropped
+			AsGrayScaleAsHuffmanEncoded,
+			AsGrayScaleAsHuffmanDecoded,
+			AsLZ78Encoded,
+			AsLZ78Decoded,
+			AsGrayScaleAsLZ78Encoded,
+			AsGrayScaleAsLZ78Decoded
 		}
 
 		public enum GrayScaleColors {
@@ -23,17 +30,17 @@ namespace StreamCompress {
 			public int StartIndex { get; set; }
 			public int Count { get; set; }
 			public string DestinationPath { get; set; }
+			public string DestinationFileSuffix { get; set; }
 			public Method? Method { get; set; }
-			public int CropLeftPx { get; set; }
-			public int CropRightPx { get; set; }
-			public int CropTopPx { get; set; }
-			public int CropBottomPx { get; set; }
+			public int? CropLeftPx { get; set; }
+			public int? CropRightPx { get; set; }
+			public int? CropTopPx { get; set; }
+			public int? CropBottomPx { get; set; }
 			public GrayScaleColors? GrayScaleColors { get; set; }
 		}
 
 
 		public static int Main(string[] args) {
-
 
 			var command = new RootCommand(){
 				new Option<string>(
@@ -41,40 +48,49 @@ namespace StreamCompress {
 					description: "Stream images source folder"),
 				new Option<string>(
 					"--source-file-suffix",
-					description: "Stream images filename suffix"),
+					description: "Source filename suffix"),
 				new Option<string>(
 					"--destination-path",
-					description: "Stream images destination folder"),
-				new Option<int>(
+					description: "Destination folder"),
+				new Option<string>(
+					"--destination-file-suffix",
+					description: "Destination filename suffix"),
+				new Option<int?>(
 					"--start-index",
 					getDefaultValue: () => 0,
 					description: "Image stream first image index"),
-				new Option<int>(
+				new Option<int?>(
 					"--count",
 					getDefaultValue: () => 1,
 					description: "Count of images to handle"),
-				new Option<Method>(
+				new Option<Method?>(
 					"--method",
 					getDefaultValue: () => Method.AsGrayScale,
 					description: "Image handling method"),
-				new Option<GrayScaleColors>(
+				new Option<GrayScaleColors?>(
 					"--gray-scale-colors",
 					getDefaultValue: () => GrayScaleColors.Full,
 					description: "Gray scale image color count"),
-				new Option<int>(
+				new Option<int?>(
 					"--crop-left-px",
-					"Image crop px left"),
-				new Option<int>(
+					getDefaultValue: () => 0,
+					description:"Image crop px left"),
+				new Option<int?>(
 					"--crop-right-px",
-					"Image crop px right"),
-				new Option<int>(
+					getDefaultValue: () => 0,
+					description:"Image crop px right"),
+				new Option<int?>(
 					"--crop-top-px",
-					"Image crop px top"),
-				new Option<int>(
+					getDefaultValue: () => 0,
+					description:"Image crop px top"),
+				new Option<int?>(
 					"--crop-bottom-px",
-					"Image crop px bottom")};
+					getDefaultValue: () => 0,
+					description:"Image crop px bottom")};
 
 			command.Description = "Stream Compress App";
+
+
 
 			command.Handler = CommandHandler.Create(
 				 (CommandLineArgs cmdArgs) => {
@@ -100,7 +116,7 @@ namespace StreamCompress {
 					 }
 
 					 for (int i = cmdArgs.StartIndex; i < cmdArgs.Count; i++) {
-						 var sourceFile = _sourceFile(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
+						 var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
 
 						 if (!File.Exists(sourceFile)) {
 							 throw new ArgumentException($"Source file '{sourceFile}' not exist!");
@@ -111,15 +127,46 @@ namespace StreamCompress {
 
 					 switch (method) {
 						 case Method.AsGrayScale:
-							 SourceLooper<ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
-								 return image.AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
+							 SourceLooper<ImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+								 return image
+								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
+								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
 							 });
 							 break;
-						 case Method.AsGrayScaleCropped:
-							 SourceLooper<ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+						 case Method.AsGrayScaleAsHuffmanEncoded:
+							 SourceLooper<ImageFrame, HuffmanImageFrame>(cmdArgs, (index, a, image) => {
 								 return image
-								 .AsCroppedImage(new CropSetup{ LeftPx = a.CropLeftPx, RightPx = a.CropRightPx, TopPx = a.CropTopPx, BottomPx = a.CropBottomPx})
-								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
+								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
+								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
+								 .AsHuffmanEncoded();
+							 });
+							 break;
+						 case Method.AsGrayScaleAsHuffmanDecoded:
+							 SourceLooper<HuffmanImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+								 return image.AsImageGrayScaleFrame();
+							 });
+							 break;
+						 case Method.AsLZ78Encoded:
+							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
+								 return image.AsLZEncoded(12289);
+							 });
+							 break;
+						 case Method.AsLZ78Decoded:
+							 SourceLooper<LZImageFrame, ImageFrame>(cmdArgs, (index, a, image) => {
+								 return image.AsImageFrame<ImageFrame>(12289);
+							 });
+							 break;
+						 case Method.AsGrayScaleAsLZ78Encoded:
+							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
+								 return image
+								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
+								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
+								 .AsLZEncoded(12289);
+							 });
+							 break;
+						 case Method.AsGrayScaleAsLZ78Decoded:
+							 SourceLooper<LZImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+								 return image.AsImageFrame<ImageFrameGrayScale>(12289);
 							 });
 							 break;
 						 default:
@@ -127,23 +174,51 @@ namespace StreamCompress {
 					 }
 				 });
 
-			return command.InvokeAsync(args).Result;
+
+			var debugConsole = new DebugConsole();
+
+			return command.InvokeAsync(args, debugConsole).Result;
 		}
 
+		public class DebugStreamWriter : IStandardStreamWriter {
+			public void Write(string value) {
+				Debug.WriteLine(value);
+			}
+		}
 
-		private static string _sourceFile(int i, string path, string suffix) {
+		public class DebugConsole : IConsole {
+
+			private readonly IStandardStreamWriter _standardStreamWriter;
+
+			public DebugConsole() {
+				_standardStreamWriter = new DebugStreamWriter();
+			}
+
+			public IStandardStreamWriter Out => _standardStreamWriter;
+
+			public bool IsOutputRedirected => false;
+
+			public IStandardStreamWriter Error => _standardStreamWriter;
+
+			public bool IsErrorRedirected => false;
+
+			public bool IsInputRedirected => false;
+		}
+
+		private static string _filePath(int i, string path, string suffix) {
 			return FileExtensions.PathCombine(path, $"{i.ToString("00000")}-{suffix}");
 		}
 
-		private static void SourceLooper<T>(
+		private static void SourceLooper<T, R>(
 			CommandLineArgs cmdArgs,
-			Func<int, CommandLineArgs, ImageFrame, ISaveable<T>> func) {
+			Func<int, CommandLineArgs, T, ISaveable<R>> func) where T : ISaveable<T>, new() {
 
 			for (int i = cmdArgs.StartIndex; i < cmdArgs.Count; i++) {
-				var sourceFile = _sourceFile(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
-				var image = ImageFrame.FromFile(sourceFile);
+				var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
+				var image = new T();
+				((ISaveable<T>)image).Open(sourceFile);
 				var ret = func(i, cmdArgs, image);
-				var destFile = FileExtensions.PathCombine(cmdArgs.DestinationPath, $"{i.ToString("00000")}-{cmdArgs.Method.ToString().ToLower()}");
+				var destFile = _filePath(i, cmdArgs.DestinationPath, cmdArgs.DestinationFileSuffix);
 				ret.Save(destFile);
 			}
 		}

@@ -7,18 +7,18 @@ using Xunit;
 namespace StreamCompressTest {
 	public class StreamCompressTests {
 
-		const string sourcePath = @"T:\Kalle\Videos\WebCamStreams\1\source";
-		const string destPath = @"T:\Kalle\Videos\WebCamStreams\1\tmp";
-		const string sourceFileSuffix = "first-frame-color.bmp";
+		const string SOURCE_PATH = @"T:\Kalle\Videos\WebCamStreams\1\source";
+		const string DEST_PATH = @"T:\Kalle\Videos\WebCamStreams\1\tmp";
+		const string SOURCE_FILE_SUFFIX = "first-frame-color.bmp";
 
 		private readonly static CropSetup _cropSetupCorrect = new CropSetup { LeftPx = 27 * 16, RightPx = 29 * 16, TopPx = 1 * 16, BottomPx = 6 * 16 };
 
 		public static string GetSourceImagePath(int i) {
-			return FileExtensions.PathCombine(sourcePath, $"{i.ToString("00000")}-{sourceFileSuffix}");
+			return FileExtensions.PathCombine(SOURCE_PATH, $"{i.ToString("00000")}-{SOURCE_FILE_SUFFIX}");
 		}
 
 		public static string GetSaveImagePath(int i, string suffix) {
-			return FileExtensions.PathCombine(sourcePath, $"{i.ToString("00000")}-{suffix}");
+			return FileExtensions.PathCombine(SOURCE_PATH, $"{i.ToString("00000")}-{suffix}");
 		}
 
 		public class LZCompressionTests {
@@ -64,7 +64,7 @@ namespace StreamCompressTest {
 				var sourceFile = GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				var encoded = image.AsLZEncoded(hastablePrime);
-				var decoded = encoded.AsImageFrame(hastablePrime);
+				var decoded = encoded.AsImageFrame<ImageFrame>(hastablePrime);
 				Assert.True(image.Image.Compare(decoded.Image));
 			}
 		}
@@ -244,9 +244,38 @@ namespace StreamCompressTest {
 		public class CLITests {
 
 			[Theory]
-			[InlineData(Program.Method.AsGrayScale)]
-			//[InlineData(Program.Method.AsGrayScaleCropped)]
-			public void AllMethods(Program.Method method) {
+			[InlineData(Program.Method.AsGrayScale, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale.bmp")]
+			[InlineData(Program.Method.AsGrayScale, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-cropped.bmp", true)]
+			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-as-huffman-encoded", false, Program.Method.AsGrayScaleAsHuffmanDecoded)]
+			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-cropped-as-huffman-encoded", true, Program.Method.AsGrayScaleAsHuffmanDecoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			public void AllMethods(
+				Program.Method method,
+				string sourcePath,
+				string sourceFileSuffix,
+				string destinationPath,
+				string destinationFileSuffix,
+				bool crop = false,
+				Program.Method? decodeMethod = null) {
+
+				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop);
+
+				if (decodeMethod.HasValue) {
+					_allMethods(decodeMethod.Value, destinationPath, destinationFileSuffix, destinationPath, destinationFileSuffix + "-decoded.bmp");
+				}
+			}
+
+			private void _allMethods(
+				Program.Method method,
+				string sourcePath,
+				string sourceFileSuffix,
+				string destinationPath,
+				string destinationFileSuffix,
+				bool crop = false
+				) {
 
 				var args = new List<string> {
 					"--source-path",
@@ -254,7 +283,9 @@ namespace StreamCompressTest {
 					"--source-file-suffix",
 					sourceFileSuffix,
 					"--destination-path",
-					destPath,
+					destinationPath,
+					"--destination-file-suffix",
+					destinationFileSuffix,
 					"--start-index",
 					"0",
 					"--count",
@@ -265,14 +296,21 @@ namespace StreamCompressTest {
 
 				switch (method) {
 					case Program.Method.AsGrayScale:
-						break;
-					case Program.Method.AsGrayScaleCropped:
-						args.AddRange(new string[] {
+					case Program.Method.AsGrayScaleAsHuffmanEncoded:
+					case Program.Method.AsLZ78Encoded:
+					case Program.Method.AsGrayScaleAsLZ78Encoded:
+						if (crop) {
+							args.AddRange(new string[] {
 							"--crop-left-px", _cropSetupCorrect.LeftPx.ToString(),
 							"--crop-right-px", _cropSetupCorrect.RightPx.ToString(),
 							"--crop-top-px", _cropSetupCorrect.TopPx.ToString(),
 							"--crop-bottom-px", _cropSetupCorrect.BottomPx.ToString()
 						});
+						}
+						break;
+					case Program.Method.AsGrayScaleAsHuffmanDecoded:
+					case Program.Method.AsLZ78Decoded:
+					case Program.Method.AsGrayScaleAsLZ78Decoded:
 						break;
 					default:
 						throw new ArgumentException();
@@ -282,7 +320,6 @@ namespace StreamCompressTest {
 
 				Assert.True(ret == 0);
 			}
-
 
 		}
 	}

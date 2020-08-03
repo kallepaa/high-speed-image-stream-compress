@@ -27,12 +27,12 @@
 		public int ColorCodeHeaderLength => ColorCodeCount * HeaderColorItem.GetBytesLength();
 		public int ImageDataOffSet => FixedHeaderLength + ColorCodeHeaderLength + OriginalImageHeaderLength;
 
-		public readonly byte[] Data;
-		public readonly int CompressedBits;
-		public readonly int MaxCodeBitsLength;
-		public readonly int ColorCodeCount;
-		public readonly int OriginalImageHeaderLength;
-		public readonly int OriginalImageDataLength;
+		public byte[] Data { get; internal set; }
+		public int CompressedBits { get; internal set; }
+		public int MaxCodeBitsLength { get; internal set; }
+		public int ColorCodeCount { get; internal set; }
+		public int OriginalImageHeaderLength { get; internal set; }
+		public int OriginalImageDataLength { get; internal set; }
 
 		public HuffmanImageFrame(int compressedBits, HeaderColorItem[] colorCodes, int maxCodeBitsLength, int originalImageDataLength, byte[] originalImageHeader) {
 
@@ -66,6 +66,14 @@
 		}
 
 		public HuffmanImageFrame(byte[] data) {
+			_fromBytes(data);
+		}
+
+		public HuffmanImageFrame() {
+
+		}
+
+		private void _fromBytes(byte[] data) {
 			Data = data;
 			CompressedBits = data.AsInt(HEADER_COMPRESSED_BITS_BYTES_POS);
 			MaxCodeBitsLength = data.AsInt(HEADER_MAX_CODE_BITS_BYTES_POS);
@@ -73,6 +81,7 @@
 			OriginalImageHeaderLength = data.AsInt(HEADER_ORIGINAL_IMAGE_HEADER_BYTES_POS);
 			OriginalImageDataLength = data.AsInt(HEADER_ORIGINAL_IMAGE_DATA_BYTES_POS);
 		}
+
 
 		public HeaderColorItem GetColorCodeItemFromHeader(int index) {
 			var colorStartIndex = index * HeaderColorItem.GetBytesLength() + FixedHeaderLength;
@@ -130,6 +139,12 @@
 		public static HuffmanImageFrame FromFile(string path) {
 			return new HuffmanImageFrame(FileExtensions.ReadAllBytes(path));
 		}
+
+		public HuffmanImageFrame Open(string path) {
+			_fromBytes(FileExtensions.ReadAllBytes(path));
+			return this;
+		}
+
 
 	}
 }
