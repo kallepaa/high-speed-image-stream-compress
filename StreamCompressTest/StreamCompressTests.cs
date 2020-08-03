@@ -321,6 +321,7 @@ namespace StreamCompressTest {
 
 			public enum InCorrectArgumentTests {
 				Method,
+				MissingMethod,
 				SourcePath,
 				NonExistingFiles,
 				DestinationPath,
@@ -334,6 +335,7 @@ namespace StreamCompressTest {
 
 			[Theory]
 			[InlineData(InCorrectArgumentTests.Method)]
+			[InlineData(InCorrectArgumentTests.MissingMethod)]
 			[InlineData(InCorrectArgumentTests.SourcePath)]
 			[InlineData(InCorrectArgumentTests.NonExistingFiles)]
 			[InlineData(InCorrectArgumentTests.DestinationPath)]
@@ -358,8 +360,6 @@ namespace StreamCompressTest {
 					test != InCorrectArgumentTests.StartIndex ? "0" : "-1",
 					"--count",
 					test != InCorrectArgumentTests.Count ? "1" : "0",
-					"--method",
-					test != InCorrectArgumentTests.Method ? Program.Method.AsGrayScale.ToString() : "NonExistMethod",
 					"--crop-left-px",
 					test != InCorrectArgumentTests.CropLeftPx ? _cropSetupCorrect.LeftPx.ToString() : "-1",
 					"--crop-right-px",
@@ -369,6 +369,10 @@ namespace StreamCompressTest {
 					"--crop-bottom-px",
 					test != InCorrectArgumentTests.CropBottomPx ? _cropSetupCorrect.BottomPx.ToString(): "-1"
 				};
+
+				if (test != InCorrectArgumentTests.MissingMethod) {
+					args.AddRange(new[] { "--method", test != InCorrectArgumentTests.Method ? Program.Method.AsGrayScale.ToString() : "NonExistMethod" });
+				}
 
 				var ret = Program.Main(args.ToArray());
 

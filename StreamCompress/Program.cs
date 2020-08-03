@@ -65,7 +65,6 @@ namespace StreamCompress {
 					description: "Count of images to handle"),
 				new Option<Method?>(
 					"--method",
-					getDefaultValue: () => Method.AsGrayScale,
 					description: "Image handling method"),
 				new Option<GrayScaleColors?>(
 					"--gray-scale-colors",
