@@ -115,6 +115,21 @@ namespace StreamCompress {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.Count)} '{cmdArgs.Count}'!");
 					 }
 
+					 if (cmdArgs.CropLeftPx.Value < 0) {
+						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropLeftPx)} '{cmdArgs.CropLeftPx}'!");
+					 }
+
+					 if (cmdArgs.CropRightPx.Value < 0) {
+						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropRightPx)} '{cmdArgs.CropRightPx}'!");
+					 }
+
+					 if (cmdArgs.CropTopPx.Value < 0) {
+						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropTopPx)} '{cmdArgs.CropTopPx}'!");
+					 }
+					 if (cmdArgs.CropBottomPx.Value < 0) {
+						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropBottomPx)} '{cmdArgs.CropBottomPx}'!");
+					 }
+
 					 for (int i = cmdArgs.StartIndex; i < cmdArgs.Count; i++) {
 						 var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
 
@@ -174,35 +189,7 @@ namespace StreamCompress {
 					 }
 				 });
 
-
-			var debugConsole = new DebugConsole();
-
-			return command.InvokeAsync(args, debugConsole).Result;
-		}
-
-		public class DebugStreamWriter : IStandardStreamWriter {
-			public void Write(string value) {
-				Debug.WriteLine(value);
-			}
-		}
-
-		public class DebugConsole : IConsole {
-
-			private readonly IStandardStreamWriter _standardStreamWriter;
-
-			public DebugConsole() {
-				_standardStreamWriter = new DebugStreamWriter();
-			}
-
-			public IStandardStreamWriter Out => _standardStreamWriter;
-
-			public bool IsOutputRedirected => false;
-
-			public IStandardStreamWriter Error => _standardStreamWriter;
-
-			public bool IsErrorRedirected => false;
-
-			public bool IsInputRedirected => false;
+			return command.InvokeAsync(args).Result;
 		}
 
 		private static string _filePath(int i, string path, string suffix) {

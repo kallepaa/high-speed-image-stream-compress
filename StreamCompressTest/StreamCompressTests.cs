@@ -237,8 +237,6 @@ namespace StreamCompressTest {
 				var b1 = new byte[] { 1 };
 				Assert.True(b1.AsInt(0) == 1);
 			}
-
-
 		}
 
 		public class CLITests {
@@ -319,6 +317,63 @@ namespace StreamCompressTest {
 				var ret = Program.Main(args.ToArray());
 
 				Assert.True(ret == 0);
+			}
+
+			public enum InCorrectArgumentTests {
+				Method,
+				SourcePath,
+				NonExistingFiles,
+				DestinationPath,
+				StartIndex,
+				Count,
+				CropLeftPx,
+				CropRightPx,
+				CropTopPx,
+				CropBottomPx
+			}
+
+			[Theory]
+			[InlineData(InCorrectArgumentTests.Method)]
+			[InlineData(InCorrectArgumentTests.SourcePath)]
+			[InlineData(InCorrectArgumentTests.NonExistingFiles)]
+			[InlineData(InCorrectArgumentTests.DestinationPath)]
+			[InlineData(InCorrectArgumentTests.StartIndex)]
+			[InlineData(InCorrectArgumentTests.Count)]
+			[InlineData(InCorrectArgumentTests.CropLeftPx)]
+			[InlineData(InCorrectArgumentTests.CropRightPx)]
+			[InlineData(InCorrectArgumentTests.CropTopPx)]
+			[InlineData(InCorrectArgumentTests.CropBottomPx)]
+			public void InCorrectArguments(InCorrectArgumentTests test) {
+
+				var args = new List<string> {
+					"--source-path",
+					test != InCorrectArgumentTests.SourcePath ? SOURCE_PATH : "x:\non-exist",
+					"--source-file-suffix",
+					test != InCorrectArgumentTests.NonExistingFiles ? SOURCE_FILE_SUFFIX : "non-exists",
+					"--destination-path",
+					test != InCorrectArgumentTests.DestinationPath ? DEST_PATH : "x:\non-exist",
+					"--destination-file-suffix",
+					"dest-file-suffix",
+					"--start-index",
+					test != InCorrectArgumentTests.StartIndex ? "0" : "-1",
+					"--count",
+					test != InCorrectArgumentTests.Count ? "1" : "0",
+					"--method",
+					test != InCorrectArgumentTests.Method ? Program.Method.AsGrayScale.ToString() : "NonExistMethod",
+					"--crop-left-px",
+					test != InCorrectArgumentTests.CropLeftPx ? _cropSetupCorrect.LeftPx.ToString() : "-1",
+					"--crop-right-px",
+					test != InCorrectArgumentTests.CropRightPx ? _cropSetupCorrect.RightPx.ToString(): "-1",
+					"--crop-top-px",
+					test != InCorrectArgumentTests.CropTopPx ? _cropSetupCorrect.TopPx.ToString(): "-1",
+					"--crop-bottom-px",
+					test != InCorrectArgumentTests.CropBottomPx ? _cropSetupCorrect.BottomPx.ToString(): "-1"
+				};
+
+				var ret = Program.Main(args.ToArray());
+
+				Assert.False(ret == 0);
+
 			}
 
 		}
