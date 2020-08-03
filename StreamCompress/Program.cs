@@ -102,7 +102,7 @@ namespace StreamCompress {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.SourcePath)} '{cmdArgs.SourcePath}'!");
 					 }
 
-					 if (!string.IsNullOrEmpty(cmdArgs.DestinationPath) && !Directory.Exists(cmdArgs.DestinationPath)) {
+					 if (!Directory.Exists(cmdArgs.DestinationPath)) {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.DestinationPath)} '{cmdArgs.DestinationPath}'!");
 					 }
 
@@ -183,8 +183,6 @@ namespace StreamCompress {
 								 return image.AsImageFrame<ImageFrameGrayScale>(12289);
 							 });
 							 break;
-						 default:
-							 throw new NotSupportedException("Method not supported!");
 					 }
 				 });
 

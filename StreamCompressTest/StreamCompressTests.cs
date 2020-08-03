@@ -1,24 +1,34 @@
 using StreamCompress;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Xunit;
 
 namespace StreamCompressTest {
 	public class StreamCompressTests {
 
-		const string SOURCE_PATH = @"T:\Kalle\Videos\WebCamStreams\1\source";
-		const string DEST_PATH = @"T:\Kalle\Videos\WebCamStreams\1\tmp";
-		const string SOURCE_FILE_SUFFIX = "first-frame-color.bmp";
+		const string SOURCE_FILE_SUFFIX = "original.bmp";
+
+		public static string GetSourcePath() {
+			var sourcePath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestData\Source");
+			var dirInfo = new DirectoryInfo(sourcePath);
+			return dirInfo.FullName;
+		}
+		public static string GetDestinationPath() {
+			var sourcePath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestData\Destination");
+			var dirInfo = new DirectoryInfo(sourcePath);
+			return dirInfo.FullName;
+		}
 
 		private readonly static CropSetup _cropSetupCorrect = new CropSetup { LeftPx = 27 * 16, RightPx = 29 * 16, TopPx = 1 * 16, BottomPx = 6 * 16 };
 
 		public static string GetSourceImagePath(int i) {
-			return FileExtensions.PathCombine(SOURCE_PATH, $"{i.ToString("00000")}-{SOURCE_FILE_SUFFIX}");
+			return FileExtensions.PathCombine(GetSourcePath(), $"{i.ToString("00000")}-{SOURCE_FILE_SUFFIX}");
 		}
 
 		public static string GetSaveImagePath(int i, string suffix) {
-			return FileExtensions.PathCombine(SOURCE_PATH, $"{i.ToString("00000")}-{suffix}");
+			return FileExtensions.PathCombine(GetDestinationPath(), $"{i.ToString("00000")}-{suffix}");
 		}
 
 		public class LZCompressionTests {
@@ -242,22 +252,24 @@ namespace StreamCompressTest {
 		public class CLITests {
 
 			[Theory]
-			[InlineData(Program.Method.AsGrayScale, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale.bmp")]
-			[InlineData(Program.Method.AsGrayScale, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-cropped.bmp", true)]
-			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-as-huffman-encoded", false, Program.Method.AsGrayScaleAsHuffmanDecoded)]
-			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-cropped-as-huffman-encoded", true, Program.Method.AsGrayScaleAsHuffmanDecoded)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
-			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
-			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_PATH, SOURCE_FILE_SUFFIX, DEST_PATH, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScale, SOURCE_FILE_SUFFIX, "as-gray-scale.bmp")]
+			[InlineData(Program.Method.AsGrayScale, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped.bmp", true)]
+			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_FILE_SUFFIX, "as-gray-scale-as-huffman-encoded", false, Program.Method.AsGrayScaleAsHuffmanDecoded)]
+			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-huffman-encoded", true, Program.Method.AsGrayScaleAsHuffmanDecoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
 			public void AllMethods(
 				Program.Method method,
-				string sourcePath,
 				string sourceFileSuffix,
-				string destinationPath,
 				string destinationFileSuffix,
 				bool crop = false,
 				Program.Method? decodeMethod = null) {
+
+				var sourcePath = GetSourcePath();
+				var destinationPath = GetDestinationPath();
+
 
 				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop);
 
@@ -349,11 +361,11 @@ namespace StreamCompressTest {
 
 				var args = new List<string> {
 					"--source-path",
-					test != InCorrectArgumentTests.SourcePath ? SOURCE_PATH : "x:\non-exist",
+					test != InCorrectArgumentTests.SourcePath ? GetSourcePath() : "x:\non-exist",
 					"--source-file-suffix",
 					test != InCorrectArgumentTests.NonExistingFiles ? SOURCE_FILE_SUFFIX : "non-exists",
 					"--destination-path",
-					test != InCorrectArgumentTests.DestinationPath ? DEST_PATH : "x:\non-exist",
+					test != InCorrectArgumentTests.DestinationPath ? GetDestinationPath() : "x:\non-exist",
 					"--destination-file-suffix",
 					"dest-file-suffix",
 					"--start-index",

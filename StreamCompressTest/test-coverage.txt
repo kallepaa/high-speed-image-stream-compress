@@ -1,0 +1,1 @@
+﻿dotnet %UserProfile%\.nuget\packages\reportgenerator\4.6.4\tools\netcoreapp2.1\ReportGenerator.dll "-reports:latest.coveragexml" "-targetdir:coveragereport" -reporttypes:Html
