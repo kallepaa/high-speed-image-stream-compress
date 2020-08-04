@@ -58,7 +58,7 @@ namespace StreamCompressTest {
 			[Fact]
 			public void InsertAndCount() {
 
-				var words = new[] { "Car", "Cat","Car", "Cat" };
+				var words = new[] { "Car", "Cat", "Car", "Cat" };
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 
 				var sut = new Tries<string>(10);
@@ -381,12 +381,15 @@ namespace StreamCompressTest {
 			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
 			public void AllMethods(
 				Program.Method method,
 				string sourceFileSuffix,
 				string destinationFileSuffix,
 				bool crop = false,
-				Program.Method? decodeMethod = null) {
+				Program.Method? decodeMethod = null,
+				Program.LZCompressionDictionary? compDic = null) {
 
 				var sourcePath = GetSourcePath();
 				var destinationPath = GetDestinationPath();
@@ -405,7 +408,8 @@ namespace StreamCompressTest {
 				string sourceFileSuffix,
 				string destinationPath,
 				string destinationFileSuffix,
-				bool crop = false
+				bool crop = false,
+				Program.LZCompressionDictionary? compDic = null
 				) {
 
 				var args = new List<string> {
@@ -424,6 +428,22 @@ namespace StreamCompressTest {
 					"--method",
 					method.ToString()
 				};
+
+				if (compDic.HasValue) {
+					args.AddRange(new[] { "--lz-compression-dictionary", compDic.Value.ToString() });
+
+					switch (compDic.Value) {
+						case Program.LZCompressionDictionary.HashTable:
+							args.AddRange(new[] { "--lz-compression-dictionary", "393241" });
+							break;
+						case Program.LZCompressionDictionary.Trie:
+							args.AddRange(new[] { "--lz-compression-trie-initial-capacity", "10" });
+							break;
+						default:
+							throw new ArgumentException();
+					}
+
+				}
 
 				switch (method) {
 					case Program.Method.AsGrayScale:
@@ -463,7 +483,9 @@ namespace StreamCompressTest {
 				CropLeftPx,
 				CropRightPx,
 				CropTopPx,
-				CropBottomPx
+				CropBottomPx,
+				LZCompressionHashTablePrime,
+				LZCompressionTrieInitialCapacity
 			}
 
 			[Theory]
@@ -478,6 +500,8 @@ namespace StreamCompressTest {
 			[InlineData(InCorrectArgumentTests.CropRightPx)]
 			[InlineData(InCorrectArgumentTests.CropTopPx)]
 			[InlineData(InCorrectArgumentTests.CropBottomPx)]
+			[InlineData(InCorrectArgumentTests.LZCompressionHashTablePrime)]
+			[InlineData(InCorrectArgumentTests.LZCompressionTrieInitialCapacity)]
 			public void InCorrectArguments(InCorrectArgumentTests test) {
 
 				var args = new List<string> {
@@ -500,7 +524,11 @@ namespace StreamCompressTest {
 					"--crop-top-px",
 					test != InCorrectArgumentTests.CropTopPx ? _cropSetupCorrect.TopPx.ToString(): "-1",
 					"--crop-bottom-px",
-					test != InCorrectArgumentTests.CropBottomPx ? _cropSetupCorrect.BottomPx.ToString(): "-1"
+					test != InCorrectArgumentTests.CropBottomPx ? _cropSetupCorrect.BottomPx.ToString(): "-1",
+					"--lz-compression-hash-table-prime",
+					test != InCorrectArgumentTests.LZCompressionHashTablePrime ? "12289": "-1",
+					"--lz-compression-trie-initial-capacity",
+					test != InCorrectArgumentTests.LZCompressionTrieInitialCapacity ? "1": "-1"
 				};
 
 				if (test != InCorrectArgumentTests.MissingMethod) {

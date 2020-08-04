@@ -1,8 +1,6 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.CommandLine.IO;
-using System.Diagnostics;
 using System.IO;
 
 namespace StreamCompress {
@@ -24,6 +22,11 @@ namespace StreamCompress {
 			Quarter = 64
 		}
 
+		public enum LZCompressionDictionary {
+			HashTable,
+			Trie
+		}
+
 		public class CommandLineArgs {
 			public string SourcePath { get; set; }
 			public string SourceFileSuffix { get; set; }
@@ -32,11 +35,14 @@ namespace StreamCompress {
 			public string DestinationPath { get; set; }
 			public string DestinationFileSuffix { get; set; }
 			public Method? Method { get; set; }
-			public int? CropLeftPx { get; set; }
-			public int? CropRightPx { get; set; }
-			public int? CropTopPx { get; set; }
-			public int? CropBottomPx { get; set; }
+			public int CropLeftPx { get; set; }
+			public int CropRightPx { get; set; }
+			public int CropTopPx { get; set; }
+			public int CropBottomPx { get; set; }
 			public GrayScaleColors? GrayScaleColors { get; set; }
+			public LZCompressionDictionary LZCompressionDictionary { get; set; }
+			public int LZCompressionHashTablePrime { get; set; }
+			public int LZCompressionTrieInitialCapacity { get; set; }
 		}
 
 
@@ -85,7 +91,19 @@ namespace StreamCompress {
 				new Option<int?>(
 					"--crop-bottom-px",
 					getDefaultValue: () => 0,
-					description:"Image crop px bottom")};
+					description:"Image crop px bottom"),
+				new Option<LZCompressionDictionary?>(
+					"--lz-compression-dictionary",
+					getDefaultValue: () => LZCompressionDictionary.HashTable,
+					description: "LZ compression dictionary type"),
+				new Option<int?>(
+					"--lz-compression-hash-table-prime",
+					getDefaultValue: () => 12289,
+					description: "LZ compression hash table prime"),
+				new Option<int?>(
+					"--lz-compression-trie-initial-capacity",
+					getDefaultValue: () => 1,
+					description: "LZ compression trie node container initial capacity")};
 
 			command.Description = "Stream Compress App";
 
@@ -114,19 +132,28 @@ namespace StreamCompress {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.Count)} '{cmdArgs.Count}'!");
 					 }
 
-					 if (cmdArgs.CropLeftPx.Value < 0) {
+					 if (cmdArgs.CropLeftPx < 0) {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropLeftPx)} '{cmdArgs.CropLeftPx}'!");
 					 }
 
-					 if (cmdArgs.CropRightPx.Value < 0) {
+					 if (cmdArgs.CropRightPx < 0) {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropRightPx)} '{cmdArgs.CropRightPx}'!");
 					 }
 
-					 if (cmdArgs.CropTopPx.Value < 0) {
+					 if (cmdArgs.CropTopPx < 0) {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropTopPx)} '{cmdArgs.CropTopPx}'!");
 					 }
-					 if (cmdArgs.CropBottomPx.Value < 0) {
+
+					 if (cmdArgs.CropBottomPx < 0) {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.CropBottomPx)} '{cmdArgs.CropBottomPx}'!");
+					 }
+
+					 if (cmdArgs.LZCompressionHashTablePrime < 1) {
+						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.LZCompressionHashTablePrime)} '{cmdArgs.LZCompressionHashTablePrime}'!");
+					 }
+
+					 if (cmdArgs.LZCompressionTrieInitialCapacity < 1) {
+						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.LZCompressionTrieInitialCapacity)} '{cmdArgs.LZCompressionTrieInitialCapacity}'!");
 					 }
 
 					 for (int i = cmdArgs.StartIndex; i < cmdArgs.Count; i++) {
@@ -143,14 +170,14 @@ namespace StreamCompress {
 						 case Method.AsGrayScale:
 							 SourceLooper<ImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
 								 return image
-								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
+								 .AsCroppedImage(a.AsCropSetup())
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
 							 });
 							 break;
 						 case Method.AsGrayScaleAsHuffmanEncoded:
 							 SourceLooper<ImageFrame, HuffmanImageFrame>(cmdArgs, (index, a, image) => {
 								 return image
-								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
+								 .AsCroppedImage(a.AsCropSetup())
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
 								 .AsHuffmanEncoded();
 							 });
@@ -162,25 +189,54 @@ namespace StreamCompress {
 							 break;
 						 case Method.AsLZ78Encoded:
 							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
-								 return image.AsLZEncodedUsingHashTable(12289);
+								 switch (a.LZCompressionDictionary) {
+									 case LZCompressionDictionary.HashTable:
+										 return image.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
+									 case LZCompressionDictionary.Trie:
+										 return image.AsLZEncodedUsingTrie(a.LZCompressionTrieInitialCapacity);
+									 default:
+										 throw new NotSupportedException();
+								 }
 							 });
 							 break;
 						 case Method.AsLZ78Decoded:
 							 SourceLooper<LZImageFrame, ImageFrame>(cmdArgs, (index, a, image) => {
-								 return image.AsImageFrameUsingHashTable<ImageFrame>(12289);
+								 switch (a.LZCompressionDictionary) {
+									 case LZCompressionDictionary.HashTable:
+										 return image.AsImageFrameUsingHashTable<ImageFrame>(a.LZCompressionHashTablePrime);
+									 case LZCompressionDictionary.Trie:
+										 return image.AsImageFrameUsingTrie<ImageFrame>(a.LZCompressionTrieInitialCapacity);
+									 default:
+										 throw new NotSupportedException();
+								 }
 							 });
 							 break;
 						 case Method.AsGrayScaleAsLZ78Encoded:
 							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
-								 return image
-								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
-								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
-								 .AsLZEncodedUsingHashTable(12289);
+								 var retData = image
+								 .AsCroppedImage(a.AsCropSetup())
+								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
+
+								 switch (a.LZCompressionDictionary) {
+									 case LZCompressionDictionary.HashTable:
+										 return retData.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
+									 case LZCompressionDictionary.Trie:
+										 return retData.AsLZEncodedUsingTrie(a.LZCompressionTrieInitialCapacity);
+									 default:
+										 throw new NotSupportedException();
+								 }
 							 });
 							 break;
 						 case Method.AsGrayScaleAsLZ78Decoded:
 							 SourceLooper<LZImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
-								 return image.AsImageFrameUsingHashTable<ImageFrameGrayScale>(12289);
+								 switch (a.LZCompressionDictionary) {
+									 case LZCompressionDictionary.HashTable:
+										 return image.AsImageFrameUsingHashTable<ImageFrameGrayScale>(a.LZCompressionHashTablePrime);
+									 case LZCompressionDictionary.Trie:
+										 return image.AsImageFrameUsingTrie<ImageFrameGrayScale>(a.LZCompressionTrieInitialCapacity);
+									 default:
+										 throw new NotSupportedException();
+								 }
 							 });
 							 break;
 					 }

@@ -492,7 +492,9 @@ namespace StreamCompress {
 
 		#endregion
 
-
+		public static CropSetup AsCropSetup(this Program.CommandLineArgs a) {
+			return new CropSetup { LeftPx = a.CropLeftPx, RightPx = a.CropRightPx, TopPx = a.CropTopPx, BottomPx = a.CropBottomPx };
+		}
 
 	}
 }
