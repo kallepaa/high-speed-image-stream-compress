@@ -31,6 +31,57 @@ namespace StreamCompressTest {
 			return FileExtensions.PathCombine(GetDestinationPath(), $"{i.ToString("00000")}-{suffix}");
 		}
 
+
+		public class TriesTests {
+
+			[Fact]
+			public void InsertAndExists() {
+
+				var words = new[] { "Car", "Cat" };
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+
+				var sut = new Tries(10);
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					sut.Insert(b);
+				}
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					Assert.True(sut.Exists(b));
+				}
+			}
+
+			[Fact]
+			public void InsertAndExistsAndNotExists() {
+
+				var words = new[] { "Car", "Cat", "trophe", "astro", "he" };
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+
+				var sut = new Tries(10);
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					sut.Insert(b);
+				}
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					Assert.True(sut.Exists(b));
+				}
+
+				var wordsNotExist = new[] { "car", "cat", "tac", "rac", "r", "ca", "catastrophe" };
+
+				for (int i = 0; i < wordsNotExist.Length; i++) {
+					var b = strEncoder.GetBytes(wordsNotExist[i]);
+					Assert.False(sut.Exists(b));
+				}
+
+			}
+		}
+
+
 		public class LZCompressionTests {
 			[Theory]
 			[InlineData("babaabaaa")]
