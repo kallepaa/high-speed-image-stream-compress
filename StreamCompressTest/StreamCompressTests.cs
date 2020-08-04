@@ -173,11 +173,11 @@ namespace StreamCompressTest {
 		}
 
 
-		public class ImageFrameLZCompressionTests {
+		public class ImageFrameLZCompressionHashTableTests {
 			[Theory]
 			[InlineData(12289)]
-			public void AsLZEncodedAndDecodedUsing(int prime) {
-				var i = 1;
+			public void AsLZEncodedAndDecoded(int prime) {
+				var i = 2;
 				var sourceFile = GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				var encoded = image.AsLZEncodedUsingHashTable(prime);
@@ -189,8 +189,8 @@ namespace StreamCompressTest {
 		public class ImageFrameLZCompressionTrieTests {
 			[Theory]
 			[InlineData(1)]
-			public void AsLZEncodedAndDecodedUsing(int nodeInitialCapacity) {
-				var i = 1;
+			public void AsLZEncodedAndDecoded(int nodeInitialCapacity) {
+				var i = 2;
 				var sourceFile = GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				var encoded = image.AsLZEncodedUsingTrie(nodeInitialCapacity);
@@ -381,8 +381,8 @@ namespace StreamCompressTest {
 			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
 			public void AllMethods(
 				Program.Method method,
 				string sourceFileSuffix,
@@ -395,10 +395,10 @@ namespace StreamCompressTest {
 				var destinationPath = GetDestinationPath();
 
 
-				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop);
+				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop, compDic);
 
 				if (decodeMethod.HasValue) {
-					_allMethods(decodeMethod.Value, destinationPath, destinationFileSuffix, destinationPath, destinationFileSuffix + "-decoded.bmp");
+					_allMethods(decodeMethod.Value, destinationPath, destinationFileSuffix, destinationPath, destinationFileSuffix + "-decoded.bmp", false, compDic);
 				}
 			}
 
@@ -422,7 +422,7 @@ namespace StreamCompressTest {
 					"--destination-file-suffix",
 					destinationFileSuffix,
 					"--start-index",
-					"0",
+					"1",
 					"--count",
 					"1",
 					"--method",
@@ -434,10 +434,10 @@ namespace StreamCompressTest {
 
 					switch (compDic.Value) {
 						case Program.LZCompressionDictionary.HashTable:
-							args.AddRange(new[] { "--lz-compression-dictionary", "393241" });
+							args.AddRange(new[] { "--lz-compression-dictionary", "12289" });
 							break;
 						case Program.LZCompressionDictionary.Trie:
-							args.AddRange(new[] { "--lz-compression-trie-initial-capacity", "10" });
+							args.AddRange(new[] { "--lz-compression-trie-initial-capacity", "1" });
 							break;
 						default:
 							throw new ArgumentException();

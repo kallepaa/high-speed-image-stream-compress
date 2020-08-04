@@ -253,7 +253,7 @@ namespace StreamCompress {
 			CommandLineArgs cmdArgs,
 			Func<int, CommandLineArgs, T, ISaveable<R>> func) where T : ISaveable<T>, new() {
 
-			for (int i = cmdArgs.StartIndex; i < cmdArgs.Count; i++) {
+			for (int i = cmdArgs.StartIndex; i < cmdArgs.Count + cmdArgs.StartIndex; i++) {
 				var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
 				var image = new T();
 				((ISaveable<T>)image).Open(sourceFile);

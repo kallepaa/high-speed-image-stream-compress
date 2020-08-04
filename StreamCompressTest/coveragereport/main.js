@@ -238,14 +238,14 @@ var assemblies = [
       { "name": "StreamCompress.ImageFrameGrayScale", "rp": "streamcompress.dll_ImageFrameGrayScale.html", "cl": 14, "ucl": 4, "cal": 18, "tl": 40, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "StreamCompress.LZImageFrame", "rp": "streamcompress.dll_LZImageFrame.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 29, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "StreamCompress.MinHeap<T>", "rp": "streamcompress.dll_MinHeap_T_.html", "cl": 63, "ucl": 0, "cal": 63, "tl": 147, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "StreamCompress.Program", "rp": "streamcompress.dll_Program.html", "cl": 186, "ucl": 0, "cal": 186, "tl": 267, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "StreamCompress.Program", "rp": "streamcompress.dll_Program.html", "cl": 185, "ucl": 1, "cal": 186, "tl": 267, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "StreamCompress.Tries", "rp": "streamcompress.dll_Tries.html", "cl": 33, "ucl": 0, "cal": 33, "tl": 116, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "StreamCompress.Tries<T>", "rp": "streamcompress.dll_Tries_T_.html", "cl": 43, "ucl": 1, "cal": 44, "tl": 116, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
   {
     "name": "streamcompresstest.dll",
     "classes": [
-      { "name": "StreamCompressTest.StreamCompressTests", "rp": "streamcompresstest.dll_StreamCompressTests.html", "cl": 300, "ucl": 9, "cal": 309, "tl": 546, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "StreamCompressTest.StreamCompressTests", "rp": "streamcompresstest.dll_StreamCompressTests.html", "cl": 305, "ucl": 4, "cal": 309, "tl": 546, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 
