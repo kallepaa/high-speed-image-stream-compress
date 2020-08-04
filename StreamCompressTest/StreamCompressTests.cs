@@ -2,6 +2,7 @@ using StreamCompress;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -40,56 +41,77 @@ namespace StreamCompressTest {
 				var words = new[] { "Car", "Cat" };
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 
-				var sut = new Tries(10);
+				var sut = new Tries<string>(10);
 
 				for (int i = 0; i < words.Length; i++) {
 					var b = strEncoder.GetBytes(words[i]);
-					sut.Insert(b);
+					sut.Insert(b, words[i]);
 				}
 
 				for (int i = 0; i < words.Length; i++) {
 					var b = strEncoder.GetBytes(words[i]);
-					Assert.True(sut.Exists(b));
+					var match = sut.Search(b);
+					Assert.True(match != null && match.CodeWord == words[i]);
 				}
 			}
 
 			[Fact]
-			public void InsertAndExistsAndNotExists() {
+			public void InsertAndCount() {
 
-				var words = new[] { "Car", "Cat", "trophe", "astro", "he" };
+				var words = new[] { "Car", "Cat","Car", "Cat" };
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 
-				var sut = new Tries(10);
+				var sut = new Tries<string>(10);
 
 				for (int i = 0; i < words.Length; i++) {
 					var b = strEncoder.GetBytes(words[i]);
-					sut.Insert(b);
+					sut.Insert(b, words[i]);
+				}
+
+				Assert.True(sut.Count == words.Distinct().Count());
+			}
+
+
+			[Fact]
+			public void InsertAndExistsAndNotExists() {
+
+				var words = new[] { "Car", "Cat" };
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+
+				var sut = new Tries<string>(10);
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					sut.Insert(b, words[i]);
 				}
 
 				for (int i = 0; i < words.Length; i++) {
 					var b = strEncoder.GetBytes(words[i]);
-					Assert.True(sut.Exists(b));
+					var match = sut.Search(b);
+					Assert.True(match != null && match.CodeWord == words[i]);
 				}
 
 				var wordsNotExist = new[] { "car", "cat", "tac", "rac", "r", "ca", "catastrophe" };
 
 				for (int i = 0; i < wordsNotExist.Length; i++) {
 					var b = strEncoder.GetBytes(wordsNotExist[i]);
-					Assert.False(sut.Exists(b));
+					var match = sut.Search(b);
+					Assert.True(match == null);
 				}
 
 			}
 		}
 
 
-		public class LZCompressionTests {
+		public class LZCompressionUsingHashTableTests {
+
 			[Theory]
 			[InlineData("babaabaaa")]
 			public void AsLZEncodedAndDecoded(string val) {
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 				var b = strEncoder.GetBytes(val);
-				var encoded = b.AsLZEncoded(389);
-				var decoded = encoded.AsLZDecoded(389);
+				var encoded = b.AsLZEncodedUsingHashTable(389);
+				var decoded = encoded.AsLZDecodedUsingHashTable(389);
 				var valDecoded = strEncoder.GetString(decoded);
 				Assert.Equal(val, valDecoded);
 			}
@@ -100,8 +122,6 @@ namespace StreamCompressTest {
 			[InlineData(1000, 389)]
 			[InlineData(10000, 389)]
 			[InlineData(100000, 389)]
-			//[InlineData(1000000, 12289)]
-			//[InlineData(10000000, 393241)]
 			public void AsLZEncodedAndDecodedRandom(int length, int prime) {
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 				var b = new byte[length];
@@ -110,25 +130,75 @@ namespace StreamCompressTest {
 					b[i] = (byte)rand.Next(0, 255);
 				}
 				var val = strEncoder.GetString(b);
-				var encoded = b.AsLZEncoded(prime);
-				var decoded = encoded.AsLZDecoded(prime);
+				var encoded = b.AsLZEncodedUsingHashTable(prime);
+				var decoded = encoded.AsLZDecodedUsingHashTable(prime);
 				var valDecoded = strEncoder.GetString(decoded);
 				Assert.Equal(val, valDecoded);
 			}
 		}
 
+
+		public class LZCompressionUsingTrieTests {
+
+			[Theory]
+			[InlineData("babaabaaa")]
+			public void AsLZEncodedAndDecoded(string val) {
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+				var b = strEncoder.GetBytes(val);
+				var encoded = b.AsLZEncodedUsingTrie(10);
+				var decoded = encoded.AsLZDecodedUsingTrie(10);
+				var valDecoded = strEncoder.GetString(decoded);
+				Assert.Equal(val, valDecoded);
+			}
+
+			[Theory]
+			[InlineData(10, 1)]
+			[InlineData(100, 2)]
+			[InlineData(1000, 5)]
+			[InlineData(10000, 10)]
+			[InlineData(100000, 20)]
+			public void AsLZEncodedAndDecodedRandom(int length, int nodeInitialCapacity) {
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+				var b = new byte[length];
+				var rand = new Random();
+				for (int i = 0; i < length; i++) {
+					b[i] = (byte)rand.Next(0, 255);
+				}
+				var val = strEncoder.GetString(b);
+				var encoded = b.AsLZEncodedUsingTrie(nodeInitialCapacity);
+				var decoded = encoded.AsLZDecodedUsingTrie(nodeInitialCapacity);
+				var valDecoded = strEncoder.GetString(decoded);
+				Assert.Equal(val, valDecoded);
+			}
+		}
+
+
 		public class ImageFrameLZCompressionTests {
 			[Theory]
 			[InlineData(12289)]
-			public void AsLZEncodedAndDecoded(int hastablePrime) {
+			public void AsLZEncodedAndDecodedUsing(int prime) {
 				var i = 1;
 				var sourceFile = GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
-				var encoded = image.AsLZEncoded(hastablePrime);
-				var decoded = encoded.AsImageFrame<ImageFrame>(hastablePrime);
+				var encoded = image.AsLZEncodedUsingHashTable(prime);
+				var decoded = encoded.AsImageFrameUsingHashTable<ImageFrame>(prime);
 				Assert.True(image.Image.Compare(decoded.Image));
 			}
 		}
+
+		public class ImageFrameLZCompressionTrieTests {
+			[Theory]
+			[InlineData(1)]
+			public void AsLZEncodedAndDecodedUsing(int nodeInitialCapacity) {
+				var i = 1;
+				var sourceFile = GetSourceImagePath(i);
+				var image = ImageFrame.FromFile(sourceFile);
+				var encoded = image.AsLZEncodedUsingTrie(nodeInitialCapacity);
+				var decoded = encoded.AsImageFrameUsingTrie<ImageFrame>(nodeInitialCapacity);
+				Assert.True(image.Image.Compare(decoded.Image));
+			}
+		}
+
 
 		public class ImageFrameGrayScaleHuffmanCodeCompressionTests {
 

@@ -162,12 +162,12 @@ namespace StreamCompress {
 							 break;
 						 case Method.AsLZ78Encoded:
 							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
-								 return image.AsLZEncoded(12289);
+								 return image.AsLZEncodedUsingHashTable(12289);
 							 });
 							 break;
 						 case Method.AsLZ78Decoded:
 							 SourceLooper<LZImageFrame, ImageFrame>(cmdArgs, (index, a, image) => {
-								 return image.AsImageFrame<ImageFrame>(12289);
+								 return image.AsImageFrameUsingHashTable<ImageFrame>(12289);
 							 });
 							 break;
 						 case Method.AsGrayScaleAsLZ78Encoded:
@@ -175,12 +175,12 @@ namespace StreamCompress {
 								 return image
 								 .AsCroppedImage(new CropSetup { LeftPx = a.CropLeftPx.Value, RightPx = a.CropRightPx.Value, TopPx = a.CropTopPx.Value, BottomPx = a.CropBottomPx.Value })
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
-								 .AsLZEncoded(12289);
+								 .AsLZEncodedUsingHashTable(12289);
 							 });
 							 break;
 						 case Method.AsGrayScaleAsLZ78Decoded:
 							 SourceLooper<LZImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
-								 return image.AsImageFrame<ImageFrameGrayScale>(12289);
+								 return image.AsImageFrameUsingHashTable<ImageFrameGrayScale>(12289);
 							 });
 							 break;
 					 }

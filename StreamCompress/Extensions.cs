@@ -358,8 +358,9 @@ namespace StreamCompress {
 			return ret;
 		}
 
-		public static byte[] AsLZEncoded(this byte[] input, int hashPrime) {
-			var encoderDic = new HashTable<int>(hashPrime);
+
+		private static byte[] _asLZEncoded(this byte[] input, ILZ78CodingTable<int> encoderDic) {
+
 
 			for (int i = 0; i < 256; i++) {
 				var searchKey = new[] { (byte)i };
@@ -384,7 +385,7 @@ namespace StreamCompress {
 						var item2 = encoderDic.Search(P);
 
 						encodedOutput.AddBytes(item2.CodeWord.AsBytes());
-						encoderDic.Insert(PC, (int)encoderDic.Count);
+						encoderDic.Insert(PC, encoderDic.Count);
 						P = C;
 					}
 				}
@@ -396,9 +397,7 @@ namespace StreamCompress {
 			}
 		}
 
-		public static byte[] AsLZDecoded(this byte[] codes, int hashPrime) {
-
-			var decoderDic = new HashTable<byte[]>(hashPrime);
+		private static byte[] _asLZDecoded(byte[] codes, ILZ78CodingTable<byte[]> decoderDic) {
 
 			for (int i = 0; i < 256; i++) {
 				var searchKey = i.AsBytes();
@@ -435,24 +434,64 @@ namespace StreamCompress {
 
 					var C3 = itemO.CodeWord.Concatenate(C2);
 
-					decoderDic.Insert(((int)(decoderDic.Count)).AsBytes(), C3);
+					decoderDic.Insert(((decoderDic.Count)).AsBytes(), C3);
 
 					O = N;
 				}
 
 				return decodedOutPut.ReadBytes();
 			}
+
 		}
 
-		public static LZImageFrame AsLZEncoded<T>(this T image, int hashPrime) where T : ImageFrame {
-			return new LZImageFrame(image.Image.AsLZEncoded(hashPrime));
+		#region LZ78 Using Hash Table as dictionary
+
+		public static byte[] AsLZEncodedUsingHashTable(this byte[] input, int hashPrime) {
+			var encoderDic = new HashTable<int>(hashPrime);
+			return _asLZEncoded(input, encoderDic);
 		}
 
-		public static T AsImageFrame<T>(this LZImageFrame encodedImage, int hashPrime) where T : ImageFrame, new() {
+		public static byte[] AsLZDecodedUsingHashTable(this byte[] codes, int hashPrime) {
+			var decoderDic = new HashTable<byte[]>(hashPrime);
+			return _asLZDecoded(codes, decoderDic);
+		}
+
+		public static LZImageFrame AsLZEncodedUsingHashTable<T>(this T image, int hashPrime) where T : ImageFrame {
+			return new LZImageFrame(image.Image.AsLZEncodedUsingHashTable(hashPrime));
+		}
+
+		public static T AsImageFrameUsingHashTable<T>(this LZImageFrame encodedImage, int hashPrime) where T : ImageFrame, new() {
 			var ret = new T();
-			ret.FromBytes(encodedImage.Codes.AsLZDecoded(hashPrime));
+			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingHashTable(hashPrime));
 			return ret;
 		}
+
+		#endregion
+
+		#region LZ78 Using Trie as dictionary
+
+		public static byte[] AsLZEncodedUsingTrie(this byte[] input, int nodeInitialCapacity) {
+			var encoderDic = new Tries<int>(nodeInitialCapacity);
+			return _asLZEncoded(input, encoderDic);
+		}
+
+		public static byte[] AsLZDecodedUsingTrie(this byte[] codes, int nodeInitialCapacity) {
+			var decoderDic = new Tries<byte[]>(nodeInitialCapacity);
+			return _asLZDecoded(codes, decoderDic);
+		}
+
+		public static LZImageFrame AsLZEncodedUsingTrie<T>(this T image, int nodeInitialCapacity) where T : ImageFrame {
+			return new LZImageFrame(image.Image.AsLZEncodedUsingTrie(nodeInitialCapacity));
+		}
+
+		public static T AsImageFrameUsingTrie<T>(this LZImageFrame encodedImage, int nodeInitialCapacity) where T : ImageFrame, new() {
+			var ret = new T();
+			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingTrie(nodeInitialCapacity));
+			return ret;
+		}
+
+		#endregion
+
 
 
 	}

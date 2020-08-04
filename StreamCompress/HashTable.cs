@@ -5,7 +5,7 @@ namespace StreamCompress {
 	/// <summary>
 	/// Hash table impl
 	/// </summary>
-	public class HashTable<T> {
+	public class HashTable<T> : ILZ78CodingTable<T> {
 
 		public HashTableItem<T>[] HashTableItems { get; internal set; }
 		public int Count { get; internal set; }
@@ -14,7 +14,7 @@ namespace StreamCompress {
 			HashTableItems = new HashTableItem<T>[m];
 		}
 
-		public void Insert(byte[] searchKey, T codeWord) {
+		private void _insert(byte[] searchKey, T codeWord) {
 
 			var item = new HashTableItem<T>(searchKey, codeWord, HashTableItems.Length);
 
@@ -22,7 +22,7 @@ namespace StreamCompress {
 				HashTableItems[item.Hash] = item;
 				Count++;
 			} else {
-				var existingItem = Search(searchKey);
+				var existingItem = _search(searchKey);
 				if (existingItem == null) {
 					HashTableItems[item.Hash].SetLinkedItem(item);
 					Count++;
@@ -30,7 +30,7 @@ namespace StreamCompress {
 			}
 		}
 
-		public HashTableItem<T> Search(byte[] searchKey) {
+		public HashTableItem<T> _search(byte[] searchKey) {
 
 			var hashTableItem = new HashTableItem<T>(searchKey, default(T), HashTableItems.Length);
 
@@ -44,6 +44,15 @@ namespace StreamCompress {
 				}
 			}
 			return itemFound;
+		}
+
+		public void Insert(byte[] searchKey, T codeWord) {
+			_insert(searchKey, codeWord);
+		}
+
+		public ILZ78CodingTableItem<T> Search(byte[] searchKey) {
+			var htItem = _search(searchKey);
+			return htItem == null ? null : new ILZ78CodingTableItem<T>(htItem.SearchKey, htItem.CodeWord);
 		}
 
 		public class HashTableItem<TT> : IComparable<HashTableItem<TT>> {
