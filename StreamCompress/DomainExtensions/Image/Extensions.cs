@@ -1,6 +1,10 @@
-﻿using System;
+﻿using StreamCompress.Domain.Huffman;
+using StreamCompress.Domain.Image;
+using StreamCompress.Domain.LZ;
+using StreamCompress.Utils;
+using System;
 
-namespace StreamCompress {
+namespace StreamCompress.DomainExtensions.Image {
 
 	/// <summary>
 	/// Domain extensions for domain objects manipulation
@@ -225,92 +229,6 @@ namespace StreamCompress {
 			return ret;
 		}
 
-		public static ImageFrameGrayScale AsImageGrayScaleFrame(this HuffmanImageFrame encodedImage) {
-
-			//---------- generate tree from color codes -----------------
-
-			var maxNodes = 0;
-			for (int i = 0; i <= encodedImage.MaxCodeBitsLength + 1; i++) {
-				maxNodes = 1 << i;
-			}
-
-			//simple help table for tree generation
-			var nodeTree = new HuffmanTreeNode<int>[maxNodes - 1];
-			var rootNode = new HuffmanTreeNode<int>();
-			nodeTree[0] = rootNode;
-
-			for (int i = 0; i < encodedImage.ColorCodeCount; i++) {
-
-				var colorCodeItem = encodedImage.GetColorCodeItemFromHeader(i);
-				var huffmanNode = new HuffmanTreeNode<int>(colorCodeItem.Symbol, colorCodeItem.Code, colorCodeItem.CodeBitsCount);
-				huffmanNode.PopulateBitTable();
-
-				//start always from root bit and go to leaf
-				var parentPos = 0;
-				var parent = nodeTree[0];
-
-				for (int j = huffmanNode.CodeBitTable.Length - 1; j >= 0; j--) {
-
-					var childPos = 0;
-					var isRightChild = huffmanNode.CodeBitTable[j];
-
-					if (isRightChild) {
-						childPos = ((parentPos + 1) * 2 + 1) - 1;
-					} else {
-						childPos = ((parentPos + 1) * 2) - 1;
-					}
-
-					if (j == 0) {
-						//leaf node
-						nodeTree[childPos] = huffmanNode;
-					} else if (nodeTree[childPos] == null) {
-						//create internal node
-						nodeTree[childPos] = new HuffmanTreeNode<int>();
-					}
-
-					nodeTree[childPos].SetParent(parent, isRightChild);
-					parent.SetChild(nodeTree[childPos]);
-					parent = nodeTree[childPos];
-					parentPos = childPos;
-				}
-			}
-
-			var imageHeaderSize = encodedImage.OriginalImageHeaderLength + ImageFrame.HEADER_256_COLOR_TABLE_SIZE;
-			var imageData = new byte[imageHeaderSize + encodedImage.OriginalImageDataLength];
-
-			//-------------   set header ------------------------
-
-			//copy original image non-encoded header to image
-			encodedImage.Data.CopyBytesTo(
-				encodedImage.FixedHeaderLength + encodedImage.ColorCodeHeaderLength,
-				imageData,
-				0,
-				encodedImage.OriginalImageHeaderLength);
-
-			//--------------- decode image -----------------------
-
-			var node = rootNode;
-			var destIndex = imageHeaderSize;
-
-			//read encoded stream bit by bit and travel tree using bit value
-			//until leaf node is reached. read original color code from leaf node
-			for (int i = 0; i < encodedImage.CompressedBits; i++) {
-				//read right or left child based bit in stream
-				node = encodedImage.GetBit(i) ? node.RightChild : node.LeftChild;
-				if (node.Leaf) {
-					//set decoded byte to image
-					imageData[destIndex++] = (byte)node.Symbol;
-					//move back to root node
-					node = rootNode;
-				}
-			}
-
-			var ret =  new ImageFrameGrayScale(imageData);
-			//generate color table
-			ret.SetColorTable();
-
-			return ret;
-		}
 
 		public static ImageFrameGrayScale AsPlanted(this ImageFrameGrayScale image, int plantWidthPx, int plantHeightPx) {
 
@@ -358,7 +276,6 @@ namespace StreamCompress {
 			return ret;
 		}
 
-
 		private static byte[] _asLZEncoded(this byte[] input, ILZ78CodingTable<int> encoderDic) {
 
 
@@ -397,97 +314,30 @@ namespace StreamCompress {
 			}
 		}
 
-		private static byte[] _asLZDecoded(byte[] codes, ILZ78CodingTable<byte[]> decoderDic) {
-
-			for (int i = 0; i < 256; i++) {
-				var searchKey = i.AsBytes();
-				var codeWord = new[] { (byte)i };
-				decoderDic.Insert(searchKey, codeWord);
-			}
-
-			using (var decodedOutPut = new ByteMemoryStream(codes.Length * 2)) {
-
-				var O = codes.AsInt(0).AsBytes();
-				var S = new byte[0];
-				var C2 = new byte[0];
-
-				var item = decoderDic.Search(O);
-
-				decodedOutPut.AddBytes(item.CodeWord);
-
-				for (int i = 4; i < codes.Length; i += 4) {
-
-					var N = codes.AsInt(i).AsBytes();
-
-					var itemN = decoderDic.Search(N);
-					var itemO = decoderDic.Search(O);
-
-					if (itemN == null) {
-						S = itemO.CodeWord.Concatenate(C2);
-					} else {
-						S = itemN.CodeWord;
-					}
-
-					decodedOutPut.AddBytes(S);
-
-					C2 = new byte[] { S[0] };
-
-					var C3 = itemO.CodeWord.Concatenate(C2);
-
-					decoderDic.Insert(((decoderDic.Count)).AsBytes(), C3);
-
-					O = N;
-				}
-
-				return decodedOutPut.ReadBytes();
-			}
-
-		}
 
 		#region LZ78 Using Hash Table as dictionary
 
-		public static byte[] AsLZEncodedUsingHashTable(this byte[] input, int hashPrime) {
+
+		public static byte[] BytesAsLZEncodedUsingHashTable(this byte[] input, int hashPrime) {
 			var encoderDic = new HashTable<int>(hashPrime);
 			return _asLZEncoded(input, encoderDic);
 		}
 
-		public static byte[] AsLZDecodedUsingHashTable(this byte[] codes, int hashPrime) {
-			var decoderDic = new HashTable<byte[]>(hashPrime);
-			return _asLZDecoded(codes, decoderDic);
-		}
-
 		public static LZImageFrame AsLZEncodedUsingHashTable<T>(this T image, int hashPrime) where T : ImageFrame {
-			return new LZImageFrame(image.Image.AsLZEncodedUsingHashTable(hashPrime));
-		}
-
-		public static T AsImageFrameUsingHashTable<T>(this LZImageFrame encodedImage, int hashPrime) where T : ImageFrame, new() {
-			var ret = new T();
-			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingHashTable(hashPrime));
-			return ret;
+			return new LZImageFrame(image.Image.BytesAsLZEncodedUsingHashTable(hashPrime));
 		}
 
 		#endregion
 
 		#region LZ78 Using Trie as dictionary
 
-		public static byte[] AsLZEncodedUsingTrie(this byte[] input, int nodeInitialCapacity) {
+		public static byte[] BytesAsLZEncodedUsingTrie(this byte[] input, int nodeInitialCapacity) {
 			var encoderDic = new Tries<int>(nodeInitialCapacity);
 			return _asLZEncoded(input, encoderDic);
 		}
 
-		public static byte[] AsLZDecodedUsingTrie(this byte[] codes, int nodeInitialCapacity) {
-			var decoderDic = new Tries<byte[]>(nodeInitialCapacity);
-			return _asLZDecoded(codes, decoderDic);
-		}
-
 		public static LZImageFrame AsLZEncodedUsingTrie<T>(this T image, int nodeInitialCapacity) where T : ImageFrame {
-			return new LZImageFrame(image.Image.AsLZEncodedUsingTrie(nodeInitialCapacity));
-		}
-
-		public static T AsImageFrameUsingTrie<T>(this LZImageFrame encodedImage, int nodeInitialCapacity) where T : ImageFrame, new() {
-			var ret = new T();
-			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingTrie(nodeInitialCapacity));
-			return ret;
+			return new LZImageFrame(image.Image.BytesAsLZEncodedUsingTrie(nodeInitialCapacity));
 		}
 
 		#endregion

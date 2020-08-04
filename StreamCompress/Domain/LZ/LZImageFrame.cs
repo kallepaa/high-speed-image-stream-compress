@@ -1,5 +1,7 @@
 ﻿
-namespace StreamCompress {
+using StreamCompress.Utils;
+
+namespace StreamCompress.Domain.LZ {
 	public class LZImageFrame : ISaveable<LZImageFrame> {
 
 		public byte[] Codes { get; internal set; }

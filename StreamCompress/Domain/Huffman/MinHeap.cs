@@ -1,4 +1,4 @@
-﻿namespace StreamCompress {
+﻿namespace StreamCompress.Domain.Huffman {
 
 	/// <summary>
 	/// Min heap implementation

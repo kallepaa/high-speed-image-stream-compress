@@ -1,4 +1,4 @@
-﻿namespace StreamCompress {
+﻿namespace StreamCompress.Domain.Huffman {
 
 	/// <summary>
 	/// Presents one node in huffman tree

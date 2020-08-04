@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace StreamCompress {
+namespace StreamCompress.Utils {
 	public sealed class ByteMemoryStream : IDisposable {
 
 		private readonly MemoryStream _memoryStream;

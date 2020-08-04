@@ -1,4 +1,11 @@
-﻿using System;
+﻿using StreamCompress.Domain.Huffman;
+using StreamCompress.Domain.Image;
+using StreamCompress.Domain.LZ;
+using StreamCompress.DomainExtensions.Huffman;
+using StreamCompress.DomainExtensions.Image;
+using StreamCompress.DomainExtensions.LZ;
+using StreamCompress.Utils;
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;

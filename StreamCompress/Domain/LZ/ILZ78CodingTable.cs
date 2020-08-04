@@ -1,5 +1,5 @@
 ﻿
-namespace StreamCompress {
+namespace StreamCompress.Domain.LZ {
 	public interface ILZ78CodingTable<T> {
 		int Count { get; }
 		void Insert(byte[] searchKey, T codeWord);

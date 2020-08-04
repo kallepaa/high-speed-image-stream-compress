@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace StreamCompress {
+namespace StreamCompress.Utils {
 
 	/// <summary>
 	/// Extensions for byte and bit manipulation

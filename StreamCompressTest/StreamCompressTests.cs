@@ -1,4 +1,11 @@
 using StreamCompress;
+using StreamCompress.Domain.Huffman;
+using StreamCompress.Domain.Image;
+using StreamCompress.Domain.LZ;
+using StreamCompress.DomainExtensions.Huffman;
+using StreamCompress.DomainExtensions.Image;
+using StreamCompress.DomainExtensions.LZ;
+using StreamCompress.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -110,7 +117,7 @@ namespace StreamCompressTest {
 			public void AsLZEncodedAndDecoded(string val) {
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 				var b = strEncoder.GetBytes(val);
-				var encoded = b.AsLZEncodedUsingHashTable(389);
+				var encoded = b.BytesAsLZEncodedUsingHashTable(389);
 				var decoded = encoded.AsLZDecodedUsingHashTable(389);
 				var valDecoded = strEncoder.GetString(decoded);
 				Assert.Equal(val, valDecoded);
@@ -130,7 +137,7 @@ namespace StreamCompressTest {
 					b[i] = (byte)rand.Next(0, 255);
 				}
 				var val = strEncoder.GetString(b);
-				var encoded = b.AsLZEncodedUsingHashTable(prime);
+				var encoded = b.BytesAsLZEncodedUsingHashTable(prime);
 				var decoded = encoded.AsLZDecodedUsingHashTable(prime);
 				var valDecoded = strEncoder.GetString(decoded);
 				Assert.Equal(val, valDecoded);
@@ -145,7 +152,7 @@ namespace StreamCompressTest {
 			public void AsLZEncodedAndDecoded(string val) {
 				var strEncoder = Encoding.GetEncoding("iso-8859-1");
 				var b = strEncoder.GetBytes(val);
-				var encoded = b.AsLZEncodedUsingTrie(10);
+				var encoded = b.BytesAsLZEncodedUsingTrie(10);
 				var decoded = encoded.AsLZDecodedUsingTrie(10);
 				var valDecoded = strEncoder.GetString(decoded);
 				Assert.Equal(val, valDecoded);
@@ -165,7 +172,7 @@ namespace StreamCompressTest {
 					b[i] = (byte)rand.Next(0, 255);
 				}
 				var val = strEncoder.GetString(b);
-				var encoded = b.AsLZEncodedUsingTrie(nodeInitialCapacity);
+				var encoded = b.BytesAsLZEncodedUsingTrie(nodeInitialCapacity);
 				var decoded = encoded.AsLZDecodedUsingTrie(nodeInitialCapacity);
 				var valDecoded = strEncoder.GetString(decoded);
 				Assert.Equal(val, valDecoded);

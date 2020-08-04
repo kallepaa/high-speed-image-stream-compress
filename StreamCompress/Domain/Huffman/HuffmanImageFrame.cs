@@ -1,5 +1,6 @@
-﻿namespace StreamCompress {
+﻿using StreamCompress.Utils;
 
+namespace StreamCompress.Domain.Huffman {
 
 	/// <summary>
 	/// Presents single image frame as Huffman encoded

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using StreamCompress.Utils;
+using System;
 
-namespace StreamCompress {
+namespace StreamCompress.Domain.LZ {
 
 	/// <summary>
 	/// Hash table impl

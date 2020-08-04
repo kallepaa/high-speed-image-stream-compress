@@ -1,5 +1,7 @@
 ﻿
-namespace StreamCompress {
+using StreamCompress.Utils;
+
+namespace StreamCompress.Domain.Image {
 
 	/// <summary>
 	/// Present image frame which image is gray scale image

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace StreamCompress {
+namespace StreamCompress.Utils {
 
 	/// <summary>
 	/// Operations for file manipulations

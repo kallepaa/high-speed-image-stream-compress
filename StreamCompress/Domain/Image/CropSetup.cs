@@ -1,5 +1,5 @@
 ﻿
-namespace StreamCompress {
+namespace StreamCompress.Domain.Image {
 
 	/// <summary>
 	/// Presents image crop information

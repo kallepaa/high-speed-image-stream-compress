@@ -1,6 +1,7 @@
-﻿using System;
+﻿using StreamCompress.Utils;
+using System;
 
-namespace StreamCompress {
+namespace StreamCompress.Domain.Image {
 
 	/// <summary>
 	/// Presents single image frame 

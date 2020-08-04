@@ -1,4 +1,5 @@
-﻿namespace StreamCompress {
+﻿namespace StreamCompress.Domain.LZ {
+
 	public class Tries<T> : ILZ78CodingTable<T> {
 
 		public TriesContainer<T> Root { get; }
