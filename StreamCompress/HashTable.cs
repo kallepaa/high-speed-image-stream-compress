@@ -52,7 +52,7 @@ namespace StreamCompress {
 
 		public ILZ78CodingTableItem<T> Search(byte[] searchKey) {
 			var htItem = _search(searchKey);
-			return htItem == null ? null : new ILZ78CodingTableItem<T>(htItem.SearchKey, htItem.CodeWord);
+			return htItem == null ? null : new ILZ78CodingTableItem<T>(htItem.CodeWord);
 		}
 
 		public class HashTableItem<TT> : IComparable<HashTableItem<TT>> {

@@ -8,11 +8,9 @@ namespace StreamCompress {
 
 	public class ILZ78CodingTableItem<T> {
 
-		public byte[] SearchKey { get; }
 		public T CodeWord { get; }
 
-		public ILZ78CodingTableItem(byte[] searchKey, T codeWord) {
-			SearchKey = searchKey;
+		public ILZ78CodingTableItem(T codeWord) {
 			CodeWord = codeWord;
 		}
 	}

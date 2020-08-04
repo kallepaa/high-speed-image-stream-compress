@@ -17,7 +17,7 @@
 
 		public ILZ78CodingTableItem<T> Search(byte[] searchKey) {
 			var match = _search(searchKey);
-			return match == null ? null : new ILZ78CodingTableItem<T>(searchKey, match.ChildContainer.CodeWord);
+			return match == null ? null : new ILZ78CodingTableItem<T>(match.ChildContainer.CodeWord);
 		}
 
 		public void _insert(byte[] searchKey, T codeWord) {

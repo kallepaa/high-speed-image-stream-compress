@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="coveragereport\" />
     <Folder Include="TestData\Destination\" />
     <Folder Include="TestData\Source\" />
   </ItemGroup>
