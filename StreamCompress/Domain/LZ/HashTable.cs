@@ -8,9 +8,19 @@ namespace StreamCompress.Domain.LZ {
 	/// </summary>
 	public class HashTable<T> : ILZ78CodingTable<T> {
 
+		/// <summary>
+		/// Hash table items
+		/// </summary>
 		public HashTableItem<T>[] HashTableItems { get; internal set; }
+		/// <summary>
+		/// Items count
+		/// </summary>
 		public int Count { get; internal set; }
 
+		/// <summary>
+		/// Constructor for new HashTable
+		/// </summary>
+		/// <param name="m">Hash table size</param>
 		public HashTable(int m) {
 			HashTableItems = new HashTableItem<T>[m];
 		}
@@ -47,15 +57,29 @@ namespace StreamCompress.Domain.LZ {
 			return itemFound;
 		}
 
+		/// <summary>
+		/// Inserts new item to HashTable if it does not already exists
+		/// </summary>
+		/// <param name="searchKey">Key</param>
+		/// <param name="codeWord">Value</param>
 		public void Insert(byte[] searchKey, T codeWord) {
 			_insert(searchKey, codeWord);
 		}
 
+		/// <summary>
+		/// Serach method for hash table items
+		/// </summary>
+		/// <param name="searchKey">Key</param>
+		/// <returns>Item if it does exists, otherwise null</returns>
 		public ILZ78CodingTableItem<T> Search(byte[] searchKey) {
 			var htItem = _search(searchKey);
 			return htItem == null ? null : new ILZ78CodingTableItem<T>(htItem.CodeWord);
 		}
 
+		/// <summary>
+		/// Hash table item
+		/// </summary>
+		/// <typeparam name="TT">CodeWord type</typeparam>
 		public class HashTableItem<TT> : IComparable<HashTableItem<TT>> {
 
 			const int p = 16777619;
@@ -67,6 +91,12 @@ namespace StreamCompress.Domain.LZ {
 
 			public HashTableItem<TT> LinkedItem { get; internal set; }
 
+			/// <summary>
+			/// Constructor to create new item. Method will also calculate key and hash
+			/// </summary>
+			/// <param name="searchKey"></param>
+			/// <param name="codeWord"></param>
+			/// <param name="m"></param>
 			public HashTableItem(byte[] searchKey, TT codeWord, int m) {
 
 				//FNV Hash
@@ -94,6 +124,10 @@ namespace StreamCompress.Domain.LZ {
 				}
 			}
 
+			/// <summary>
+			/// Ser given item as linked item to this item
+			/// </summary>
+			/// <param name="item"></param>
 			public void SetLinkedItem(HashTableItem<TT> item) {
 				if (LinkedItem == null) {
 					LinkedItem = item;
@@ -102,9 +136,13 @@ namespace StreamCompress.Domain.LZ {
 				}
 			}
 
+			/// <summary>
+			/// Compares this item to given one
+			/// </summary>
+			/// <param name="other">Other item</param>
+			/// <returns>zero when items are equal, otherwise -1</returns>
 			public int CompareTo(HashTableItem<TT> other) {
 				return SearchKey.Compare(other.SearchKey) ? 0 : -1;
-
 			}
 		}
 	}

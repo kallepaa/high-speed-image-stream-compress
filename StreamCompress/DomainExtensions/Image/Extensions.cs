@@ -11,6 +11,12 @@ namespace StreamCompress.DomainExtensions.Image {
 	/// </summary>
 	public static class Extensions {
 
+		/// <summary>
+		/// Converts 24 bit color image to gray scale image
+		/// </summary>
+		/// <param name="image">Color image</param>
+		/// <param name="colors">How many gray colors are used in gray image</param>
+		/// <returns></returns>
 		public static ImageFrameGrayScale AsGrayScale(this ImageFrame image, int colors = 256) {
 
 			//--------- write gray scale image header -----------------
@@ -24,7 +30,7 @@ namespace StreamCompress.DomainExtensions.Image {
 			image.Image.CopyBytesTo(0, newImage, 0, 2);
 
 			//file size
-			((uint)(newImage.Length)).AsBytes().CopyBytesTo(newImage,2);
+			((uint)(newImage.Length)).AsBytes().CopyBytesTo(newImage, 2);
 
 			//pixel data offset 54 (old header) + 1024 (color table) = 1078
 			newImage[10] = 54;
@@ -79,6 +85,12 @@ namespace StreamCompress.DomainExtensions.Image {
 			return ret;
 		}
 
+		/// <summary>
+		/// Crops given image
+		/// </summary>
+		/// <param name="image">Image to crop</param>
+		/// <param name="cropSetup">Crop setup</param>
+		/// <returns>Cropped image</returns>
 		public static ImageFrame AsCroppedImage(this ImageFrame image, CropSetup cropSetup) {
 			var newWidthPx = image.ImageWidthPx - cropSetup.LeftPx - cropSetup.RightPx;
 			var newHeightPx = image.ImageHeightPx - cropSetup.TopPx - cropSetup.BottomPx;
@@ -99,7 +111,7 @@ namespace StreamCompress.DomainExtensions.Image {
 
 			//copy header from source and ...
 			image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
-	
+
 			//copy image bytes from source to new image
 			var leftCropBytes = (cropSetup.LeftPx * 3);
 			var imageWidthBytes = image.ImageWidthPx * 3;
@@ -119,6 +131,11 @@ namespace StreamCompress.DomainExtensions.Image {
 			return ret;
 		}
 
+		/// <summary>
+		/// Encodes gray scale image using huffman coding
+		/// </summary>
+		/// <param name="image">Image to encode</param>
+		/// <returns>Huffman image frame</returns>
 		public static HuffmanImageFrame AsHuffmanEncoded(this ImageFrameGrayScale image) {
 
 			if (image.BitsPerPixel != 8) {
@@ -229,7 +246,13 @@ namespace StreamCompress.DomainExtensions.Image {
 			return ret;
 		}
 
-
+		/// <summary>
+		/// Adds given image in the center of the given plant area and return new image instance
+		/// </summary>
+		/// <param name="image">Image to plant inside new image</param>
+		/// <param name="plantWidthPx">New image width</param>
+		/// <param name="plantHeightPx">New image height</param>
+		/// <returns></returns>
 		public static ImageFrameGrayScale AsPlanted(this ImageFrameGrayScale image, int plantWidthPx, int plantHeightPx) {
 
 
@@ -255,7 +278,7 @@ namespace StreamCompress.DomainExtensions.Image {
 			image.Image.CopyBytesTo(0, newImage, 0, image.HeaderBytesLength);
 
 			var leftPx = plantWidthPx / 2 - image.ImageWidthPx / 2;
-			var bottomPx = (plantHeightPx / 2 - image.ImageHeightPx / 2) ;
+			var bottomPx = (plantHeightPx / 2 - image.ImageHeightPx / 2);
 
 			//fill image into plant center
 			for (int ir = 0; ir < image.ImageHeightPx; ir++) {
@@ -276,6 +299,12 @@ namespace StreamCompress.DomainExtensions.Image {
 			return ret;
 		}
 
+		/// <summary>
+		/// Encode given data using LZ coding and given dictionary
+		/// </summary>
+		/// <param name="input">Byte array to encode</param>
+		/// <param name="encoderDic">Dictionary implementation</param>
+		/// <returns>Encoded byte array</returns>
 		private static byte[] _asLZEncoded(this byte[] input, ILZ78CodingTable<int> encoderDic) {
 
 
@@ -317,12 +346,24 @@ namespace StreamCompress.DomainExtensions.Image {
 
 		#region LZ78 Using Hash Table as dictionary
 
-
+		/// <summary>
+		/// Encodes bytes using LZ and hash table as dictionary
+		/// </summary>
+		/// <param name="input">Byte array</param>
+		/// <param name="hashPrime">m value in hash table</param>
+		/// <returns>Encoded byte array</returns>
 		public static byte[] BytesAsLZEncodedUsingHashTable(this byte[] input, int hashPrime) {
 			var encoderDic = new HashTable<int>(hashPrime);
 			return _asLZEncoded(input, encoderDic);
 		}
 
+		/// <summary>
+		/// Encodes image using LZ and hash table as dictionary
+		/// </summary>
+		/// <typeparam name="T">Type of image</typeparam>
+		/// <param name="image">Image to encode</param>
+		/// <param name="hashPrime">m value in hash table</param>
+		/// <returns></returns>
 		public static LZImageFrame AsLZEncodedUsingHashTable<T>(this T image, int hashPrime) where T : ImageFrame {
 			return new LZImageFrame(image.Image.BytesAsLZEncodedUsingHashTable(hashPrime));
 		}
@@ -331,17 +372,35 @@ namespace StreamCompress.DomainExtensions.Image {
 
 		#region LZ78 Using Trie as dictionary
 
+		/// <summary>
+		/// Encodes bytes using LZ and trie as dictionary
+		/// </summary>
+		/// <param name="input">Byte array</param>
+		/// <param name="nodeInitialCapacity">Node table initial size</param>
+		/// <returns></returns>
 		public static byte[] BytesAsLZEncodedUsingTrie(this byte[] input, int nodeInitialCapacity) {
 			var encoderDic = new Tries<int>(nodeInitialCapacity);
 			return _asLZEncoded(input, encoderDic);
 		}
 
+		/// <summary>
+		/// Encodes image using LZ and trie as dictionary
+		/// </summary>
+		/// <typeparam name="T">Type of image</typeparam>
+		/// <param name="image">Image to encode</param>
+		/// <param name="nodeInitialCapacity">Node table initial size</param>
+		/// <returns></returns>
 		public static LZImageFrame AsLZEncodedUsingTrie<T>(this T image, int nodeInitialCapacity) where T : ImageFrame {
 			return new LZImageFrame(image.Image.BytesAsLZEncodedUsingTrie(nodeInitialCapacity));
 		}
 
 		#endregion
 
+		/// <summary>
+		/// Create crop setup from command line arguments
+		/// </summary>
+		/// <param name="a">Command line arguments</param>
+		/// <returns>Crop setup</returns>
 		public static CropSetup AsCropSetup(this Program.CommandLineArgs a) {
 			return new CropSetup { LeftPx = a.CropLeftPx, RightPx = a.CropRightPx, TopPx = a.CropTopPx, BottomPx = a.CropBottomPx };
 		}

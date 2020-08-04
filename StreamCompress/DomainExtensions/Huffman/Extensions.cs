@@ -9,6 +9,12 @@ namespace StreamCompress.DomainExtensions.Huffman {
 	/// Domain extensions for domain objects manipulation
 	/// </summary>
 	public static class Extensions {
+
+		/// <summary>
+		/// Decodes Huffman encoded image back to gray scale image
+		/// </summary>
+		/// <param name="encodedImage"></param>
+		/// <returns></returns>
 		public static ImageFrameGrayScale AsImageGrayScaleFrame(this HuffmanImageFrame encodedImage) {
 
 			//---------- generate tree from color codes -----------------

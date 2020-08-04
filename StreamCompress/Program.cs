@@ -11,8 +11,14 @@ using System.CommandLine.Invocation;
 using System.IO;
 
 namespace StreamCompress {
+	/// <summary>
+	/// Main program
+	/// </summary>
 	public class Program {
 
+		/// <summary>
+		/// Supported methods
+		/// </summary>
 		public enum Method {
 			AsGrayScale,
 			AsGrayScaleAsHuffmanEncoded,
@@ -23,17 +29,26 @@ namespace StreamCompress {
 			AsGrayScaleAsLZ78Decoded
 		}
 
+		/// <summary>
+		/// Gray scale image color counts
+		/// </summary>
 		public enum GrayScaleColors {
 			Full = 256,
 			Half = 128,
 			Quarter = 64
 		}
 
+		/// <summary>
+		/// LZ compression dictionary types
+		/// </summary>
 		public enum LZCompressionDictionary {
 			HashTable,
 			Trie
 		}
 
+		/// <summary>
+		/// Command line arguments
+		/// </summary>
 		public class CommandLineArgs {
 			public string SourcePath { get; set; }
 			public string SourceFileSuffix { get; set; }
@@ -252,10 +267,25 @@ namespace StreamCompress {
 			return command.InvokeAsync(args).Result;
 		}
 
+		/// <summary>
+		/// Builds full path to file
+		/// </summary>
+		/// <param name="i">File index</param>
+		/// <param name="path">File path</param>
+		/// <param name="suffix">File suffix</param>
+		/// <returns>Full path</returns>
 		private static string _filePath(int i, string path, string suffix) {
 			return FileExtensions.PathCombine(path, $"{i.ToString("00000")}-{suffix}");
 		}
 
+		/// <summary>
+		/// Iterates over source folder and reads file using index. 
+		/// Executes given function and then saves return value to file.
+		/// </summary>
+		/// <typeparam name="T">Type of domain object</typeparam>
+		/// <typeparam name="R">Type of domain object</typeparam>
+		/// <param name="cmdArgs">Command line arguments</param>
+		/// <param name="func">Executing function</param>
 		private static void SourceLooper<T, R>(
 			CommandLineArgs cmdArgs,
 			Func<int, CommandLineArgs, T, ISaveable<R>> func) where T : ISaveable<T>, new() {
@@ -263,9 +293,12 @@ namespace StreamCompress {
 			for (int i = cmdArgs.StartIndex; i < cmdArgs.Count + cmdArgs.StartIndex; i++) {
 				var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
 				var image = new T();
+				//open file and creates domain object
 				((ISaveable<T>)image).Open(sourceFile);
+				//executes given function
 				var ret = func(i, cmdArgs, image);
 				var destFile = _filePath(i, cmdArgs.DestinationPath, cmdArgs.DestinationFileSuffix);
+				//saves file
 				ret.Save(destFile);
 			}
 		}

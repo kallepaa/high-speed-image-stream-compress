@@ -29,11 +29,21 @@ namespace StreamCompress.Domain.Image {
 			}
 		}
 
+		/// <summary>
+		/// Saves image frame to file
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
 		ImageFrameGrayScale ISaveable<ImageFrameGrayScale>.Open(string path) {
 			Open(path);
 			return this;
 		}
 
+		/// <summary>
+		/// Reads image frame from file
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
 		ImageFrameGrayScale ISaveable<ImageFrameGrayScale>.Save(string path) {
 			Save(path);
 			return this;

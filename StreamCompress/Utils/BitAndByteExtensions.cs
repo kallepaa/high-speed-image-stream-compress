@@ -118,6 +118,12 @@ namespace StreamCompress.Utils {
 			Buffer.BlockCopy(val, 0, dest, destOffSet, val.Length);
 		}
 
+		/// <summary>
+		/// Concatenates this byte array with given one
+		/// </summary>
+		/// <param name="bytes1">This</param>
+		/// <param name="bytes2">Bytes to add</param>
+		/// <returns></returns>
 		public static byte[] Concatenate(this byte[] bytes1, byte[] bytes2) {
 			var ret = new byte[bytes1.Length + bytes2.Length];
 			bytes1.CopyBytesTo(ret, 0);
@@ -125,7 +131,14 @@ namespace StreamCompress.Utils {
 			return ret;
 		}
 
+		/// <summary>
+		/// Compares to byte arrays
+		/// </summary>
+		/// <param name="b1">this</param>
+		/// <param name="b2">other</param>
+		/// <returns>true when arrays are equal otherwise false</returns>
 		public static bool Compare(this byte[] b1, byte[] b2) {
+
 			if (b2 == null || b1.Length != b2.Length) {
 				return false;
 			}

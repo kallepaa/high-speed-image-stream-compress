@@ -229,7 +229,7 @@ namespace StreamCompressTest {
 				var image = ImageFrame.FromFile(sourceFile).AsCroppedImage(cropSetup).AsGrayScale();
 				var encodedFilename = GetSaveImagePath(i, "gray-huffman-encoded");
 				image.AsHuffmanEncoded().Save(encodedFilename);
-				var encoded = HuffmanImageFrame.FromFile(encodedFilename);
+				var encoded = new HuffmanImageFrame().Open(encodedFilename);
 				var decodedFilename = GetSaveImagePath(i, "gray-huffman-decoded.bmp");
 				encoded.AsImageGrayScaleFrame().Save(decodedFilename);
 				var decoded = ImageFrame.FromFile(decodedFilename);

@@ -10,7 +10,12 @@ namespace StreamCompress.DomainExtensions.LZ {
 	/// </summary>
 	public static class Extensions {
 
-
+		/// <summary>
+		/// Decodes LZ compressed bytes
+		/// </summary>
+		/// <param name="codes">Compressed bytes</param>
+		/// <param name="decoderDic">Dictionary to use in decoding</param>
+		/// <returns>Decompressed data</returns>
 		private static byte[] _asLZDecoded(byte[] codes, ILZ78CodingTable<byte[]> decoderDic) {
 
 			for (int i = 0; i < 256; i++) {
@@ -60,12 +65,24 @@ namespace StreamCompress.DomainExtensions.LZ {
 
 		#region LZ78 Using Hash Table as dictionary
 
-
+		/// <summary>
+		/// Decodes compressed bytes
+		/// </summary>
+		/// <param name="codes">Compressed bytes</param>
+		/// <param name="hashPrime">m value used in hash table</param>
+		/// <returns>Decompressed data</returns>
 		public static byte[] AsLZDecodedUsingHashTable(this byte[] codes, int hashPrime) {
 			var decoderDic = new HashTable<byte[]>(hashPrime);
 			return _asLZDecoded(codes, decoderDic);
 		}
 
+		/// <summary>
+		/// Decodes LZ compressed data
+		/// </summary>
+		/// <typeparam name="T">Type of image</typeparam>
+		/// <param name="encodedImage">LZ encoded image frame</param>
+		/// <param name="hashPrime">m value used in hash table</param>
+		/// <returns>Decompressed data</returns>
 		public static T AsImageFrameUsingHashTable<T>(this LZImageFrame encodedImage, int hashPrime) where T : ImageFrame, new() {
 			var ret = new T();
 			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingHashTable(hashPrime));
@@ -76,11 +93,24 @@ namespace StreamCompress.DomainExtensions.LZ {
 
 		#region LZ78 Using Trie as dictionary
 
+		/// <summary>
+		/// Decodes compressed bytes
+		/// </summary>
+		/// <param name="codes">Compressed bytes</param>
+		/// <param name="nodeInitialCapacity">Node table initial size</param>
+		/// <returns>Decompressed data</returns>
 		public static byte[] AsLZDecodedUsingTrie(this byte[] codes, int nodeInitialCapacity) {
 			var decoderDic = new Tries<byte[]>(nodeInitialCapacity);
 			return _asLZDecoded(codes, decoderDic);
 		}
 
+		/// <summary>
+		/// Decodes LZ compressed data
+		/// </summary>
+		/// <typeparam name="T">Type of image</typeparam>
+		/// <param name="encodedImage">LZ encoded image frame</param>
+		/// <param name="nodeInitialCapacity">Node table initial size</param>
+		/// <returns>Return image frame of type T</returns>
 		public static T AsImageFrameUsingTrie<T>(this LZImageFrame encodedImage, int nodeInitialCapacity) where T : ImageFrame, new() {
 			var ret = new T();
 			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingTrie(nodeInitialCapacity));

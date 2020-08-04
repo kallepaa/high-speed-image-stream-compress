@@ -80,11 +80,21 @@ namespace StreamCompress.Domain.Image {
 			return new ImageFrame(FileExtensions.ReadAllBytes(path));
 		}
 
+		/// <summary>
+		/// Saves image frame to file
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
 		public ImageFrame Save(string path) {
 			Image.SaveToFile(path);
 			return this;
 		}
 
+		/// <summary>
+		/// Reads image frame from file
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
 		public ImageFrame Open(string path) {
 			FromBytes(FileExtensions.ReadAllBytes(path));
 			return this;
