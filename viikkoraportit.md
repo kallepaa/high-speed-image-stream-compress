@@ -1,3 +1,39 @@
+# Viikko 3
+
+_Mitä olen tehnyt tällä viikolla?_
+
+* Selvitellyt LZ77 koodausken periaatteita. MS:ltä löytyi yksinkertainen kuvaus periaatteista. [LZ77 Compression Algorithm
+](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wusp/fb98aa28-5cd7-407f-8869-a6cef1ff1ccb)
+* Toteuttanut Trie algoritmin vaihtoehtona hajautustaululle nykyisessä LZ koodauksessa
+* Aloittanut toteutusdokumentin tekemistä
+* Viimeistellyt CLI toteutuksen
+* Täydentänyt yksikkö testauksia
+* Lisännyt yksikkötestauksiin testikattavuus raportin
+* Täydentänyt koodin dokumentointia
+* Uudelleen järjestellyt lähdekoodi projektin rakennetta
+
+_Miten ohjelma on edistynyt?_
+
+* Trie algoritmi on vaihtoehto hajautustaululle
+* Ohjelmaa voidaan ajaa komentokehotteesta 
+
+_Mitä opin tällä viikolla / tänään?_
+
+* Tire algoritmin periaatteet
+* LZ77 algoritmin yksinkertaiset periaatteet 
+* Tehokkaan koodin toteuttaminen isoilla syötteillä ei ole helppoa
+
+_Mikä jäi epäselväksi tai tuottanut vaikeuksia? Vastaa tähän kohtaan rehellisesti, koska saat tarvittaessa apua tämän kohdan perusteella._
+
+* Trie algoritmi ei parantanut suoritus kykyä. Pisimmät hakuavaimet ovat 512 tavua. Tuskin pystyn tämän työn aikana pääsemään määrittelyssä määrittämiini nopeus tavoitteisiin. Jos on vielä aikaa niin teen totetuksen LZ77 lla.
+
+_Mitä teen seuraavaksi?_
+
+* Viimeistelen toteutusdokumentin
+* Teen käyttöohjeet
+* Teen ohjelmasta julkaisun GitHubiin
+* Aloitan testausdokumentin tekemisen
+
 # Viikko 2
 
 _Mitä olen tehnyt tällä viikolla?_

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Utils">
+    <Position X="5.75" Y="2.062" Height="0.396" Width="4.481" />
+  </Comment>
+  <Comment CommentText="Huffman">
+    <Position X="0.729" Y="5.031" Height="0.396" Width="4.169" />
+  </Comment>
+  <Comment CommentText="Image">
+    <Position X="0.635" Y="2.073" Height="0.396" Width="4.387" />
+  </Comment>
+  <Comment CommentText="LZ">
+    <Position X="5.75" Y="5" Height="0.396" Width="4.471" />
+  </Comment>
+  <Class Name="StreamCompress.Domain.Huffman.HuffmanImageFrame" Collapsed="true">
+    <Position X="0.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAxYBgICAAIAAAAAABAAAAAgACAhgAAQACAQAAuAA=</HashCode>
+      <FileName>Domain\Huffman\HuffmanImageFrame.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.Domain.Image.ImageFrame" Collapsed="true">
+    <Position X="0.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAAAIBAAAAQIAAAAAAAAAAAAAAACFAEAAACAAAAAAA=</HashCode>
+      <FileName>Domain\Image\ImageFrame.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.Domain.Image.ImageFrameGrayScale" Collapsed="true">
+    <Position X="2.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAIAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Image\ImageFrameGrayScale.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.Domain.LZ.LZImageFrame" Collapsed="true">
+    <Position X="6.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAIAAAAAAAAAEAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\LZ\LZImageFrame.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.DomainExtensions.Huffman.Extensions" Collapsed="true">
+    <Position X="0.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainExtensions\Huffman\Extensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.DomainExtensions.Image.Extensions" Collapsed="true">
+    <Position X="0.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAECAADAAAAAAAAAQAACgAEAAAAAABAAAAAA=</HashCode>
+      <FileName>DomainExtensions\Image\Extensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.DomainExtensions.LZ.Extensions" Collapsed="true">
+    <Position X="6.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAMAAAAAgAAAAAAAACAAAA=</HashCode>
+      <FileName>DomainExtensions\LZ\Extensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Domain.LZ.ILZ78CodingTableItem&lt;T&gt;" Collapsed="true">
+    <Position X="8.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\LZ\ILZ78CodingTable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Domain.LZ.Tries&lt;T&gt;" Collapsed="true">
+    <Position X="8.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAEAAAAACAAAAAAAAQAAAAAAEAAgAAAAAAgAAA=</HashCode>
+      <FileName>Domain\LZ\Tries.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.Domain.LZ.HashTable&lt;T&gt;" Collapsed="true">
+    <Position X="6" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAQAAAAAAEAAgABAAAAgAAA=</HashCode>
+      <FileName>Domain\LZ\HashTable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.Domain.Image.CropSetup" Collapsed="true">
+    <Position X="2.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAEAAAAAgAAAAAAAAAAIA=</HashCode>
+      <FileName>Domain\Image\CropSetup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Domain.Huffman.HuffmanTreeNode&lt;T&gt;" Collapsed="true">
+    <Position X="2.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAIAAABAAAAAABBAAgRAAgAIAEEAAAAEEKgAAACAA=</HashCode>
+      <FileName>Domain\Huffman\HuffmanTreeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Domain.Huffman.MinHeap&lt;T&gt;" Collapsed="true">
+    <Position X="0.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAgAEAECAAAAAAAAAAAAAAAgAAAAAAAAJAAAgAAAAA=</HashCode>
+      <FileName>Domain\Huffman\MinHeap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Utils.FileExtensions" Collapsed="true">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\FileExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Utils.BitAndByteExtensions" Collapsed="true">
+    <Position X="8.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAEACAAAAAIAAAAgAAAAAAAABBAAAAQAAA=</HashCode>
+      <FileName>Utils\BitAndByteExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Utils.ByteMemoryStream" Collapsed="true">
+    <Position X="8.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAQAAAAAAEAAQAAAAEAAAAA=</HashCode>
+      <FileName>Utils\ByteMemoryStream.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StreamCompress.Program" Collapsed="true">
+    <Position X="4.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAIAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="StreamCompress.Domain.LZ.ILZ78CodingTable&lt;T&gt;" Collapsed="true">
+    <Position X="6.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Domain\LZ\ILZ78CodingTable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="StreamCompress.Utils.ISaveable&lt;T&gt;" Collapsed="true">
+    <Position X="5.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\ISaveable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
