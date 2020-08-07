@@ -10,7 +10,7 @@ _Mitä olen tehnyt tällä viikolla?_
 * Täydentänyt yksikkö testauksia
 * Lisännyt yksikkötestauksiin testikattavuus raportin
 * Täydentänyt koodin dokumentointia
-* Uudelleen järjestellyt lähdekoodi projektin rakennetta
+* Uudelleen järjestellyt lähdekoodin hakemisto ja nimiavaruuksien rakennetta
 
 _Miten ohjelma on edistynyt?_
 
