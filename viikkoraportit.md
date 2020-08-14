@@ -1,3 +1,26 @@
+# Viikko 4
+
+_Mitä olen tehnyt tällä viikolla?_
+
+* Valitettavasti en kerennyt edistämään työtä tällä viikolla
+
+_Miten ohjelma on edistynyt?_
+
+* Tällä viikolla ei edistystä 
+
+_Mitä opin tällä viikolla / tänään?_
+
+_Mikä jäi epäselväksi tai tuottanut vaikeuksia? Vastaa tähän kohtaan rehellisesti, koska saat tarvittaessa apua tämän kohdan perusteella._
+
+
+_Mitä teen seuraavaksi?_
+
+* Muutan palautteen perusteella Trie toteutusta niin, että jokaisessa solmussa on 256 kokoinen taulu
+* Viimeistelen toteutusdokumentin
+* Teen käyttöohjeet
+* Teen ohjelmasta julkaisun GitHubiin
+* Aloitan testausdokumentin tekemisen
+
 # Viikko 3
 
 _Mitä olen tehnyt tällä viikolla?_
