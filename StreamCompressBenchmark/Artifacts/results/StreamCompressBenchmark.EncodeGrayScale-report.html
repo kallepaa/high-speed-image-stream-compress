@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>StreamCompressBenchmark.EncodeGrayScale-20200815-211127</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17134.1667 (1803/April2018Update/Redstone4)
+Intel Core i5-6600K CPU 3.50GHz (Skylake), 1 CPU, 4 logical and 4 physical cores
+Frequency=3421871 Hz, Resolution=292.2378 ns, Timer=TSC
+.NET Core SDK=3.1.100
+  [Host]             : .NET Core 2.1.8 (CoreCLR 4.6.27317.03, CoreFX 4.6.27317.03), X64 RyuJIT
+  EncodeGrayScaleJob : .NET Core 2.1.8 (CoreCLR 4.6.27317.03, CoreFX 4.6.27317.03), X64 RyuJIT
+</code></pre>
+<pre><code>Job=EncodeGrayScaleJob  IterationCount=1  LaunchCount=3  
+RunStrategy=ColdStart  WarmupCount=1  
+</code></pre>
+
+<table>
+<thead><tr><th>               Method</th><th>Colors</th><th> Mean</th><th> Error</th><th>StdDev</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>&#39;HashTable - Prime 12289&#39;</td><td>32</td><td>336.66 ms</td><td>608.225 ms</td><td>33.339 ms</td><td>26000.0000</td><td>7000.0000</td><td>2000.0000</td><td>150938.42 KB</td>
+</tr><tr><td>&#39;Trie - Initial capacity 1&#39;</td><td>32</td><td>441.83 ms</td><td>138.921 ms</td><td>7.615 ms</td><td>18000.0000</td><td>5000.0000</td><td>2000.0000</td><td>107617.91 KB</td>
+</tr><tr><td>Trie256</td><td>32</td><td>675.98 ms</td><td>229.695 ms</td><td>12.590 ms</td><td>57000.0000</td><td>21000.0000</td><td>4000.0000</td><td>333168.97 KB</td>
+</tr><tr><td>Huffman</td><td>32</td><td>24.09 ms</td><td>3.514 ms</td><td>0.193 ms</td><td>-</td><td>-</td><td>-</td><td>554.45 KB</td>
+</tr><tr><td>&#39;HashTable - Prime 12289&#39;</td><td>64</td><td>413.50 ms</td><td>86.584 ms</td><td>4.746 ms</td><td>26000.0000</td><td>7000.0000</td><td>2000.0000</td><td>157065.42 KB</td>
+</tr><tr><td>&#39;Trie - Initial capacity 1&#39;</td><td>64</td><td>485.30 ms</td><td>33.473 ms</td><td>1.835 ms</td><td>19000.0000</td><td>5000.0000</td><td>2000.0000</td><td>114775.76 KB</td>
+</tr><tr><td>Trie256</td><td>64</td><td>854.91 ms</td><td>100.285 ms</td><td>5.497 ms</td><td>74000.0000</td><td>27000.0000</td><td>4000.0000</td><td>436722.59 KB</td>
+</tr><tr><td>Huffman</td><td>64</td><td>33.08 ms</td><td>13.363 ms</td><td>0.732 ms</td><td>-</td><td>-</td><td>-</td><td>669.75 KB</td>
+</tr><tr><td>&#39;HashTable - Prime 12289&#39;</td><td>128</td><td>586.79 ms</td><td>482.299 ms</td><td>26.436 ms</td><td>28000.0000</td><td>7000.0000</td><td>2000.0000</td><td>166367.87 KB</td>
+</tr><tr><td>&#39;Trie - Initial capacity 1&#39;</td><td>128</td><td>605.76 ms</td><td>394.965 ms</td><td>21.649 ms</td><td>21000.0000</td><td>5000.0000</td><td>2000.0000</td><td>127309.22 KB</td>
+</tr><tr><td>Trie256</td><td>128</td><td>1,181.10 ms</td><td>563.025 ms</td><td>30.861 ms</td><td>95000.0000</td><td>34000.0000</td><td>5000.0000</td><td>561186.87 KB</td>
+</tr><tr><td>Huffman</td><td>128</td><td>41.62 ms</td><td>1.218 ms</td><td>0.067 ms</td><td>-</td><td>-</td><td>-</td><td>791.3 KB</td>
+</tr><tr><td>&#39;HashTable - Prime 12289&#39;</td><td>256</td><td>793.41 ms</td><td>1,032.942 ms</td><td>56.619 ms</td><td>30000.0000</td><td>8000.0000</td><td>2000.0000</td><td>178015.38 KB</td>
+</tr><tr><td>&#39;Trie - Initial capacity 1&#39;</td><td>256</td><td>762.68 ms</td><td>171.931 ms</td><td>9.424 ms</td><td>25000.0000</td><td>6000.0000</td><td>2000.0000</td><td>148236.95 KB</td>
+</tr><tr><td>Trie256</td><td>256</td><td>1,482.04 ms</td><td>1,309.122 ms</td><td>71.757 ms</td><td>118000.0000</td><td>43000.0000</td><td>5000.0000</td><td>703784.02 KB</td>
+</tr><tr><td>Huffman</td><td>256</td><td>47.22 ms</td><td>3.386 ms</td><td>0.186 ms</td><td>-</td><td>-</td><td>-</td><td>927.52 KB</td>
+</tr></tbody></table>
+</body>
+</html>

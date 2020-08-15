@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>StreamCompressBenchmark.EncodeCroppedGrayScale-20200815-210926</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17134.1667 (1803/April2018Update/Redstone4)
+Intel Core i5-6600K CPU 3.50GHz (Skylake), 1 CPU, 4 logical and 4 physical cores
+Frequency=3421871 Hz, Resolution=292.2378 ns, Timer=TSC
+.NET Core SDK=3.1.100
+  [Host]                    : .NET Core 2.1.8 (CoreCLR 4.6.27317.03, CoreFX 4.6.27317.03), X64 RyuJIT
+  EncodeCroppedGrayScaleJob : .NET Core 2.1.8 (CoreCLR 4.6.27317.03, CoreFX 4.6.27317.03), X64 RyuJIT
+</code></pre>
+<pre><code>Job=EncodeCroppedGrayScaleJob  IterationCount=1  LaunchCount=3  
+RunStrategy=ColdStart  WarmupCount=1  
+</code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>Crop</th><th>  Mean</th><th>Error</th><th>StdDev</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>HashTable</td><td>0</td><td>796.876 ms</td><td>757.1364 ms</td><td>41.5012 ms</td><td>30000.0000</td><td>8000.0000</td><td>2000.0000</td><td>178015.39 KB</td>
+</tr><tr><td>Trie</td><td>0</td><td>729.167 ms</td><td>126.0857 ms</td><td>6.9112 ms</td><td>25000.0000</td><td>6000.0000</td><td>2000.0000</td><td>148240.57 KB</td>
+</tr><tr><td>Trie256</td><td>0</td><td>1,439.472 ms</td><td>194.4835 ms</td><td>10.6603 ms</td><td>118000.0000</td><td>43000.0000</td><td>5000.0000</td><td>703784.02 KB</td>
+</tr><tr><td>Huffman</td><td>0</td><td>47.905 ms</td><td>29.7053 ms</td><td>1.6282 ms</td><td>-</td><td>-</td><td>-</td><td>927.52 KB</td>
+</tr><tr><td>HashTable</td><td>2</td><td>610.881 ms</td><td>118.4517 ms</td><td>6.4927 ms</td><td>26000.0000</td><td>7000.0000</td><td>2000.0000</td><td>154571.48 KB</td>
+</tr><tr><td>Trie</td><td>2</td><td>628.782 ms</td><td>57.9153 ms</td><td>3.1745 ms</td><td>22000.0000</td><td>6000.0000</td><td>2000.0000</td><td>130023.77 KB</td>
+</tr><tr><td>Trie256</td><td>2</td><td>1,293.611 ms</td><td>149.8123 ms</td><td>8.2117 ms</td><td>106000.0000</td><td>39000.0000</td><td>5000.0000</td><td>627770.66 KB</td>
+</tr><tr><td>Huffman</td><td>2</td><td>42.108 ms</td><td>12.5116 ms</td><td>0.6858 ms</td><td>-</td><td>-</td><td>-</td><td>813.35 KB</td>
+</tr><tr><td>HashTable</td><td>4</td><td>501.872 ms</td><td>28.8263 ms</td><td>1.5801 ms</td><td>22000.0000</td><td>6000.0000</td><td>2000.0000</td><td>132666.66 KB</td>
+</tr><tr><td>Trie</td><td>4</td><td>492.751 ms</td><td>122.3517 ms</td><td>6.7065 ms</td><td>19000.0000</td><td>5000.0000</td><td>2000.0000</td><td>112618.03 KB</td>
+</tr><tr><td>Trie256</td><td>4</td><td>1,097.987 ms</td><td>150.9870 ms</td><td>8.2761 ms</td><td>93000.0000</td><td>34000.0000</td><td>5000.0000</td><td>551345.67 KB</td>
+</tr><tr><td>Huffman</td><td>4</td><td>37.363 ms</td><td>25.1133 ms</td><td>1.3765 ms</td><td>-</td><td>-</td><td>-</td><td>704.41 KB</td>
+</tr><tr><td>HashTable</td><td>6</td><td>381.086 ms</td><td>92.4461 ms</td><td>5.0673 ms</td><td>19000.0000</td><td>4000.0000</td><td>2000.0000</td><td>112387.51 KB</td>
+</tr><tr><td>Trie</td><td>6</td><td>374.581 ms</td><td>37.0509 ms</td><td>2.0309 ms</td><td>15000.0000</td><td>3000.0000</td><td>1000.0000</td><td>96247.05 KB</td>
+</tr><tr><td>Trie256</td><td>6</td><td>888.933 ms</td><td>114.3636 ms</td><td>6.2687 ms</td><td>80000.0000</td><td>29000.0000</td><td>4000.0000</td><td>476826.16 KB</td>
+</tr><tr><td>Huffman</td><td>6</td><td>32.063 ms</td><td>2.8099 ms</td><td>0.1540 ms</td><td>-</td><td>-</td><td>-</td><td>604.41 KB</td>
+</tr><tr><td>HashTable</td><td>8</td><td>293.472 ms</td><td>109.3498 ms</td><td>5.9938 ms</td><td>16000.0000</td><td>4000.0000</td><td>2000.0000</td><td>93109.17 KB</td>
+</tr><tr><td>Trie</td><td>8</td><td>312.838 ms</td><td>37.6181 ms</td><td>2.0620 ms</td><td>13000.0000</td><td>3000.0000</td><td>1000.0000</td><td>79943.04 KB</td>
+</tr><tr><td>Trie256</td><td>8</td><td>760.023 ms</td><td>332.2410 ms</td><td>18.2112 ms</td><td>67000.0000</td><td>24000.0000</td><td>4000.0000</td><td>397163.87 KB</td>
+</tr><tr><td>Huffman</td><td>8</td><td>27.523 ms</td><td>7.5464 ms</td><td>0.4136 ms</td><td>-</td><td>-</td><td>-</td><td>507.49 KB</td>
+</tr><tr><td>HashTable</td><td>10</td><td>210.131 ms</td><td>256.9724 ms</td><td>14.0855 ms</td><td>12000.0000</td><td>3000.0000</td><td>1000.0000</td><td>75099.16 KB</td>
+</tr><tr><td>Trie</td><td>10</td><td>232.234 ms</td><td>122.0448 ms</td><td>6.6897 ms</td><td>10000.0000</td><td>2000.0000</td><td>1000.0000</td><td>64178.36 KB</td>
+</tr><tr><td>Trie256</td><td>10</td><td>658.980 ms</td><td>365.8713 ms</td><td>20.0546 ms</td><td>55000.0000</td><td>20000.0000</td><td>4000.0000</td><td>319918.45 KB</td>
+</tr><tr><td>Huffman</td><td>10</td><td>22.650 ms</td><td>2.9789 ms</td><td>0.1633 ms</td><td>-</td><td>-</td><td>-</td><td>418.79 KB</td>
+</tr><tr><td>HashTable</td><td>12</td><td>138.283 ms</td><td>25.2198 ms</td><td>1.3824 ms</td><td>9000.0000</td><td>2000.0000</td><td>1000.0000</td><td>59144.07 KB</td>
+</tr><tr><td>Trie</td><td>12</td><td>175.608 ms</td><td>11.1795 ms</td><td>0.6128 ms</td><td>8000.0000</td><td>2000.0000</td><td>1000.0000</td><td>50703.41 KB</td>
+</tr><tr><td>Trie256</td><td>12</td><td>441.245 ms</td><td>362.2451 ms</td><td>19.8559 ms</td><td>43000.0000</td><td>16000.0000</td><td>3000.0000</td><td>254880.13 KB</td>
+</tr><tr><td>Huffman</td><td>12</td><td>19.157 ms</td><td>5.7368 ms</td><td>0.3145 ms</td><td>-</td><td>-</td><td>-</td><td>341.96 KB</td>
+</tr><tr><td>HashTable</td><td>14</td><td>106.172 ms</td><td>222.1150 ms</td><td>12.1749 ms</td><td>7000.0000</td><td>2000.0000</td><td>1000.0000</td><td>45028.55 KB</td>
+</tr><tr><td>Trie</td><td>14</td><td>137.600 ms</td><td>275.3680 ms</td><td>15.0939 ms</td><td>6000.0000</td><td>2000.0000</td><td>1000.0000</td><td>39148.56 KB</td>
+</tr><tr><td>Trie256</td><td>14</td><td>352.257 ms</td><td>427.2676 ms</td><td>23.4200 ms</td><td>34000.0000</td><td>13000.0000</td><td>3000.0000</td><td>199431.22 KB</td>
+</tr><tr><td>Huffman</td><td>14</td><td>17.650 ms</td><td>24.8219 ms</td><td>1.3606 ms</td><td>-</td><td>-</td><td>-</td><td>274.67 KB</td>
+</tr><tr><td>HashTable</td><td>16</td><td>66.273 ms</td><td>21.7142 ms</td><td>1.1902 ms</td><td>5000.0000</td><td>2000.0000</td><td>1000.0000</td><td>32357.63 KB</td>
+</tr><tr><td>Trie</td><td>16</td><td>90.771 ms</td><td>43.9069 ms</td><td>2.4067 ms</td><td>5000.0000</td><td>1000.0000</td><td>-</td><td>28569.32 KB</td>
+</tr><tr><td>Trie256</td><td>16</td><td>246.332 ms</td><td>44.0526 ms</td><td>2.4147 ms</td><td>26000.0000</td><td>10000.0000</td><td>3000.0000</td><td>148783.94 KB</td>
+</tr><tr><td>Huffman</td><td>16</td><td>12.823 ms</td><td>2.7635 ms</td><td>0.1515 ms</td><td>-</td><td>-</td><td>-</td><td>214.77 KB</td>
+</tr><tr><td>HashTable</td><td>18</td><td>37.235 ms</td><td>17.1925 ms</td><td>0.9424 ms</td><td>3000.0000</td><td>1000.0000</td><td>-</td><td>20707.84 KB</td>
+</tr><tr><td>Trie</td><td>18</td><td>54.102 ms</td><td>5.0388 ms</td><td>0.2762 ms</td><td>3000.0000</td><td>1000.0000</td><td>-</td><td>18238.54 KB</td>
+</tr><tr><td>Trie256</td><td>18</td><td>144.228 ms</td><td>102.3925 ms</td><td>5.6125 ms</td><td>17000.0000</td><td>6000.0000</td><td>2000.0000</td><td>97889.9 KB</td>
+</tr><tr><td>Huffman</td><td>18</td><td>11.064 ms</td><td>8.3096 ms</td><td>0.4555 ms</td><td>-</td><td>-</td><td>-</td><td>161.3 KB</td>
+</tr><tr><td>HashTable</td><td>20</td><td>22.227 ms</td><td>42.4783 ms</td><td>2.3284 ms</td><td>2000.0000</td><td>1000.0000</td><td>-</td><td>10902.92 KB</td>
+</tr><tr><td>Trie</td><td>20</td><td>33.255 ms</td><td>10.5678 ms</td><td>0.5793 ms</td><td>2000.0000</td><td>1000.0000</td><td>-</td><td>9865.92 KB</td>
+</tr><tr><td>Trie256</td><td>20</td><td>66.228 ms</td><td>29.1059 ms</td><td>1.5954 ms</td><td>9000.0000</td><td>3000.0000</td><td>1000.0000</td><td>54155.62 KB</td>
+</tr><tr><td>Huffman</td><td>20</td><td>7.739 ms</td><td>4.3403 ms</td><td>0.2379 ms</td><td>-</td><td>-</td><td>-</td><td>116.48 KB</td>
+</tr><tr><td>HashTable</td><td>22</td><td>5.140 ms</td><td>0.9574 ms</td><td>0.0525 ms</td><td>-</td><td>-</td><td>-</td><td>2325.01 KB</td>
+</tr><tr><td>Trie</td><td>22</td><td>7.902 ms</td><td>11.3756 ms</td><td>0.6235 ms</td><td>-</td><td>-</td><td>-</td><td>2505.25 KB</td>
+</tr><tr><td>Trie256</td><td>22</td><td>12.995 ms</td><td>6.1760 ms</td><td>0.3385 ms</td><td>2000.0000</td><td>1000.0000</td><td>-</td><td>13504.19 KB</td>
+</tr><tr><td>Huffman</td><td>22</td><td>5.911 ms</td><td>2.0014 ms</td><td>0.1097 ms</td><td>-</td><td>-</td><td>-</td><td>78.06 KB</td>
+</tr></tbody></table>
+</body>
+</html>
