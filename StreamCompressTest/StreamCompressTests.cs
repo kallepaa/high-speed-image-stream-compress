@@ -12,33 +12,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Xunit;
+using StreamCompress.Shared;
 
 namespace StreamCompressTest {
 	public class StreamCompressTests {
 
-		const string SOURCE_FILE_SUFFIX = "original.bmp";
-
-		public static string GetSourcePath() {
-			var sourcePath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestData\Source");
-			var dirInfo = new DirectoryInfo(sourcePath);
-			return dirInfo.FullName;
-		}
-		public static string GetDestinationPath() {
-			var sourcePath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestData\Destination");
-			var dirInfo = new DirectoryInfo(sourcePath);
-			return dirInfo.FullName;
-		}
-
 		private readonly static CropSetup _cropSetupCorrect = new CropSetup { LeftPx = 27 * 16, RightPx = 29 * 16, TopPx = 1 * 16, BottomPx = 6 * 16 };
-
-		public static string GetSourceImagePath(int i) {
-			return FileExtensions.PathCombine(GetSourcePath(), $"{i.ToString("00000")}-{SOURCE_FILE_SUFFIX}");
-		}
-
-		public static string GetSaveImagePath(int i, string suffix) {
-			return FileExtensions.PathCombine(GetDestinationPath(), $"{i.ToString("00000")}-{suffix}");
-		}
-
 
 		public class TriesTests {
 
@@ -108,7 +87,6 @@ namespace StreamCompressTest {
 
 			}
 		}
-
 
 		public class Tries256Tests {
 
@@ -291,7 +269,7 @@ namespace StreamCompressTest {
 			[InlineData(12289)]
 			public void AsLZEncodedAndDecoded(int prime) {
 				var i = 2;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				var encoded = image.AsLZEncodedUsingHashTable(prime);
 				var decoded = encoded.AsImageFrameUsingHashTable<ImageFrame>(prime);
@@ -304,7 +282,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsLZEncodedAndDecoded(int nodeInitialCapacity) {
 				var i = 2;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				var encoded = image.AsLZEncodedUsingTrie(nodeInitialCapacity);
 				var decoded = encoded.AsImageFrameUsingTrie<ImageFrame>(nodeInitialCapacity);
@@ -316,7 +294,7 @@ namespace StreamCompressTest {
 			[Fact]
 			public void AsLZEncodedAndDecoded() {
 				var i = 2;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				var encoded = image.AsLZEncodedUsingTrie256();
 				var decoded = encoded.AsImageFrameUsingTrie256<ImageFrame>();
@@ -330,7 +308,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsHuffmanEncodedAndDecoded(int imageIndex) {
 				var i = imageIndex;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile).AsCroppedImage(_cropSetupCorrect).AsGrayScale();
 				var encoded = image.AsHuffmanEncoded();
 				var decoded = encoded.AsImageGrayScaleFrame();
@@ -342,12 +320,12 @@ namespace StreamCompressTest {
 			public void AsHuffmanEncodedAndDecodedWithSave(int imageIndex) {
 				var i = imageIndex;
 				var cropSetup = new CropSetup { LeftPx = 27 * 16, RightPx = 29 * 16, TopPx = 1 * 16, BottomPx = 6 * 16 };
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile).AsCroppedImage(cropSetup).AsGrayScale();
-				var encodedFilename = GetSaveImagePath(i, "gray-huffman-encoded");
+				var encodedFilename = Common.GetSaveImagePath(i, "gray-huffman-encoded");
 				image.AsHuffmanEncoded().Save(encodedFilename);
 				var encoded = new HuffmanImageFrame().Open(encodedFilename);
-				var decodedFilename = GetSaveImagePath(i, "gray-huffman-decoded.bmp");
+				var decodedFilename = Common.GetSaveImagePath(i, "gray-huffman-decoded.bmp");
 				encoded.AsImageGrayScaleFrame().Save(decodedFilename);
 				var decoded = ImageFrame.FromFile(decodedFilename);
 				Assert.True(image.Image.Compare(decoded.Image));
@@ -362,7 +340,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsGrayScaleInCorrectBits(int imageIndex) {
 				var i = imageIndex;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile).AsGrayScale();
 				((ushort)(24)).AsBytes().CopyBytesTo(image.Image, 28);
 
@@ -374,7 +352,7 @@ namespace StreamCompressTest {
 			public void AsCroppedInCorrectWidth(int imageIndex) {
 				var i = imageIndex;
 				var cropSetup = new CropSetup { LeftPx = 27 * 7, RightPx = 29 * 16, TopPx = 1 * 16, BottomPx = 6 * 16 };
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				Assert.Throws<ArgumentException>(() => image.AsCroppedImage(cropSetup));
 			}
@@ -384,7 +362,7 @@ namespace StreamCompressTest {
 			public void AsCroppedInCorrectHeight(int imageIndex) {
 				var i = imageIndex;
 				var cropSetup = new CropSetup { LeftPx = 27 * 16, RightPx = 29 * 16, TopPx = 1 * 7, BottomPx = 6 * 16 };
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame.FromFile(sourceFile);
 				Assert.Throws<ArgumentException>(() => image.AsCroppedImage(cropSetup));
 			}
@@ -394,7 +372,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsCroppedAsGrayScaleAsPlanted(int imageIndex) {
 				var i = imageIndex;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame
 					.FromFile(sourceFile)
 					.AsCroppedImage(_cropSetupCorrect)
@@ -409,7 +387,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsCroppedAsGrayScaleAsPlantedInCorrectWidth(int imageIndex) {
 				var i = imageIndex;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame
 					.FromFile(sourceFile)
 					.AsCroppedImage(_cropSetupCorrect)
@@ -423,7 +401,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsCroppedAsGrayScaleAsPlantedInCorrectHeight(int imageIndex) {
 				var i = imageIndex;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame
 					.FromFile(sourceFile)
 					.AsCroppedImage(_cropSetupCorrect)
@@ -436,7 +414,7 @@ namespace StreamCompressTest {
 			[InlineData(1)]
 			public void AsCroppedAsGrayScaleAsPlantedInCorrectBits(int imageIndex) {
 				var i = imageIndex;
-				var sourceFile = GetSourceImagePath(i);
+				var sourceFile = Common.GetSourceImagePath(i);
 				var image = ImageFrame
 					.FromFile(sourceFile)
 					.AsCroppedImage(_cropSetupCorrect)
@@ -497,18 +475,18 @@ namespace StreamCompressTest {
 		public class CLITests {
 
 			[Theory]
-			[InlineData(Program.Method.AsGrayScale, SOURCE_FILE_SUFFIX, "as-gray-scale.bmp")]
-			[InlineData(Program.Method.AsGrayScale, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped.bmp", true)]
-			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_FILE_SUFFIX, "as-gray-scale-as-huffman-encoded", false, Program.Method.AsGrayScaleAsHuffmanDecoded)]
-			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-huffman-encoded", true, Program.Method.AsGrayScaleAsHuffmanDecoded)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
-			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
-			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-256-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
-			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-256-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
+			[InlineData(Program.Method.AsGrayScale, Common.SOURCE_FILE_SUFFIX, "as-gray-scale.bmp")]
+			[InlineData(Program.Method.AsGrayScale, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-cropped.bmp", true)]
+			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-as-huffman-encoded", false, Program.Method.AsGrayScaleAsHuffmanDecoded)]
+			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-huffman-encoded", true, Program.Method.AsGrayScaleAsHuffmanDecoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
+			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
+			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
+			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-256-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
+			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-256-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
 			public void AllMethods(
 				Program.Method method,
 				string sourceFileSuffix,
@@ -517,8 +495,8 @@ namespace StreamCompressTest {
 				Program.Method? decodeMethod = null,
 				Program.LZCompressionDictionary? compDic = null) {
 
-				var sourcePath = GetSourcePath();
-				var destinationPath = GetDestinationPath();
+				var sourcePath = Common.GetSourcePath();
+				var destinationPath = Common.GetDestinationPath();
 
 
 				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop, compDic);
@@ -634,11 +612,11 @@ namespace StreamCompressTest {
 
 				var args = new List<string> {
 					"--source-path",
-					test != InCorrectArgumentTests.SourcePath ? GetSourcePath() : "x:\non-exist",
+					test != InCorrectArgumentTests.SourcePath ? Common.GetSourcePath() : "x:\non-exist",
 					"--source-file-suffix",
-					test != InCorrectArgumentTests.NonExistingFiles ? SOURCE_FILE_SUFFIX : "non-exists",
+					test != InCorrectArgumentTests.NonExistingFiles ? Common.SOURCE_FILE_SUFFIX : "non-exists",
 					"--destination-path",
-					test != InCorrectArgumentTests.DestinationPath ? GetDestinationPath() : "x:\non-exist",
+					test != InCorrectArgumentTests.DestinationPath ? Common.GetDestinationPath() : "x:\non-exist",
 					"--destination-file-suffix",
 					"dest-file-suffix",
 					"--start-index",
