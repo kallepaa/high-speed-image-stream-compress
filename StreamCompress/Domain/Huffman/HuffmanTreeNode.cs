@@ -24,6 +24,9 @@
 		/// Code numeric value
 		/// </summary>
 		public int Code { get; internal set; }
+		/// <summary>
+		/// Bits used for code
+		/// </summary>
 		public int CodeBits => _codeBitPos - 1;
 		/// <summary>
 		/// Total bits used for symbol
@@ -72,7 +75,6 @@
 		/// To create leaf
 		/// </summary>
 		/// <param name="symbol"></param>
-		/// <param name="frequency"></param>
 		public HuffmanTreeNode(T symbol) {
 			Symbol = symbol;
 			Leaf = true;
@@ -81,8 +83,9 @@
 		/// <summary>
 		/// To create leaf when decoding
 		/// </summary>
-		/// <param name="symbol"></param>
-		/// <param name="frequency"></param>
+		/// <param name="symbol">Symbol</param>
+		/// <param name="code">Code</param>
+		/// <param name="codeBits">Bits</param>
 		public HuffmanTreeNode(T symbol, int code, int codeBits) {
 			Symbol = symbol;
 			Leaf = true;
@@ -93,18 +96,16 @@
 		/// <summary>
 		/// To create internal node when decoding
 		/// </summary>
-		/// <param name="symbol"></param>
-		/// <param name="frequency"></param>
 		public HuffmanTreeNode() {
 			Leaf = false;
 		}
 
-
 		/// <summary>
-		/// To create internal node
+		/// Constructor to create internal node
 		/// </summary>
-		/// <param name="symbol"></param>
-		/// <param name="frequency"></param>
+		/// <param name="frequency">Frequency</param>
+		/// <param name="leftChild">Left child</param>
+		/// <param name="rightChild">Right child</param>
 		public HuffmanTreeNode(int frequency, HuffmanTreeNode<T> leftChild, HuffmanTreeNode<T> rightChild) {
 			Frequency = frequency;
 			Leaf = false;

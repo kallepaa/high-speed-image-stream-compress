@@ -14,6 +14,9 @@
 		/// nodes data
 		/// </summary>
 		private readonly T[] _heapData;
+		/// <summary>
+		/// Heap size
+		/// </summary>
 		public int HeapSize { get; private set; }
 
 		/// <summary>

@@ -8,6 +8,9 @@ namespace StreamCompress.Domain.Image {
 	/// </summary>
 	public class ImageFrameGrayScale : ImageFrame, ISaveable<ImageFrameGrayScale> {
 
+		/// <summary>
+		/// Parametless constructor
+		/// </summary>
 		public ImageFrameGrayScale() {
 
 		}

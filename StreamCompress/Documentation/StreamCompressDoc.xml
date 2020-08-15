@@ -234,11 +234,71 @@
             Original image data header field position
             </summary>
         </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.FixedHeaderLength">
+            <summary>
+            Total size of header
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.ColorCodeHeaderLength">
+            <summary>
+            Total size of color header
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.ImageDataOffSet">
+            <summary>
+            Image off set
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.Data">
+            <summary>
+            Frame data header + image
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.CompressedBits">
+            <summary>
+            Compressed bits count
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.MaxCodeBitsLength">
+            <summary>
+            Longest bit length
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.ColorCodeCount">
+            <summary>
+            Count of color codes
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.OriginalImageHeaderLength">
+            <summary>
+            Original image header length
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.OriginalImageDataLength">
+            <summary>
+            Original image data length
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.Huffman.HuffmanImageFrame.#ctor(System.Int32,StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem[],System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Constructor for huffamn encoded image frame
+            </summary>
+            <param name="compressedBits">Compressed bits count</param>
+            <param name="colorCodes">Color code count</param>
+            <param name="maxCodeBitsLength">Longest bit length</param>
+            <param name="originalImageDataLength">Original image header length</param>
+            <param name="originalImageHeader">Original image header</param>
+        </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanImageFrame.#ctor(System.Byte[])">
             <summary>
             New huffman image frame from given data
             </summary>
             <param name="data"></param>
+        </member>
+        <member name="M:StreamCompress.Domain.Huffman.HuffmanImageFrame.#ctor">
+            <summary>
+            Parametless constructor
+            </summary>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanImageFrame.GetColorCodeItemFromHeader(System.Int32)">
             <summary>
@@ -257,6 +317,36 @@
         <member name="T:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem">
             <summary>
             Header color item
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.HEADER_COLOR_SYMBOL_BYTES">
+            <summary>
+            Bytes used for color symbol
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.HEADER_COLOR_CODE_BIT_COUNT_BYTES">
+            <summary>
+            Bytes used for color code bit count
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.HEADER_COLOR_CODE_BIT_CODE_BYTES">
+            <summary>
+            Bytes used for color code
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.Symbol">
+            <summary>
+            Symbole
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.CodeBitsCount">
+            <summary>
+            Bits
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.Code">
+            <summary>
+            Code
             </summary>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.#ctor(System.Byte[],System.Int32)">
@@ -320,6 +410,11 @@
             Code numeric value
             </summary>
         </member>
+        <member name="P:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.CodeBits">
+            <summary>
+            Bits used for code
+            </summary>
+        </member>
         <member name="P:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.TotalBits">
             <summary>
             Total bits used for symbol
@@ -365,28 +460,27 @@
             To create leaf
             </summary>
             <param name="symbol"></param>
-            <param name="frequency"></param>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(`0,System.Int32,System.Int32)">
             <summary>
             To create leaf when decoding
             </summary>
-            <param name="symbol"></param>
-            <param name="frequency"></param>
+            <param name="symbol">Symbol</param>
+            <param name="code">Code</param>
+            <param name="codeBits">Bits</param>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor">
             <summary>
             To create internal node when decoding
             </summary>
-            <param name="symbol"></param>
-            <param name="frequency"></param>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(System.Int32,StreamCompress.Domain.Huffman.HuffmanTreeNode{`0},StreamCompress.Domain.Huffman.HuffmanTreeNode{`0})">
             <summary>
-            To create internal node
+            Constructor to create internal node
             </summary>
-            <param name="symbol"></param>
-            <param name="frequency"></param>
+            <param name="frequency">Frequency</param>
+            <param name="leftChild">Left child</param>
+            <param name="rightChild">Right child</param>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.SetChild(StreamCompress.Domain.Huffman.HuffmanTreeNode{`0})">
             <summary>
@@ -439,6 +533,11 @@
         <member name="F:StreamCompress.Domain.Huffman.MinHeap`1._heapData">
             <summary>
             nodes data
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.Huffman.MinHeap`1.HeapSize">
+            <summary>
+            Heap size
             </summary>
         </member>
         <member name="M:StreamCompress.Domain.Huffman.MinHeap`1.#ctor(System.Int32)">
@@ -559,11 +658,22 @@
             How many bits is used to prsent single pixel
             </summary>
         </member>
+        <member name="M:StreamCompress.Domain.Image.ImageFrame.#ctor">
+            <summary>
+            Parametless constructor
+            </summary>
+        </member>
         <member name="M:StreamCompress.Domain.Image.ImageFrame.#ctor(System.Byte[])">
             <summary>
             Constructor to create image frame from byte array
             </summary>
             <param name="image">Bitmap image byte array</param>
+        </member>
+        <member name="M:StreamCompress.Domain.Image.ImageFrame.FromBytes(System.Byte[])">
+            <summary>
+            Initialize frame from given bytes
+            </summary>
+            <param name="image">Image</param>
         </member>
         <member name="M:StreamCompress.Domain.Image.ImageFrame.SetSizeInfo(System.UInt32,System.Int32,System.Int32)">
             <summary>
@@ -597,6 +707,11 @@
         <member name="T:StreamCompress.Domain.Image.ImageFrameGrayScale">
             <summary>
             Present image frame which image is gray scale image
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.Image.ImageFrameGrayScale.#ctor">
+            <summary>
+            Parametless constructor
             </summary>
         </member>
         <member name="M:StreamCompress.Domain.Image.ImageFrameGrayScale.#ctor(System.Byte[])">
@@ -665,6 +780,26 @@
             </summary>
             <typeparam name="TT">CodeWord type</typeparam>
         </member>
+        <member name="F:StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.Hash">
+            <summary>
+            Hash value
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.CodeWord">
+            <summary>
+            Value saved to item
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.SearchKey">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.LinkedItem">
+            <summary>
+            Linked list
+            </summary>
+        </member>
         <member name="M:StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.#ctor(System.Byte[],`1,System.Int32)">
             <summary>
             Constructor to create new item. Method will also calculate key and hash
@@ -692,11 +827,41 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="P:StreamCompress.Domain.LZ.ILZ78CodingTable`1.Count">
+            <summary>
+            Items count in dictionary
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.ILZ78CodingTable`1.Insert(System.Byte[],`0)">
+            <summary>
+            Insert new item to dictionary
+            </summary>
+            <param name="searchKey">Item key</param>
+            <param name="codeWord">Item value</param>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.ILZ78CodingTable`1.Search(System.Byte[])">
+            <summary>
+            Search item from disctionary
+            </summary>
+            <param name="searchKey">Search key</param>
+            <returns>Existing item or null</returns>
+        </member>
         <member name="T:StreamCompress.Domain.LZ.ILZ78CodingTableItem`1">
             <summary>
             Presents item in dictionary
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.ILZ78CodingTableItem`1.CodeWord">
+            <summary>
+            Item code word
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.ILZ78CodingTableItem`1.#ctor(`0)">
+            <summary>
+            Item constructor
+            </summary>
+            <param name="codeWord">Item code word</param>
         </member>
         <member name="T:StreamCompress.Domain.LZ.LZImageFrame">
             <summary>
@@ -706,6 +871,11 @@
         <member name="P:StreamCompress.Domain.LZ.LZImageFrame.Codes">
             <summary>
             Byte array which contains compressed image
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.LZImageFrame.#ctor">
+            <summary>
+            Parametless constructor
             </summary>
         </member>
         <member name="M:StreamCompress.Domain.LZ.LZImageFrame.#ctor(System.Byte[])">
@@ -734,11 +904,192 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.Count">
+            <summary>
+            Items count
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.#ctor(System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="containerCapacity"></param>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.Insert(System.Byte[],`0)">
+            <summary>
+            Adds new item to dictionary
+            </summary>
+            <param name="searchKey">Key</param>
+            <param name="codeWord">Value</param>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.Search(System.Byte[])">
+            <summary>
+            Search item from dictionary
+            </summary>
+            <param name="searchKey">Key</param>
+            <returns>Existing key value or null</returns>
+        </member>
+        <member name="T:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1">
+            <summary>
+            Container node, which contains nodes
+            </summary>
+            <typeparam name="TT">Type of code word</typeparam>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.Nodes">
+            <summary>
+            Nodes saved to this container
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.NodesCount">
+            <summary>
+            Count of nodes
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.IsSet">
+            <summary>
+            Is container node that contains full word
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.CodeWord">
+            <summary>
+            Word saved to this container
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.#ctor(System.Int32)">
+            <summary>
+            Container constructor
+            </summary>
+            <param name="capacity">Nodes tabel intiial capacity</param>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.Add(System.Byte)">
+            <summary>
+            Adds byte to container
+            </summary>
+            <param name="b">byte</param>
+            <returns>Added node</returns>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.Get(System.Byte)">
+            <summary>
+            Return byte from container if it is set
+            </summary>
+            <param name="b">Byte to look up</param>
+            <returns>Node if it's set else null</returns>
+        </member>
+        <member name="T:StreamCompress.Domain.LZ.Tries`1.TriesNode`1">
+            <summary>
+            Node that contains byte value and links to child containers
+            </summary>
+            <typeparam name="TTT"></typeparam>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.TriesNode`1.Byte">
+            <summary>
+            Byte
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries`1.TriesNode`1.ChildContainer">
+            <summary>
+            Child container
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries`1.TriesNode`1.#ctor(System.Byte,System.Int32)">
+            <summary>
+            Node constructor
+            </summary>
+            <param name="b">Byte value</param>
+            <param name="capacity">Child container initial capacity</param>
+        </member>
         <member name="T:StreamCompress.Domain.LZ.Tries256`1">
             <summary>
             Implements trie algoritm using fixed length node table
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries256`1.Count">
+            <summary>
+            Nodes count
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.Insert(System.Byte[],`0)">
+            <summary>
+            Adds new item to dictionary
+            </summary>
+            <param name="searchKey">Key</param>
+            <param name="codeWord">Value</param>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.Search(System.Byte[])">
+            <summary>
+            Search item from dictionary
+            </summary>
+            <param name="searchKey">Key</param>
+            <returns>Item if it exists</returns>
+        </member>
+        <member name="T:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1">
+            <summary>
+            Container node, which contains nodes
+            </summary>
+            <typeparam name="TT">Type of code word</typeparam>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.Nodes">
+            <summary>
+            Nodes saved to this container
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.IsSet">
+            <summary>
+            Is container node that contains full word
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.CodeWord">
+            <summary>
+            Word saved to this container
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.SetCodeWord(`1)">
+            <summary>
+            Sets code word to container
+            </summary>
+            <param name="codeWord"></param>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.Add(System.Byte)">
+            <summary>
+            Adds byte to container
+            </summary>
+            <param name="b">byte</param>
+            <returns>Added node</returns>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.Get(System.Byte)">
+            <summary>
+            Return byte from container if it is set
+            </summary>
+            <param name="b">Byte to look up</param>
+            <returns>Node if it's set else null</returns>
+        </member>
+        <member name="T:StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1">
+            <summary>
+            Node that contains byte value and links to child containers
+            </summary>
+            <typeparam name="TTT"></typeparam>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1.Byte">
+            <summary>
+            Byte
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1.ChildContainer">
+            <summary>
+            Child container
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1.#ctor(System.Byte)">
+            <summary>
+            Node constructor
+            </summary>
+            <param name="b">Byte value</param>
         </member>
         <member name="T:StreamCompress.Program">
             <summary>
@@ -750,9 +1101,59 @@
             Supported methods
             </summary>
         </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScale">
+            <summary>
+            Converts image as gray scale
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScaleAsHuffmanEncoded">
+            <summary>
+            Converts image as gray scale and encode it using Huffman coding
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScaleAsHuffmanDecoded">
+            <summary>
+            Decodes huffman encoded gray scale image
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsLZ78Encoded">
+            <summary>
+            Encodes image using LZ78 compression
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsLZ78Decoded">
+            <summary>
+            Decodes image using LZ78 compression
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScaleAsLZ78Encoded">
+            <summary>
+            Converts image as gray scale and encodes image using LZ78 compression
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScaleAsLZ78Decoded">
+            <summary>
+            Decodes gray scale image using LZ78 compression
+            </summary>
+        </member>
         <member name="T:StreamCompress.Program.GrayScaleColors">
             <summary>
             Gray scale image color counts
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.GrayScaleColors.Full">
+            <summary>
+            256 colors
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.GrayScaleColors.Half">
+            <summary>
+            128 colors
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.GrayScaleColors.Quarter">
+            <summary>
+            64 colors
             </summary>
         </member>
         <member name="T:StreamCompress.Program.LZCompressionDictionary">
@@ -760,10 +1161,107 @@
             LZ compression dictionary types
             </summary>
         </member>
+        <member name="F:StreamCompress.Program.LZCompressionDictionary.HashTable">
+            <summary>
+            Hash table implementation
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.LZCompressionDictionary.Trie">
+            <summary>
+            Trie dynamic size node table implementation
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.LZCompressionDictionary.Trie256">
+            <summary>
+            Trie fixed size node table implementation
+            </summary>
+        </member>
         <member name="T:StreamCompress.Program.CommandLineArgs">
             <summary>
             Command line arguments
             </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.SourcePath">
+            <summary>
+            Source data path
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.SourceFileSuffix">
+            <summary>
+            Sourcefiles filename suffix with extension
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.StartIndex">
+            <summary>
+            Source files start index
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.Count">
+            <summary>
+            How many source files are proceed
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.DestinationPath">
+            <summary>
+            Output folder
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.DestinationFileSuffix">
+            <summary>
+            Output file suffix
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.Method">
+            <summary>
+            Compression method
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.CropLeftPx">
+            <summary>
+            Image crop left
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.CropRightPx">
+            <summary>
+            Image crop right
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.CropTopPx">
+            <summary>
+            Image crop top
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.CropBottomPx">
+            <summary>
+            Image crop bottom
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.GrayScaleColors">
+            <summary>
+            How many colors are used in gray scale image
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.LZCompressionDictionary">
+            <summary>
+            Dictionary implementation used in LZ78 compression
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.LZCompressionHashTablePrime">
+            <summary>
+            Hash table dictionary prime number 
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Program.CommandLineArgs.LZCompressionTrieInitialCapacity">
+            <summary>
+            Dynamic trie implementation node tables initial size 
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Program.Main(System.String[])">
+            <summary>
+            Program start method
+            </summary>
+            <param name="args">Command line arguments</param>
+            <returns>0 when OK</returns>
         </member>
         <member name="M:StreamCompress.Program._filePath(System.Int32,System.String,System.String)">
             <summary>
@@ -889,6 +1387,12 @@
             Wraps MemoryStream 
             </summary>
         </member>
+        <member name="M:StreamCompress.Utils.ByteMemoryStream.#ctor(System.Int32)">
+            <summary>
+            Constructor for new memory stream
+            </summary>
+            <param name="initialSize">Initial buffer size</param>
+        </member>
         <member name="M:StreamCompress.Utils.ByteMemoryStream.AddBytes(System.Byte[])">
             <summary>
             Adds bytes to memory stream
@@ -900,6 +1404,11 @@
             Reads all bytes from memory stream
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:StreamCompress.Utils.ByteMemoryStream.Dispose">
+            <summary>
+            Finalize intance and release resources
+            </summary>
         </member>
         <member name="T:StreamCompress.Utils.FileExtensions">
             <summary>
@@ -932,6 +1441,20 @@
             Interface for saving and opening saveable domain objects in project
             </summary>
             <typeparam name="T">Type of domain object</typeparam>
+        </member>
+        <member name="M:StreamCompress.Utils.ISaveable`1.Save(System.String)">
+            <summary>
+            Saves object to given file
+            </summary>
+            <param name="path">File path</param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamCompress.Utils.ISaveable`1.Open(System.String)">
+            <summary>
+            Reads object from given file
+            </summary>
+            <param name="path">File name</param>
+            <returns>Object</returns>
         </member>
     </members>
 </doc>

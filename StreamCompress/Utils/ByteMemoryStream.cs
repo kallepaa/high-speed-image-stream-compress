@@ -9,8 +9,12 @@ namespace StreamCompress.Utils {
 	public sealed class ByteMemoryStream : IDisposable {
 
 		private readonly MemoryStream _memoryStream;
-		//public int Capacity { get; internal set; }
-		public int Count { get; internal set; }
+		private int Count { get; set; }
+
+		/// <summary>
+		/// Constructor for new memory stream
+		/// </summary>
+		/// <param name="initialSize">Initial buffer size</param>
 		public ByteMemoryStream(int initialSize) {
 			_memoryStream = new MemoryStream(initialSize);
 		}
@@ -36,6 +40,9 @@ namespace StreamCompress.Utils {
 			return bytes;
 		}
 
+		/// <summary>
+		/// Finalize intance and release resources
+		/// </summary>
 		public void Dispose() {
 			_memoryStream.Dispose();
 			// Suppress finalization.

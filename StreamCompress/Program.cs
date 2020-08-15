@@ -20,12 +20,33 @@ namespace StreamCompress {
 		/// Supported methods
 		/// </summary>
 		public enum Method {
+			/// <summary>
+			/// Converts image as gray scale
+			/// </summary>
 			AsGrayScale,
+			/// <summary>
+			/// Converts image as gray scale and encode it using Huffman coding
+			/// </summary>
 			AsGrayScaleAsHuffmanEncoded,
+			/// <summary>
+			/// Decodes huffman encoded gray scale image
+			/// </summary>
 			AsGrayScaleAsHuffmanDecoded,
+			/// <summary>
+			/// Encodes image using LZ78 compression
+			/// </summary>
 			AsLZ78Encoded,
+			/// <summary>
+			/// Decodes image using LZ78 compression
+			/// </summary>
 			AsLZ78Decoded,
+			/// <summary>
+			/// Converts image as gray scale and encodes image using LZ78 compression
+			/// </summary>
 			AsGrayScaleAsLZ78Encoded,
+			/// <summary>
+			/// Decodes gray scale image using LZ78 compression
+			/// </summary>
 			AsGrayScaleAsLZ78Decoded
 		}
 
@@ -33,8 +54,17 @@ namespace StreamCompress {
 		/// Gray scale image color counts
 		/// </summary>
 		public enum GrayScaleColors {
+			/// <summary>
+			/// 256 colors
+			/// </summary>
 			Full = 256,
+			/// <summary>
+			/// 128 colors
+			/// </summary>
 			Half = 128,
+			/// <summary>
+			/// 64 colors
+			/// </summary>
 			Quarter = 64
 		}
 
@@ -42,8 +72,17 @@ namespace StreamCompress {
 		/// LZ compression dictionary types
 		/// </summary>
 		public enum LZCompressionDictionary {
+			/// <summary>
+			/// Hash table implementation
+			/// </summary>
 			HashTable,
+			/// <summary>
+			/// Trie dynamic size node table implementation
+			/// </summary>
 			Trie,
+			/// <summary>
+			/// Trie fixed size node table implementation
+			/// </summary>
 			Trie256
 		}
 
@@ -51,24 +90,73 @@ namespace StreamCompress {
 		/// Command line arguments
 		/// </summary>
 		public class CommandLineArgs {
+			/// <summary>
+			/// Source data path
+			/// </summary>
 			public string SourcePath { get; set; }
+			/// <summary>
+			/// Sourcefiles filename suffix with extension
+			/// </summary>
 			public string SourceFileSuffix { get; set; }
+			/// <summary>
+			/// Source files start index
+			/// </summary>
 			public int StartIndex { get; set; }
+			/// <summary>
+			/// How many source files are proceed
+			/// </summary>
 			public int Count { get; set; }
+			/// <summary>
+			/// Output folder
+			/// </summary>
 			public string DestinationPath { get; set; }
+			/// <summary>
+			/// Output file suffix
+			/// </summary>
 			public string DestinationFileSuffix { get; set; }
+			/// <summary>
+			/// Compression method
+			/// </summary>
 			public Method? Method { get; set; }
+			/// <summary>
+			/// Image crop left
+			/// </summary>
 			public int CropLeftPx { get; set; }
+			/// <summary>
+			/// Image crop right
+			/// </summary>
 			public int CropRightPx { get; set; }
+			/// <summary>
+			/// Image crop top
+			/// </summary>
 			public int CropTopPx { get; set; }
+			/// <summary>
+			/// Image crop bottom
+			/// </summary>
 			public int CropBottomPx { get; set; }
+			/// <summary>
+			/// How many colors are used in gray scale image
+			/// </summary>
 			public GrayScaleColors? GrayScaleColors { get; set; }
+			/// <summary>
+			/// Dictionary implementation used in LZ78 compression
+			/// </summary>
 			public LZCompressionDictionary LZCompressionDictionary { get; set; }
+			/// <summary>
+			/// Hash table dictionary prime number 
+			/// </summary>
 			public int LZCompressionHashTablePrime { get; set; }
+			/// <summary>
+			/// Dynamic trie implementation node tables initial size 
+			/// </summary>
 			public int LZCompressionTrieInitialCapacity { get; set; }
 		}
 
-
+		/// <summary>
+		/// Program start method
+		/// </summary>
+		/// <param name="args">Command line arguments</param>
+		/// <returns>0 when OK</returns>
 		public static int Main(string[] args) {
 
 			var command = new RootCommand(){

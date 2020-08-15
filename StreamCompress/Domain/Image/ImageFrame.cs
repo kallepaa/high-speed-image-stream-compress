@@ -38,6 +38,9 @@ namespace StreamCompress.Domain.Image {
 		/// </summary>
 		public int BitsPerPixel => BitConverter.ToUInt16(Image, 28);
 
+		/// <summary>
+		/// Parametless constructor
+		/// </summary>
 		public ImageFrame() {
 
 		}
@@ -50,6 +53,10 @@ namespace StreamCompress.Domain.Image {
 			FromBytes(image);
 		}
 
+		/// <summary>
+		/// Initialize frame from given bytes
+		/// </summary>
+		/// <param name="image">Image</param>
 		public void FromBytes(byte[] image) {
 			Image = image;
 			HeaderBytesLength = (int)BitConverter.ToUInt32(image, 10);

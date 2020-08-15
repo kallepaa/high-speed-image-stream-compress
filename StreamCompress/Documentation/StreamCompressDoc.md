@@ -17,9 +17,26 @@
   - [GetBitFromByte(b,bitIndex)](#M-StreamCompress-Utils-BitAndByteExtensions-GetBitFromByte-System-Byte,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.GetBitFromByte(System.Byte,System.Int32)')
   - [SetBitToByte(b,bitIndex)](#M-StreamCompress-Utils-BitAndByteExtensions-SetBitToByte-System-Byte,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.SetBitToByte(System.Byte,System.Int32)')
 - [ByteMemoryStream](#T-StreamCompress-Utils-ByteMemoryStream 'StreamCompress.Utils.ByteMemoryStream')
+  - [#ctor(initialSize)](#M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Int32- 'StreamCompress.Utils.ByteMemoryStream.#ctor(System.Int32)')
   - [AddBytes(bytes)](#M-StreamCompress-Utils-ByteMemoryStream-AddBytes-System-Byte[]- 'StreamCompress.Utils.ByteMemoryStream.AddBytes(System.Byte[])')
+  - [Dispose()](#M-StreamCompress-Utils-ByteMemoryStream-Dispose 'StreamCompress.Utils.ByteMemoryStream.Dispose')
   - [ReadBytes()](#M-StreamCompress-Utils-ByteMemoryStream-ReadBytes 'StreamCompress.Utils.ByteMemoryStream.ReadBytes')
 - [CommandLineArgs](#T-StreamCompress-Program-CommandLineArgs 'StreamCompress.Program.CommandLineArgs')
+  - [Count](#P-StreamCompress-Program-CommandLineArgs-Count 'StreamCompress.Program.CommandLineArgs.Count')
+  - [CropBottomPx](#P-StreamCompress-Program-CommandLineArgs-CropBottomPx 'StreamCompress.Program.CommandLineArgs.CropBottomPx')
+  - [CropLeftPx](#P-StreamCompress-Program-CommandLineArgs-CropLeftPx 'StreamCompress.Program.CommandLineArgs.CropLeftPx')
+  - [CropRightPx](#P-StreamCompress-Program-CommandLineArgs-CropRightPx 'StreamCompress.Program.CommandLineArgs.CropRightPx')
+  - [CropTopPx](#P-StreamCompress-Program-CommandLineArgs-CropTopPx 'StreamCompress.Program.CommandLineArgs.CropTopPx')
+  - [DestinationFileSuffix](#P-StreamCompress-Program-CommandLineArgs-DestinationFileSuffix 'StreamCompress.Program.CommandLineArgs.DestinationFileSuffix')
+  - [DestinationPath](#P-StreamCompress-Program-CommandLineArgs-DestinationPath 'StreamCompress.Program.CommandLineArgs.DestinationPath')
+  - [GrayScaleColors](#P-StreamCompress-Program-CommandLineArgs-GrayScaleColors 'StreamCompress.Program.CommandLineArgs.GrayScaleColors')
+  - [LZCompressionDictionary](#P-StreamCompress-Program-CommandLineArgs-LZCompressionDictionary 'StreamCompress.Program.CommandLineArgs.LZCompressionDictionary')
+  - [LZCompressionHashTablePrime](#P-StreamCompress-Program-CommandLineArgs-LZCompressionHashTablePrime 'StreamCompress.Program.CommandLineArgs.LZCompressionHashTablePrime')
+  - [LZCompressionTrieInitialCapacity](#P-StreamCompress-Program-CommandLineArgs-LZCompressionTrieInitialCapacity 'StreamCompress.Program.CommandLineArgs.LZCompressionTrieInitialCapacity')
+  - [Method](#P-StreamCompress-Program-CommandLineArgs-Method 'StreamCompress.Program.CommandLineArgs.Method')
+  - [SourceFileSuffix](#P-StreamCompress-Program-CommandLineArgs-SourceFileSuffix 'StreamCompress.Program.CommandLineArgs.SourceFileSuffix')
+  - [SourcePath](#P-StreamCompress-Program-CommandLineArgs-SourcePath 'StreamCompress.Program.CommandLineArgs.SourcePath')
+  - [StartIndex](#P-StreamCompress-Program-CommandLineArgs-StartIndex 'StreamCompress.Program.CommandLineArgs.StartIndex')
 - [CropSetup](#T-StreamCompress-Domain-Image-CropSetup 'StreamCompress.Domain.Image.CropSetup')
   - [BottomPx](#P-StreamCompress-Domain-Image-CropSetup-BottomPx 'StreamCompress.Domain.Image.CropSetup.BottomPx')
   - [LeftPx](#P-StreamCompress-Domain-Image-CropSetup-LeftPx 'StreamCompress.Domain.Image.CropSetup.LeftPx')
@@ -53,8 +70,15 @@
   - [ReadAllBytes(filename)](#M-StreamCompress-Utils-FileExtensions-ReadAllBytes-System-String- 'StreamCompress.Utils.FileExtensions.ReadAllBytes(System.String)')
   - [SaveToFile(bytes,filename)](#M-StreamCompress-Utils-FileExtensions-SaveToFile-System-Byte[],System-String- 'StreamCompress.Utils.FileExtensions.SaveToFile(System.Byte[],System.String)')
 - [GrayScaleColors](#T-StreamCompress-Program-GrayScaleColors 'StreamCompress.Program.GrayScaleColors')
+  - [Full](#F-StreamCompress-Program-GrayScaleColors-Full 'StreamCompress.Program.GrayScaleColors.Full')
+  - [Half](#F-StreamCompress-Program-GrayScaleColors-Half 'StreamCompress.Program.GrayScaleColors.Half')
+  - [Quarter](#F-StreamCompress-Program-GrayScaleColors-Quarter 'StreamCompress.Program.GrayScaleColors.Quarter')
 - [HashTableItem\`1](#T-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1')
   - [#ctor(searchKey,codeWord,m)](#M-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-#ctor-System-Byte[],`1,System-Int32- 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.#ctor(System.Byte[],`1,System.Int32)')
+  - [CodeWord](#F-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-CodeWord 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.CodeWord')
+  - [Hash](#F-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-Hash 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.Hash')
+  - [SearchKey](#F-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-SearchKey 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.SearchKey')
+  - [LinkedItem](#P-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-LinkedItem 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.LinkedItem')
   - [CompareTo(other)](#M-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-CompareTo-StreamCompress-Domain-LZ-HashTable{`0}-HashTableItem{`1}- 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.CompareTo(StreamCompress.Domain.LZ.HashTable{`0}.HashTableItem{`1})')
   - [SetLinkedItem(item)](#M-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-SetLinkedItem-StreamCompress-Domain-LZ-HashTable{`0}-HashTableItem{`1}- 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.SetLinkedItem(StreamCompress.Domain.LZ.HashTable{`0}.HashTableItem{`1})')
 - [HashTable\`1](#T-StreamCompress-Domain-LZ-HashTable`1 'StreamCompress.Domain.LZ.HashTable`1')
@@ -66,9 +90,17 @@
 - [HeaderColorItem](#T-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem')
   - [#ctor(bytes,startIndex)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-#ctor-System-Byte[],System-Int32- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.#ctor(System.Byte[],System.Int32)')
   - [#ctor(symbol,codeBitsCount,code)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-#ctor-System-Int32,System-Int32,System-Int32- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.#ctor(System.Int32,System.Int32,System.Int32)')
+  - [HEADER_COLOR_CODE_BIT_CODE_BYTES](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-HEADER_COLOR_CODE_BIT_CODE_BYTES 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.HEADER_COLOR_CODE_BIT_CODE_BYTES')
+  - [HEADER_COLOR_CODE_BIT_COUNT_BYTES](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-HEADER_COLOR_CODE_BIT_COUNT_BYTES 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.HEADER_COLOR_CODE_BIT_COUNT_BYTES')
+  - [HEADER_COLOR_SYMBOL_BYTES](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-HEADER_COLOR_SYMBOL_BYTES 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.HEADER_COLOR_SYMBOL_BYTES')
+  - [Code](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-Code 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.Code')
+  - [CodeBitsCount](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-CodeBitsCount 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.CodeBitsCount')
+  - [Symbol](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-Symbol 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.Symbol')
   - [GetBytesLength()](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-GetBytesLength 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem.GetBytesLength')
 - [HuffmanImageFrame](#T-StreamCompress-Domain-Huffman-HuffmanImageFrame 'StreamCompress.Domain.Huffman.HuffmanImageFrame')
+  - [#ctor(compressedBits,colorCodes,maxCodeBitsLength,originalImageDataLength,originalImageHeader)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-#ctor-System-Int32,StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem[],System-Int32,System-Int32,System-Byte[]- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.#ctor(System.Int32,StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem[],System.Int32,System.Int32,System.Byte[])')
   - [#ctor(data)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-#ctor-System-Byte[]- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.#ctor(System.Byte[])')
+  - [#ctor()](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-#ctor 'StreamCompress.Domain.Huffman.HuffmanImageFrame.#ctor')
   - [HEADER_COLOR_CODE_COUNT_BYTES](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_COLOR_CODE_COUNT_BYTES 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HEADER_COLOR_CODE_COUNT_BYTES')
   - [HEADER_COLOR_CODE_COUNT_BYTES_POS](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_COLOR_CODE_COUNT_BYTES_POS 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HEADER_COLOR_CODE_COUNT_BYTES_POS')
   - [HEADER_COMPRESSED_BITS_BYTES](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_COMPRESSED_BITS_BYTES 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HEADER_COMPRESSED_BITS_BYTES')
@@ -79,18 +111,28 @@
   - [HEADER_ORIGINAL_IMAGE_DATA_BYTES_POS](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_ORIGINAL_IMAGE_DATA_BYTES_POS 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HEADER_ORIGINAL_IMAGE_DATA_BYTES_POS')
   - [HEADER_ORIGINAL_IMAGE_HEADER_BYTES](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_ORIGINAL_IMAGE_HEADER_BYTES 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HEADER_ORIGINAL_IMAGE_HEADER_BYTES')
   - [HEADER_ORIGINAL_IMAGE_HEADER_BYTES_POS](#F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_ORIGINAL_IMAGE_HEADER_BYTES_POS 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HEADER_ORIGINAL_IMAGE_HEADER_BYTES_POS')
+  - [ColorCodeCount](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-ColorCodeCount 'StreamCompress.Domain.Huffman.HuffmanImageFrame.ColorCodeCount')
+  - [ColorCodeHeaderLength](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-ColorCodeHeaderLength 'StreamCompress.Domain.Huffman.HuffmanImageFrame.ColorCodeHeaderLength')
+  - [CompressedBits](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-CompressedBits 'StreamCompress.Domain.Huffman.HuffmanImageFrame.CompressedBits')
+  - [Data](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-Data 'StreamCompress.Domain.Huffman.HuffmanImageFrame.Data')
+  - [FixedHeaderLength](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-FixedHeaderLength 'StreamCompress.Domain.Huffman.HuffmanImageFrame.FixedHeaderLength')
+  - [ImageDataOffSet](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-ImageDataOffSet 'StreamCompress.Domain.Huffman.HuffmanImageFrame.ImageDataOffSet')
+  - [MaxCodeBitsLength](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-MaxCodeBitsLength 'StreamCompress.Domain.Huffman.HuffmanImageFrame.MaxCodeBitsLength')
+  - [OriginalImageDataLength](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-OriginalImageDataLength 'StreamCompress.Domain.Huffman.HuffmanImageFrame.OriginalImageDataLength')
+  - [OriginalImageHeaderLength](#P-StreamCompress-Domain-Huffman-HuffmanImageFrame-OriginalImageHeaderLength 'StreamCompress.Domain.Huffman.HuffmanImageFrame.OriginalImageHeaderLength')
   - [GetBit(index)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-GetBit-System-Int32- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.GetBit(System.Int32)')
   - [GetColorCodeItemFromHeader(index)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-GetColorCodeItemFromHeader-System-Int32- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.GetColorCodeItemFromHeader(System.Int32)')
   - [Open(path)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-Open-System-String- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.Open(System.String)')
   - [Save(path)](#M-StreamCompress-Domain-Huffman-HuffmanImageFrame-Save-System-String- 'StreamCompress.Domain.Huffman.HuffmanImageFrame.Save(System.String)')
 - [HuffmanTreeNode\`1](#T-StreamCompress-Domain-Huffman-HuffmanTreeNode`1 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1')
-  - [#ctor(symbol,frequency)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-`0- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(`0)')
-  - [#ctor(symbol,frequency)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-`0,System-Int32,System-Int32- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(`0,System.Int32,System.Int32)')
-  - [#ctor(symbol,frequency)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor')
-  - [#ctor(symbol,frequency)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-System-Int32,StreamCompress-Domain-Huffman-HuffmanTreeNode{`0},StreamCompress-Domain-Huffman-HuffmanTreeNode{`0}- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(System.Int32,StreamCompress.Domain.Huffman.HuffmanTreeNode{`0},StreamCompress.Domain.Huffman.HuffmanTreeNode{`0})')
+  - [#ctor(symbol)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-`0- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(`0)')
+  - [#ctor(symbol,code,codeBits)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-`0,System-Int32,System-Int32- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(`0,System.Int32,System.Int32)')
+  - [#ctor()](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor')
+  - [#ctor(frequency,leftChild,rightChild)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-System-Int32,StreamCompress-Domain-Huffman-HuffmanTreeNode{`0},StreamCompress-Domain-Huffman-HuffmanTreeNode{`0}- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor(System.Int32,StreamCompress.Domain.Huffman.HuffmanTreeNode{`0},StreamCompress.Domain.Huffman.HuffmanTreeNode{`0})')
   - [_codeBitPos](#F-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-_codeBitPos 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1._codeBitPos')
   - [Code](#P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-Code 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.Code')
   - [CodeBitTable](#P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-CodeBitTable 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.CodeBitTable')
+  - [CodeBits](#P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-CodeBits 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.CodeBits')
   - [Frequency](#P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-Frequency 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.Frequency')
   - [IsRightChild](#P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-IsRightChild 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.IsRightChild')
   - [Leaf](#P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-Leaf 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.Leaf')
@@ -107,9 +149,17 @@
   - [SetCodeNextBit()](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-SetCodeNextBit-System-Int32- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.SetCodeNextBit(System.Int32)')
   - [SetParent(parent,isRightChild)](#M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-SetParent-StreamCompress-Domain-Huffman-HuffmanTreeNode{`0},System-Boolean- 'StreamCompress.Domain.Huffman.HuffmanTreeNode`1.SetParent(StreamCompress.Domain.Huffman.HuffmanTreeNode{`0},System.Boolean)')
 - [ILZ78CodingTableItem\`1](#T-StreamCompress-Domain-LZ-ILZ78CodingTableItem`1 'StreamCompress.Domain.LZ.ILZ78CodingTableItem`1')
+  - [#ctor(codeWord)](#M-StreamCompress-Domain-LZ-ILZ78CodingTableItem`1-#ctor-`0- 'StreamCompress.Domain.LZ.ILZ78CodingTableItem`1.#ctor(`0)')
+  - [CodeWord](#P-StreamCompress-Domain-LZ-ILZ78CodingTableItem`1-CodeWord 'StreamCompress.Domain.LZ.ILZ78CodingTableItem`1.CodeWord')
 - [ILZ78CodingTable\`1](#T-StreamCompress-Domain-LZ-ILZ78CodingTable`1 'StreamCompress.Domain.LZ.ILZ78CodingTable`1')
+  - [Count](#P-StreamCompress-Domain-LZ-ILZ78CodingTable`1-Count 'StreamCompress.Domain.LZ.ILZ78CodingTable`1.Count')
+  - [Insert(searchKey,codeWord)](#M-StreamCompress-Domain-LZ-ILZ78CodingTable`1-Insert-System-Byte[],`0- 'StreamCompress.Domain.LZ.ILZ78CodingTable`1.Insert(System.Byte[],`0)')
+  - [Search(searchKey)](#M-StreamCompress-Domain-LZ-ILZ78CodingTable`1-Search-System-Byte[]- 'StreamCompress.Domain.LZ.ILZ78CodingTable`1.Search(System.Byte[])')
 - [ISaveable\`1](#T-StreamCompress-Utils-ISaveable`1 'StreamCompress.Utils.ISaveable`1')
+  - [Open(path)](#M-StreamCompress-Utils-ISaveable`1-Open-System-String- 'StreamCompress.Utils.ISaveable`1.Open(System.String)')
+  - [Save(path)](#M-StreamCompress-Utils-ISaveable`1-Save-System-String- 'StreamCompress.Utils.ISaveable`1.Save(System.String)')
 - [ImageFrame](#T-StreamCompress-Domain-Image-ImageFrame 'StreamCompress.Domain.Image.ImageFrame')
+  - [#ctor()](#M-StreamCompress-Domain-Image-ImageFrame-#ctor 'StreamCompress.Domain.Image.ImageFrame.#ctor')
   - [#ctor(image)](#M-StreamCompress-Domain-Image-ImageFrame-#ctor-System-Byte[]- 'StreamCompress.Domain.Image.ImageFrame.#ctor(System.Byte[])')
   - [HEADER_256_COLOR_TABLE_SIZE](#F-StreamCompress-Domain-Image-ImageFrame-HEADER_256_COLOR_TABLE_SIZE 'StreamCompress.Domain.Image.ImageFrame.HEADER_256_COLOR_TABLE_SIZE')
   - [HEADER_BYTES](#F-StreamCompress-Domain-Image-ImageFrame-HEADER_BYTES 'StreamCompress.Domain.Image.ImageFrame.HEADER_BYTES')
@@ -118,26 +168,40 @@
   - [Image](#P-StreamCompress-Domain-Image-ImageFrame-Image 'StreamCompress.Domain.Image.ImageFrame.Image')
   - [ImageHeightPx](#P-StreamCompress-Domain-Image-ImageFrame-ImageHeightPx 'StreamCompress.Domain.Image.ImageFrame.ImageHeightPx')
   - [ImageWidthPx](#P-StreamCompress-Domain-Image-ImageFrame-ImageWidthPx 'StreamCompress.Domain.Image.ImageFrame.ImageWidthPx')
+  - [FromBytes(image)](#M-StreamCompress-Domain-Image-ImageFrame-FromBytes-System-Byte[]- 'StreamCompress.Domain.Image.ImageFrame.FromBytes(System.Byte[])')
   - [FromFile(path)](#M-StreamCompress-Domain-Image-ImageFrame-FromFile-System-String- 'StreamCompress.Domain.Image.ImageFrame.FromFile(System.String)')
   - [Open(path)](#M-StreamCompress-Domain-Image-ImageFrame-Open-System-String- 'StreamCompress.Domain.Image.ImageFrame.Open(System.String)')
   - [Save(path)](#M-StreamCompress-Domain-Image-ImageFrame-Save-System-String- 'StreamCompress.Domain.Image.ImageFrame.Save(System.String)')
   - [SetSizeInfo(length,widthPx,heightPx)](#M-StreamCompress-Domain-Image-ImageFrame-SetSizeInfo-System-UInt32,System-Int32,System-Int32- 'StreamCompress.Domain.Image.ImageFrame.SetSizeInfo(System.UInt32,System.Int32,System.Int32)')
 - [ImageFrameGrayScale](#T-StreamCompress-Domain-Image-ImageFrameGrayScale 'StreamCompress.Domain.Image.ImageFrameGrayScale')
+  - [#ctor()](#M-StreamCompress-Domain-Image-ImageFrameGrayScale-#ctor 'StreamCompress.Domain.Image.ImageFrameGrayScale.#ctor')
   - [#ctor(image)](#M-StreamCompress-Domain-Image-ImageFrameGrayScale-#ctor-System-Byte[]- 'StreamCompress.Domain.Image.ImageFrameGrayScale.#ctor(System.Byte[])')
   - [SetColorTable()](#M-StreamCompress-Domain-Image-ImageFrameGrayScale-SetColorTable 'StreamCompress.Domain.Image.ImageFrameGrayScale.SetColorTable')
   - [StreamCompress#Utils#ISaveable{StreamCompress#Domain#Image#ImageFrameGrayScale}#Open(path)](#M-StreamCompress-Domain-Image-ImageFrameGrayScale-StreamCompress#Utils#ISaveable{StreamCompress#Domain#Image#ImageFrameGrayScale}#Open-System-String- 'StreamCompress.Domain.Image.ImageFrameGrayScale.StreamCompress#Utils#ISaveable{StreamCompress#Domain#Image#ImageFrameGrayScale}#Open(System.String)')
   - [StreamCompress#Utils#ISaveable{StreamCompress#Domain#Image#ImageFrameGrayScale}#Save(path)](#M-StreamCompress-Domain-Image-ImageFrameGrayScale-StreamCompress#Utils#ISaveable{StreamCompress#Domain#Image#ImageFrameGrayScale}#Save-System-String- 'StreamCompress.Domain.Image.ImageFrameGrayScale.StreamCompress#Utils#ISaveable{StreamCompress#Domain#Image#ImageFrameGrayScale}#Save(System.String)')
 - [LZCompressionDictionary](#T-StreamCompress-Program-LZCompressionDictionary 'StreamCompress.Program.LZCompressionDictionary')
+  - [HashTable](#F-StreamCompress-Program-LZCompressionDictionary-HashTable 'StreamCompress.Program.LZCompressionDictionary.HashTable')
+  - [Trie](#F-StreamCompress-Program-LZCompressionDictionary-Trie 'StreamCompress.Program.LZCompressionDictionary.Trie')
+  - [Trie256](#F-StreamCompress-Program-LZCompressionDictionary-Trie256 'StreamCompress.Program.LZCompressionDictionary.Trie256')
 - [LZImageFrame](#T-StreamCompress-Domain-LZ-LZImageFrame 'StreamCompress.Domain.LZ.LZImageFrame')
+  - [#ctor()](#M-StreamCompress-Domain-LZ-LZImageFrame-#ctor 'StreamCompress.Domain.LZ.LZImageFrame.#ctor')
   - [#ctor(codes)](#M-StreamCompress-Domain-LZ-LZImageFrame-#ctor-System-Byte[]- 'StreamCompress.Domain.LZ.LZImageFrame.#ctor(System.Byte[])')
   - [Codes](#P-StreamCompress-Domain-LZ-LZImageFrame-Codes 'StreamCompress.Domain.LZ.LZImageFrame.Codes')
   - [Open(path)](#M-StreamCompress-Domain-LZ-LZImageFrame-Open-System-String- 'StreamCompress.Domain.LZ.LZImageFrame.Open(System.String)')
   - [Save(path)](#M-StreamCompress-Domain-LZ-LZImageFrame-Save-System-String- 'StreamCompress.Domain.LZ.LZImageFrame.Save(System.String)')
 - [Method](#T-StreamCompress-Program-Method 'StreamCompress.Program.Method')
+  - [AsGrayScale](#F-StreamCompress-Program-Method-AsGrayScale 'StreamCompress.Program.Method.AsGrayScale')
+  - [AsGrayScaleAsHuffmanDecoded](#F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanDecoded 'StreamCompress.Program.Method.AsGrayScaleAsHuffmanDecoded')
+  - [AsGrayScaleAsHuffmanEncoded](#F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanEncoded 'StreamCompress.Program.Method.AsGrayScaleAsHuffmanEncoded')
+  - [AsGrayScaleAsLZ78Decoded](#F-StreamCompress-Program-Method-AsGrayScaleAsLZ78Decoded 'StreamCompress.Program.Method.AsGrayScaleAsLZ78Decoded')
+  - [AsGrayScaleAsLZ78Encoded](#F-StreamCompress-Program-Method-AsGrayScaleAsLZ78Encoded 'StreamCompress.Program.Method.AsGrayScaleAsLZ78Encoded')
+  - [AsLZ78Decoded](#F-StreamCompress-Program-Method-AsLZ78Decoded 'StreamCompress.Program.Method.AsLZ78Decoded')
+  - [AsLZ78Encoded](#F-StreamCompress-Program-Method-AsLZ78Encoded 'StreamCompress.Program.Method.AsLZ78Encoded')
 - [MinHeap\`1](#T-StreamCompress-Domain-Huffman-MinHeap`1 'StreamCompress.Domain.Huffman.MinHeap`1')
   - [#ctor(n)](#M-StreamCompress-Domain-Huffman-MinHeap`1-#ctor-System-Int32- 'StreamCompress.Domain.Huffman.MinHeap`1.#ctor(System.Int32)')
   - [_heap](#F-StreamCompress-Domain-Huffman-MinHeap`1-_heap 'StreamCompress.Domain.Huffman.MinHeap`1._heap')
   - [_heapData](#F-StreamCompress-Domain-Huffman-MinHeap`1-_heapData 'StreamCompress.Domain.Huffman.MinHeap`1._heapData')
+  - [HeapSize](#P-StreamCompress-Domain-Huffman-MinHeap`1-HeapSize 'StreamCompress.Domain.Huffman.MinHeap`1.HeapSize')
   - [DelMin()](#M-StreamCompress-Domain-Huffman-MinHeap`1-DelMin 'StreamCompress.Domain.Huffman.MinHeap`1.DelMin')
   - [Insert(nodeKey,nodeData)](#M-StreamCompress-Domain-Huffman-MinHeap`1-Insert-System-Int32,`0- 'StreamCompress.Domain.Huffman.MinHeap`1.Insert(System.Int32,`0)')
   - [_getParentIndex(i)](#M-StreamCompress-Domain-Huffman-MinHeap`1-_getParentIndex-System-Int32- 'StreamCompress.Domain.Huffman.MinHeap`1._getParentIndex(System.Int32)')
@@ -146,10 +210,42 @@
   - [_rightChildNodeIndex(i)](#M-StreamCompress-Domain-Huffman-MinHeap`1-_rightChildNodeIndex-System-Int32- 'StreamCompress.Domain.Huffman.MinHeap`1._rightChildNodeIndex(System.Int32)')
   - [_swapNodeLocations(i,j)](#M-StreamCompress-Domain-Huffman-MinHeap`1-_swapNodeLocations-System-Int32,System-Int32- 'StreamCompress.Domain.Huffman.MinHeap`1._swapNodeLocations(System.Int32,System.Int32)')
 - [Program](#T-StreamCompress-Program 'StreamCompress.Program')
+  - [Main(args)](#M-StreamCompress-Program-Main-System-String[]- 'StreamCompress.Program.Main(System.String[])')
   - [SourceLooper\`\`2(cmdArgs,func)](#M-StreamCompress-Program-SourceLooper``2-StreamCompress-Program-CommandLineArgs,System-Func{System-Int32,StreamCompress-Program-CommandLineArgs,``0,StreamCompress-Utils-ISaveable{``1}}- 'StreamCompress.Program.SourceLooper``2(StreamCompress.Program.CommandLineArgs,System.Func{System.Int32,StreamCompress.Program.CommandLineArgs,``0,StreamCompress.Utils.ISaveable{``1}})')
   - [_filePath(i,path,suffix)](#M-StreamCompress-Program-_filePath-System-Int32,System-String,System-String- 'StreamCompress.Program._filePath(System.Int32,System.String,System.String)')
 - [Tries256\`1](#T-StreamCompress-Domain-LZ-Tries256`1 'StreamCompress.Domain.LZ.Tries256`1')
+  - [#ctor()](#M-StreamCompress-Domain-LZ-Tries256`1-#ctor 'StreamCompress.Domain.LZ.Tries256`1.#ctor')
+  - [Count](#P-StreamCompress-Domain-LZ-Tries256`1-Count 'StreamCompress.Domain.LZ.Tries256`1.Count')
+  - [Insert(searchKey,codeWord)](#M-StreamCompress-Domain-LZ-Tries256`1-Insert-System-Byte[],`0- 'StreamCompress.Domain.LZ.Tries256`1.Insert(System.Byte[],`0)')
+  - [Search(searchKey)](#M-StreamCompress-Domain-LZ-Tries256`1-Search-System-Byte[]- 'StreamCompress.Domain.LZ.Tries256`1.Search(System.Byte[])')
+- [TriesContainer256\`1](#T-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1')
+  - [CodeWord](#P-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-CodeWord 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.CodeWord')
+  - [IsSet](#P-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-IsSet 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.IsSet')
+  - [Nodes](#P-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-Nodes 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.Nodes')
+  - [Add(b)](#M-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-Add-System-Byte- 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.Add(System.Byte)')
+  - [Get(b)](#M-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-Get-System-Byte- 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.Get(System.Byte)')
+  - [SetCodeWord(codeWord)](#M-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-SetCodeWord-`1- 'StreamCompress.Domain.LZ.Tries256`1.TriesContainer256`1.SetCodeWord(`1)')
+- [TriesContainer\`1](#T-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1')
+  - [#ctor(capacity)](#M-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-#ctor-System-Int32- 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.#ctor(System.Int32)')
+  - [CodeWord](#P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-CodeWord 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.CodeWord')
+  - [IsSet](#P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-IsSet 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.IsSet')
+  - [Nodes](#P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-Nodes 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.Nodes')
+  - [NodesCount](#P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-NodesCount 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.NodesCount')
+  - [Add(b)](#M-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-Add-System-Byte- 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.Add(System.Byte)')
+  - [Get(b)](#M-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-Get-System-Byte- 'StreamCompress.Domain.LZ.Tries`1.TriesContainer`1.Get(System.Byte)')
+- [TriesNode256\`1](#T-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1 'StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1')
+  - [#ctor(b)](#M-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1-#ctor-System-Byte- 'StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1.#ctor(System.Byte)')
+  - [Byte](#P-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1-Byte 'StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1.Byte')
+  - [ChildContainer](#P-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1-ChildContainer 'StreamCompress.Domain.LZ.Tries256`1.TriesNode256`1.ChildContainer')
+- [TriesNode\`1](#T-StreamCompress-Domain-LZ-Tries`1-TriesNode`1 'StreamCompress.Domain.LZ.Tries`1.TriesNode`1')
+  - [#ctor(b,capacity)](#M-StreamCompress-Domain-LZ-Tries`1-TriesNode`1-#ctor-System-Byte,System-Int32- 'StreamCompress.Domain.LZ.Tries`1.TriesNode`1.#ctor(System.Byte,System.Int32)')
+  - [Byte](#P-StreamCompress-Domain-LZ-Tries`1-TriesNode`1-Byte 'StreamCompress.Domain.LZ.Tries`1.TriesNode`1.Byte')
+  - [ChildContainer](#P-StreamCompress-Domain-LZ-Tries`1-TriesNode`1-ChildContainer 'StreamCompress.Domain.LZ.Tries`1.TriesNode`1.ChildContainer')
 - [Tries\`1](#T-StreamCompress-Domain-LZ-Tries`1 'StreamCompress.Domain.LZ.Tries`1')
+  - [#ctor(containerCapacity)](#M-StreamCompress-Domain-LZ-Tries`1-#ctor-System-Int32- 'StreamCompress.Domain.LZ.Tries`1.#ctor(System.Int32)')
+  - [Count](#P-StreamCompress-Domain-LZ-Tries`1-Count 'StreamCompress.Domain.LZ.Tries`1.Count')
+  - [Insert(searchKey,codeWord)](#M-StreamCompress-Domain-LZ-Tries`1-Insert-System-Byte[],`0- 'StreamCompress.Domain.LZ.Tries`1.Insert(System.Byte[],`0)')
+  - [Search(searchKey)](#M-StreamCompress-Domain-LZ-Tries`1-Search-System-Byte[]- 'StreamCompress.Domain.LZ.Tries`1.Search(System.Byte[])')
 
 <a name='T-StreamCompress-Utils-BitAndByteExtensions'></a>
 ## BitAndByteExtensions `type`
@@ -379,6 +475,19 @@ StreamCompress.Utils
 
 Wraps MemoryStream
 
+<a name='M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Int32-'></a>
+### #ctor(initialSize) `constructor`
+
+##### Summary
+
+Constructor for new memory stream
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| initialSize | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Initial buffer size |
+
 <a name='M-StreamCompress-Utils-ByteMemoryStream-AddBytes-System-Byte[]-'></a>
 ### AddBytes(bytes) `method`
 
@@ -391,6 +500,17 @@ Adds bytes to memory stream
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | bytes | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Bytes to add |
+
+<a name='M-StreamCompress-Utils-ByteMemoryStream-Dispose'></a>
+### Dispose() `method`
+
+##### Summary
+
+Finalize intance and release resources
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='M-StreamCompress-Utils-ByteMemoryStream-ReadBytes'></a>
 ### ReadBytes() `method`
@@ -417,6 +537,111 @@ StreamCompress.Program
 ##### Summary
 
 Command line arguments
+
+<a name='P-StreamCompress-Program-CommandLineArgs-Count'></a>
+### Count `property`
+
+##### Summary
+
+How many source files are proceed
+
+<a name='P-StreamCompress-Program-CommandLineArgs-CropBottomPx'></a>
+### CropBottomPx `property`
+
+##### Summary
+
+Image crop bottom
+
+<a name='P-StreamCompress-Program-CommandLineArgs-CropLeftPx'></a>
+### CropLeftPx `property`
+
+##### Summary
+
+Image crop left
+
+<a name='P-StreamCompress-Program-CommandLineArgs-CropRightPx'></a>
+### CropRightPx `property`
+
+##### Summary
+
+Image crop right
+
+<a name='P-StreamCompress-Program-CommandLineArgs-CropTopPx'></a>
+### CropTopPx `property`
+
+##### Summary
+
+Image crop top
+
+<a name='P-StreamCompress-Program-CommandLineArgs-DestinationFileSuffix'></a>
+### DestinationFileSuffix `property`
+
+##### Summary
+
+Output file suffix
+
+<a name='P-StreamCompress-Program-CommandLineArgs-DestinationPath'></a>
+### DestinationPath `property`
+
+##### Summary
+
+Output folder
+
+<a name='P-StreamCompress-Program-CommandLineArgs-GrayScaleColors'></a>
+### GrayScaleColors `property`
+
+##### Summary
+
+How many colors are used in gray scale image
+
+<a name='P-StreamCompress-Program-CommandLineArgs-LZCompressionDictionary'></a>
+### LZCompressionDictionary `property`
+
+##### Summary
+
+Dictionary implementation used in LZ78 compression
+
+<a name='P-StreamCompress-Program-CommandLineArgs-LZCompressionHashTablePrime'></a>
+### LZCompressionHashTablePrime `property`
+
+##### Summary
+
+Hash table dictionary prime number
+
+<a name='P-StreamCompress-Program-CommandLineArgs-LZCompressionTrieInitialCapacity'></a>
+### LZCompressionTrieInitialCapacity `property`
+
+##### Summary
+
+Dynamic trie implementation node tables initial size
+
+<a name='P-StreamCompress-Program-CommandLineArgs-Method'></a>
+### Method `property`
+
+##### Summary
+
+Compression method
+
+<a name='P-StreamCompress-Program-CommandLineArgs-SourceFileSuffix'></a>
+### SourceFileSuffix `property`
+
+##### Summary
+
+Sourcefiles filename suffix with extension
+
+<a name='P-StreamCompress-Program-CommandLineArgs-SourcePath'></a>
+### SourcePath `property`
+
+##### Summary
+
+Source data path
+
+<a name='P-StreamCompress-Program-CommandLineArgs-StartIndex'></a>
+### StartIndex `property`
+
+##### Summary
+
+Source files start index
 
 <a name='T-StreamCompress-Domain-Image-CropSetup'></a>
 ## CropSetup `type`
@@ -950,6 +1175,27 @@ StreamCompress.Program
 
 Gray scale image color counts
 
+<a name='F-StreamCompress-Program-GrayScaleColors-Full'></a>
+### Full `constants`
+
+##### Summary
+
+256 colors
+
+<a name='F-StreamCompress-Program-GrayScaleColors-Half'></a>
+### Half `constants`
+
+##### Summary
+
+128 colors
+
+<a name='F-StreamCompress-Program-GrayScaleColors-Quarter'></a>
+### Quarter `constants`
+
+##### Summary
+
+64 colors
+
 <a name='T-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1'></a>
 ## HashTableItem\`1 `type`
 
@@ -981,6 +1227,34 @@ Constructor to create new item. Method will also calculate key and hash
 | searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') |  |
 | codeWord | [\`1](#T-`1 '`1') |  |
 | m | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+
+<a name='F-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-CodeWord'></a>
+### CodeWord `constants`
+
+##### Summary
+
+Value saved to item
+
+<a name='F-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-Hash'></a>
+### Hash `constants`
+
+##### Summary
+
+Hash value
+
+<a name='F-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-SearchKey'></a>
+### SearchKey `constants`
+
+##### Summary
+
+Key
+
+<a name='P-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-LinkedItem'></a>
+### LinkedItem `property`
+
+##### Summary
+
+Linked list
 
 <a name='M-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-CompareTo-StreamCompress-Domain-LZ-HashTable{`0}-HashTableItem{`1}-'></a>
 ### CompareTo(other) `method`
@@ -1121,6 +1395,48 @@ Init new item using given values
 | codeBitsCount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
 | code | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
 
+<a name='F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-HEADER_COLOR_CODE_BIT_CODE_BYTES'></a>
+### HEADER_COLOR_CODE_BIT_CODE_BYTES `constants`
+
+##### Summary
+
+Bytes used for color code
+
+<a name='F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-HEADER_COLOR_CODE_BIT_COUNT_BYTES'></a>
+### HEADER_COLOR_CODE_BIT_COUNT_BYTES `constants`
+
+##### Summary
+
+Bytes used for color code bit count
+
+<a name='F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-HEADER_COLOR_SYMBOL_BYTES'></a>
+### HEADER_COLOR_SYMBOL_BYTES `constants`
+
+##### Summary
+
+Bytes used for color symbol
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-Code'></a>
+### Code `property`
+
+##### Summary
+
+Code
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-CodeBitsCount'></a>
+### CodeBitsCount `property`
+
+##### Summary
+
+Bits
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-Symbol'></a>
+### Symbol `property`
+
+##### Summary
+
+Symbole
+
 <a name='M-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem-GetBytesLength'></a>
 ### GetBytesLength() `method`
 
@@ -1147,6 +1463,23 @@ StreamCompress.Domain.Huffman
 
 Presents single image frame as Huffman encoded
 
+<a name='M-StreamCompress-Domain-Huffman-HuffmanImageFrame-#ctor-System-Int32,StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem[],System-Int32,System-Int32,System-Byte[]-'></a>
+### #ctor(compressedBits,colorCodes,maxCodeBitsLength,originalImageDataLength,originalImageHeader) `constructor`
+
+##### Summary
+
+Constructor for huffamn encoded image frame
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| compressedBits | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Compressed bits count |
+| colorCodes | [StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem[]](#T-StreamCompress-Domain-Huffman-HuffmanImageFrame-HeaderColorItem[] 'StreamCompress.Domain.Huffman.HuffmanImageFrame.HeaderColorItem[]') | Color code count |
+| maxCodeBitsLength | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Longest bit length |
+| originalImageDataLength | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Original image header length |
+| originalImageHeader | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Original image header |
+
 <a name='M-StreamCompress-Domain-Huffman-HuffmanImageFrame-#ctor-System-Byte[]-'></a>
 ### #ctor(data) `constructor`
 
@@ -1159,6 +1492,17 @@ New huffman image frame from given data
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | data | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') |  |
+
+<a name='M-StreamCompress-Domain-Huffman-HuffmanImageFrame-#ctor'></a>
+### #ctor() `constructor`
+
+##### Summary
+
+Parametless constructor
+
+##### Parameters
+
+This constructor has no parameters.
 
 <a name='F-StreamCompress-Domain-Huffman-HuffmanImageFrame-HEADER_COLOR_CODE_COUNT_BYTES'></a>
 ### HEADER_COLOR_CODE_COUNT_BYTES `constants`
@@ -1229,6 +1573,69 @@ Original image header header field length in bytes
 ##### Summary
 
 Original image header  header field position
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-ColorCodeCount'></a>
+### ColorCodeCount `property`
+
+##### Summary
+
+Count of color codes
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-ColorCodeHeaderLength'></a>
+### ColorCodeHeaderLength `property`
+
+##### Summary
+
+Total size of color header
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-CompressedBits'></a>
+### CompressedBits `property`
+
+##### Summary
+
+Compressed bits count
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-Data'></a>
+### Data `property`
+
+##### Summary
+
+Frame data header + image
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-FixedHeaderLength'></a>
+### FixedHeaderLength `property`
+
+##### Summary
+
+Total size of header
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-ImageDataOffSet'></a>
+### ImageDataOffSet `property`
+
+##### Summary
+
+Image off set
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-MaxCodeBitsLength'></a>
+### MaxCodeBitsLength `property`
+
+##### Summary
+
+Longest bit length
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-OriginalImageDataLength'></a>
+### OriginalImageDataLength `property`
+
+##### Summary
+
+Original image data length
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanImageFrame-OriginalImageHeaderLength'></a>
+### OriginalImageHeaderLength `property`
+
+##### Summary
+
+Original image header length
 
 <a name='M-StreamCompress-Domain-Huffman-HuffmanImageFrame-GetBit-System-Int32-'></a>
 ### GetBit(index) `method`
@@ -1316,7 +1723,7 @@ Presents one node in huffman tree
 | T |  |
 
 <a name='M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-`0-'></a>
-### #ctor(symbol,frequency) `constructor`
+### #ctor(symbol) `constructor`
 
 ##### Summary
 
@@ -1329,7 +1736,7 @@ To create leaf
 | symbol | [\`0](#T-`0 '`0') |  |
 
 <a name='M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-`0,System-Int32,System-Int32-'></a>
-### #ctor(symbol,frequency) `constructor`
+### #ctor(symbol,code,codeBits) `constructor`
 
 ##### Summary
 
@@ -1339,11 +1746,12 @@ To create leaf when decoding
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| symbol | [\`0](#T-`0 '`0') |  |
-| frequency | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+| symbol | [\`0](#T-`0 '`0') | Symbol |
+| code | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Code |
+| codeBits | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Bits |
 
 <a name='M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor'></a>
-### #ctor(symbol,frequency) `constructor`
+### #ctor() `constructor`
 
 ##### Summary
 
@@ -1351,23 +1759,22 @@ To create internal node when decoding
 
 ##### Parameters
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| symbol | [M:StreamCompress.Domain.Huffman.HuffmanTreeNode\`1.#ctor](#T-M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor 'M:StreamCompress.Domain.Huffman.HuffmanTreeNode`1.#ctor') |  |
+This constructor has no parameters.
 
 <a name='M-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-#ctor-System-Int32,StreamCompress-Domain-Huffman-HuffmanTreeNode{`0},StreamCompress-Domain-Huffman-HuffmanTreeNode{`0}-'></a>
-### #ctor(symbol,frequency) `constructor`
+### #ctor(frequency,leftChild,rightChild) `constructor`
 
 ##### Summary
 
-To create internal node
+Constructor to create internal node
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| symbol | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
-| frequency | [StreamCompress.Domain.Huffman.HuffmanTreeNode{\`0}](#T-StreamCompress-Domain-Huffman-HuffmanTreeNode{`0} 'StreamCompress.Domain.Huffman.HuffmanTreeNode{`0}') |  |
+| frequency | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Frequency |
+| leftChild | [StreamCompress.Domain.Huffman.HuffmanTreeNode{\`0}](#T-StreamCompress-Domain-Huffman-HuffmanTreeNode{`0} 'StreamCompress.Domain.Huffman.HuffmanTreeNode{`0}') | Left child |
+| rightChild | [StreamCompress.Domain.Huffman.HuffmanTreeNode{\`0}](#T-StreamCompress-Domain-Huffman-HuffmanTreeNode{`0} 'StreamCompress.Domain.Huffman.HuffmanTreeNode{`0}') | Right child |
 
 <a name='F-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-_codeBitPos'></a>
 ### _codeBitPos `constants`
@@ -1389,6 +1796,13 @@ Code numeric value
 ##### Summary
 
 Contains code bits in array and most significant bit is last one
+
+<a name='P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-CodeBits'></a>
+### CodeBits `property`
+
+##### Summary
+
+Bits used for code
 
 <a name='P-StreamCompress-Domain-Huffman-HuffmanTreeNode`1-Frequency'></a>
 ### Frequency `property`
@@ -1556,6 +1970,26 @@ Presents item in dictionary
 | ---- | ----------- |
 | T |  |
 
+<a name='M-StreamCompress-Domain-LZ-ILZ78CodingTableItem`1-#ctor-`0-'></a>
+### #ctor(codeWord) `constructor`
+
+##### Summary
+
+Item constructor
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| codeWord | [\`0](#T-`0 '`0') | Item code word |
+
+<a name='P-StreamCompress-Domain-LZ-ILZ78CodingTableItem`1-CodeWord'></a>
+### CodeWord `property`
+
+##### Summary
+
+Item code word
+
 <a name='T-StreamCompress-Domain-LZ-ILZ78CodingTable`1'></a>
 ## ILZ78CodingTable\`1 `type`
 
@@ -1572,6 +2006,44 @@ Interface for dictionary implementatio used in LZ compression
 | Name | Description |
 | ---- | ----------- |
 | T |  |
+
+<a name='P-StreamCompress-Domain-LZ-ILZ78CodingTable`1-Count'></a>
+### Count `property`
+
+##### Summary
+
+Items count in dictionary
+
+<a name='M-StreamCompress-Domain-LZ-ILZ78CodingTable`1-Insert-System-Byte[],`0-'></a>
+### Insert(searchKey,codeWord) `method`
+
+##### Summary
+
+Insert new item to dictionary
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Item key |
+| codeWord | [\`0](#T-`0 '`0') | Item value |
+
+<a name='M-StreamCompress-Domain-LZ-ILZ78CodingTable`1-Search-System-Byte[]-'></a>
+### Search(searchKey) `method`
+
+##### Summary
+
+Search item from disctionary
+
+##### Returns
+
+Existing item or null
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Search key |
 
 <a name='T-StreamCompress-Utils-ISaveable`1'></a>
 ## ISaveable\`1 `type`
@@ -1590,6 +2062,40 @@ Interface for saving and opening saveable domain objects in project
 | ---- | ----------- |
 | T | Type of domain object |
 
+<a name='M-StreamCompress-Utils-ISaveable`1-Open-System-String-'></a>
+### Open(path) `method`
+
+##### Summary
+
+Reads object from given file
+
+##### Returns
+
+Object
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | File name |
+
+<a name='M-StreamCompress-Utils-ISaveable`1-Save-System-String-'></a>
+### Save(path) `method`
+
+##### Summary
+
+Saves object to given file
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | File path |
+
 <a name='T-StreamCompress-Domain-Image-ImageFrame'></a>
 ## ImageFrame `type`
 
@@ -1600,6 +2106,17 @@ StreamCompress.Domain.Image
 ##### Summary
 
 Presents single image frame
+
+<a name='M-StreamCompress-Domain-Image-ImageFrame-#ctor'></a>
+### #ctor() `constructor`
+
+##### Summary
+
+Parametless constructor
+
+##### Parameters
+
+This constructor has no parameters.
 
 <a name='M-StreamCompress-Domain-Image-ImageFrame-#ctor-System-Byte[]-'></a>
 ### #ctor(image) `constructor`
@@ -1662,6 +2179,19 @@ Image height in pixels
 ##### Summary
 
 Image width in pixels
+
+<a name='M-StreamCompress-Domain-Image-ImageFrame-FromBytes-System-Byte[]-'></a>
+### FromBytes(image) `method`
+
+##### Summary
+
+Initialize frame from given bytes
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| image | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Image |
 
 <a name='M-StreamCompress-Domain-Image-ImageFrame-FromFile-System-String-'></a>
 ### FromFile(path) `method`
@@ -1740,6 +2270,17 @@ StreamCompress.Domain.Image
 
 Present image frame which image is gray scale image
 
+<a name='M-StreamCompress-Domain-Image-ImageFrameGrayScale-#ctor'></a>
+### #ctor() `constructor`
+
+##### Summary
+
+Parametless constructor
+
+##### Parameters
+
+This constructor has no parameters.
+
 <a name='M-StreamCompress-Domain-Image-ImageFrameGrayScale-#ctor-System-Byte[]-'></a>
 ### #ctor(image) `constructor`
 
@@ -1809,6 +2350,27 @@ StreamCompress.Program
 
 LZ compression dictionary types
 
+<a name='F-StreamCompress-Program-LZCompressionDictionary-HashTable'></a>
+### HashTable `constants`
+
+##### Summary
+
+Hash table implementation
+
+<a name='F-StreamCompress-Program-LZCompressionDictionary-Trie'></a>
+### Trie `constants`
+
+##### Summary
+
+Trie dynamic size node table implementation
+
+<a name='F-StreamCompress-Program-LZCompressionDictionary-Trie256'></a>
+### Trie256 `constants`
+
+##### Summary
+
+Trie fixed size node table implementation
+
 <a name='T-StreamCompress-Domain-LZ-LZImageFrame'></a>
 ## LZImageFrame `type`
 
@@ -1819,6 +2381,17 @@ StreamCompress.Domain.LZ
 ##### Summary
 
 Presents single image frame in LZ compressed form
+
+<a name='M-StreamCompress-Domain-LZ-LZImageFrame-#ctor'></a>
+### #ctor() `constructor`
+
+##### Summary
+
+Parametless constructor
+
+##### Parameters
+
+This constructor has no parameters.
 
 <a name='M-StreamCompress-Domain-LZ-LZImageFrame-#ctor-System-Byte[]-'></a>
 ### #ctor(codes) `constructor`
@@ -1885,6 +2458,55 @@ StreamCompress.Program
 
 Supported methods
 
+<a name='F-StreamCompress-Program-Method-AsGrayScale'></a>
+### AsGrayScale `constants`
+
+##### Summary
+
+Converts image as gray scale
+
+<a name='F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanDecoded'></a>
+### AsGrayScaleAsHuffmanDecoded `constants`
+
+##### Summary
+
+Decodes huffman encoded gray scale image
+
+<a name='F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanEncoded'></a>
+### AsGrayScaleAsHuffmanEncoded `constants`
+
+##### Summary
+
+Converts image as gray scale and encode it using Huffman coding
+
+<a name='F-StreamCompress-Program-Method-AsGrayScaleAsLZ78Decoded'></a>
+### AsGrayScaleAsLZ78Decoded `constants`
+
+##### Summary
+
+Decodes gray scale image using LZ78 compression
+
+<a name='F-StreamCompress-Program-Method-AsGrayScaleAsLZ78Encoded'></a>
+### AsGrayScaleAsLZ78Encoded `constants`
+
+##### Summary
+
+Converts image as gray scale and encodes image using LZ78 compression
+
+<a name='F-StreamCompress-Program-Method-AsLZ78Decoded'></a>
+### AsLZ78Decoded `constants`
+
+##### Summary
+
+Decodes image using LZ78 compression
+
+<a name='F-StreamCompress-Program-Method-AsLZ78Encoded'></a>
+### AsLZ78Encoded `constants`
+
+##### Summary
+
+Encodes image using LZ78 compression
+
 <a name='T-StreamCompress-Domain-Huffman-MinHeap`1'></a>
 ## MinHeap\`1 `type`
 
@@ -1928,6 +2550,13 @@ heap table
 ##### Summary
 
 nodes data
+
+<a name='P-StreamCompress-Domain-Huffman-MinHeap`1-HeapSize'></a>
+### HeapSize `property`
+
+##### Summary
+
+Heap size
 
 <a name='M-StreamCompress-Domain-Huffman-MinHeap`1-DelMin'></a>
 ### DelMin() `method`
@@ -2047,6 +2676,23 @@ StreamCompress
 
 Main program
 
+<a name='M-StreamCompress-Program-Main-System-String[]-'></a>
+### Main(args) `method`
+
+##### Summary
+
+Program start method
+
+##### Returns
+
+0 when OK
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| args | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | Command line arguments |
+
 <a name='M-StreamCompress-Program-SourceLooper``2-StreamCompress-Program-CommandLineArgs,System-Func{System-Int32,StreamCompress-Program-CommandLineArgs,``0,StreamCompress-Utils-ISaveable{``1}}-'></a>
 ### SourceLooper\`\`2(cmdArgs,func) `method`
 
@@ -2105,6 +2751,321 @@ Implements trie algoritm using fixed length node table
 | ---- | ----------- |
 | T |  |
 
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-#ctor'></a>
+### #ctor() `constructor`
+
+##### Summary
+
+Constructor
+
+##### Parameters
+
+This constructor has no parameters.
+
+<a name='P-StreamCompress-Domain-LZ-Tries256`1-Count'></a>
+### Count `property`
+
+##### Summary
+
+Nodes count
+
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-Insert-System-Byte[],`0-'></a>
+### Insert(searchKey,codeWord) `method`
+
+##### Summary
+
+Adds new item to dictionary
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Key |
+| codeWord | [\`0](#T-`0 '`0') | Value |
+
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-Search-System-Byte[]-'></a>
+### Search(searchKey) `method`
+
+##### Summary
+
+Search item from dictionary
+
+##### Returns
+
+Item if it exists
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Key |
+
+<a name='T-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1'></a>
+## TriesContainer256\`1 `type`
+
+##### Namespace
+
+StreamCompress.Domain.LZ.Tries256`1
+
+##### Summary
+
+Container node, which contains nodes
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| TT | Type of code word |
+
+<a name='P-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-CodeWord'></a>
+### CodeWord `property`
+
+##### Summary
+
+Word saved to this container
+
+<a name='P-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-IsSet'></a>
+### IsSet `property`
+
+##### Summary
+
+Is container node that contains full word
+
+<a name='P-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-Nodes'></a>
+### Nodes `property`
+
+##### Summary
+
+Nodes saved to this container
+
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-Add-System-Byte-'></a>
+### Add(b) `method`
+
+##### Summary
+
+Adds byte to container
+
+##### Returns
+
+Added node
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | byte |
+
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-Get-System-Byte-'></a>
+### Get(b) `method`
+
+##### Summary
+
+Return byte from container if it is set
+
+##### Returns
+
+Node if it's set else null
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | Byte to look up |
+
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-TriesContainer256`1-SetCodeWord-`1-'></a>
+### SetCodeWord(codeWord) `method`
+
+##### Summary
+
+Sets code word to container
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| codeWord | [\`1](#T-`1 '`1') |  |
+
+<a name='T-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1'></a>
+## TriesContainer\`1 `type`
+
+##### Namespace
+
+StreamCompress.Domain.LZ.Tries`1
+
+##### Summary
+
+Container node, which contains nodes
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| TT | Type of code word |
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-#ctor-System-Int32-'></a>
+### #ctor(capacity) `constructor`
+
+##### Summary
+
+Container constructor
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| capacity | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Nodes tabel intiial capacity |
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-CodeWord'></a>
+### CodeWord `property`
+
+##### Summary
+
+Word saved to this container
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-IsSet'></a>
+### IsSet `property`
+
+##### Summary
+
+Is container node that contains full word
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-Nodes'></a>
+### Nodes `property`
+
+##### Summary
+
+Nodes saved to this container
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-NodesCount'></a>
+### NodesCount `property`
+
+##### Summary
+
+Count of nodes
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-Add-System-Byte-'></a>
+### Add(b) `method`
+
+##### Summary
+
+Adds byte to container
+
+##### Returns
+
+Added node
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | byte |
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-TriesContainer`1-Get-System-Byte-'></a>
+### Get(b) `method`
+
+##### Summary
+
+Return byte from container if it is set
+
+##### Returns
+
+Node if it's set else null
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | Byte to look up |
+
+<a name='T-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1'></a>
+## TriesNode256\`1 `type`
+
+##### Namespace
+
+StreamCompress.Domain.LZ.Tries256`1
+
+##### Summary
+
+Node that contains byte value and links to child containers
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| TTT |  |
+
+<a name='M-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1-#ctor-System-Byte-'></a>
+### #ctor(b) `constructor`
+
+##### Summary
+
+Node constructor
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | Byte value |
+
+<a name='P-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1-Byte'></a>
+### Byte `property`
+
+##### Summary
+
+Byte
+
+<a name='P-StreamCompress-Domain-LZ-Tries256`1-TriesNode256`1-ChildContainer'></a>
+### ChildContainer `property`
+
+##### Summary
+
+Child container
+
+<a name='T-StreamCompress-Domain-LZ-Tries`1-TriesNode`1'></a>
+## TriesNode\`1 `type`
+
+##### Namespace
+
+StreamCompress.Domain.LZ.Tries`1
+
+##### Summary
+
+Node that contains byte value and links to child containers
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| TTT |  |
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-TriesNode`1-#ctor-System-Byte,System-Int32-'></a>
+### #ctor(b,capacity) `constructor`
+
+##### Summary
+
+Node constructor
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | Byte value |
+| capacity | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Child container initial capacity |
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-TriesNode`1-Byte'></a>
+### Byte `property`
+
+##### Summary
+
+Byte
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-TriesNode`1-ChildContainer'></a>
+### ChildContainer `property`
+
+##### Summary
+
+Child container
+
 <a name='T-StreamCompress-Domain-LZ-Tries`1'></a>
 ## Tries\`1 `type`
 
@@ -2121,3 +3082,54 @@ Implements trie algoritmin using dynamic size node table
 | Name | Description |
 | ---- | ----------- |
 | T |  |
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-#ctor-System-Int32-'></a>
+### #ctor(containerCapacity) `constructor`
+
+##### Summary
+
+Constructor
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| containerCapacity | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+
+<a name='P-StreamCompress-Domain-LZ-Tries`1-Count'></a>
+### Count `property`
+
+##### Summary
+
+Items count
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-Insert-System-Byte[],`0-'></a>
+### Insert(searchKey,codeWord) `method`
+
+##### Summary
+
+Adds new item to dictionary
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Key |
+| codeWord | [\`0](#T-`0 '`0') | Value |
+
+<a name='M-StreamCompress-Domain-LZ-Tries`1-Search-System-Byte[]-'></a>
+### Search(searchKey) `method`
+
+##### Summary
+
+Search item from dictionary
+
+##### Returns
+
+Existing key value or null
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| searchKey | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Key |

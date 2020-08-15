@@ -41,7 +41,7 @@ namespace StreamCompress.Domain.LZ {
 			}
 		}
 
-		public HashTableItem<T> _search(byte[] searchKey) {
+		private HashTableItem<T> _search(byte[] searchKey) {
 
 			var hashTableItem = new HashTableItem<T>(searchKey, default(T), HashTableItems.Length);
 
@@ -85,10 +85,22 @@ namespace StreamCompress.Domain.LZ {
 			const int p = 16777619;
 			private readonly int _key;
 
+			/// <summary>
+			/// Hash value
+			/// </summary>
 			public readonly int Hash;
+			/// <summary>
+			/// Value saved to item
+			/// </summary>
 			public readonly TT CodeWord;
+			/// <summary>
+			/// Key
+			/// </summary>
 			public readonly byte[] SearchKey;
 
+			/// <summary>
+			/// Linked list
+			/// </summary>
 			public HashTableItem<TT> LinkedItem { get; internal set; }
 
 			/// <summary>

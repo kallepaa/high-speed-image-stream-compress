@@ -13,6 +13,9 @@ namespace StreamCompress.Domain.LZ {
 		/// </summary>
 		public byte[] Codes { get; internal set; }
 
+		/// <summary>
+		/// Parametless constructor
+		/// </summary>
 		public LZImageFrame() {
 
 		}

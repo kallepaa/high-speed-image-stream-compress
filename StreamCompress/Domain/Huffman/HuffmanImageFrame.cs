@@ -55,18 +55,52 @@ namespace StreamCompress.Domain.Huffman {
 		/// </summary>
 		public const int HEADER_ORIGINAL_IMAGE_DATA_BYTES_POS = 16;
 
-
+		/// <summary>
+		/// Total size of header
+		/// </summary>
 		public int FixedHeaderLength => HEADER_COMPRESSED_BITS_BYTES + HEADER_MAX_CODE_BITS_BYTES + HEADER_COLOR_CODE_COUNT_BYTES + HEADER_ORIGINAL_IMAGE_HEADER_BYTES + HEADER_ORIGINAL_IMAGE_DATA_BYTES;
+		/// <summary>
+		/// Total size of color header
+		/// </summary>
 		public int ColorCodeHeaderLength => ColorCodeCount * HeaderColorItem.GetBytesLength();
+		/// <summary>
+		/// Image off set
+		/// </summary>
 		public int ImageDataOffSet => FixedHeaderLength + ColorCodeHeaderLength + OriginalImageHeaderLength;
 
+		/// <summary>
+		/// Frame data header + image
+		/// </summary>
 		public byte[] Data { get; internal set; }
+		/// <summary>
+		/// Compressed bits count
+		/// </summary>
 		public int CompressedBits { get; internal set; }
+		/// <summary>
+		/// Longest bit length
+		/// </summary>
 		public int MaxCodeBitsLength { get; internal set; }
+		/// <summary>
+		/// Count of color codes
+		/// </summary>
 		public int ColorCodeCount { get; internal set; }
+		/// <summary>
+		/// Original image header length
+		/// </summary>
 		public int OriginalImageHeaderLength { get; internal set; }
+		/// <summary>
+		/// Original image data length
+		/// </summary>
 		public int OriginalImageDataLength { get; internal set; }
 
+		/// <summary>
+		/// Constructor for huffamn encoded image frame
+		/// </summary>
+		/// <param name="compressedBits">Compressed bits count</param>
+		/// <param name="colorCodes">Color code count</param>
+		/// <param name="maxCodeBitsLength">Longest bit length</param>
+		/// <param name="originalImageDataLength">Original image header length</param>
+		/// <param name="originalImageHeader">Original image header</param>
 		public HuffmanImageFrame(int compressedBits, HeaderColorItem[] colorCodes, int maxCodeBitsLength, int originalImageDataLength, byte[] originalImageHeader) {
 
 			var imageDataTotalLength = _calculateImageDataTotalSize(compressedBits);
@@ -106,6 +140,9 @@ namespace StreamCompress.Domain.Huffman {
 			_fromBytes(data);
 		}
 
+		/// <summary>
+		/// Parametless constructor
+		/// </summary>
 		public HuffmanImageFrame() {}
 
 		private void _fromBytes(byte[] data) {
@@ -153,12 +190,30 @@ namespace StreamCompress.Domain.Huffman {
 		/// </summary>
 		public class HeaderColorItem {
 
+			/// <summary>
+			/// Bytes used for color symbol
+			/// </summary>
 			public const int HEADER_COLOR_SYMBOL_BYTES = 1;
+			/// <summary>
+			/// Bytes used for color code bit count
+			/// </summary>
 			public const int HEADER_COLOR_CODE_BIT_COUNT_BYTES = 1;
+			/// <summary>
+			/// Bytes used for color code
+			/// </summary>
 			public const int HEADER_COLOR_CODE_BIT_CODE_BYTES = 2;
 
+			/// <summary>
+			/// Symbole
+			/// </summary>
 			public int Symbol { get; }
+			/// <summary>
+			/// Bits
+			/// </summary>
 			public int CodeBitsCount { get; }
+			/// <summary>
+			/// Code
+			/// </summary>
 			public int Code { get; }
 
 			/// <summary>
