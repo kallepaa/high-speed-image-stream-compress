@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StreamCompressBenchmark": {
+      "commandName": "Project",
+      "commandLineArgs": "-f * --disableLogFile"
+    }
+  }
+}

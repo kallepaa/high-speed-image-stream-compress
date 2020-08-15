@@ -6,13 +6,33 @@ namespace StreamCompress.Shared {
 
 		public const string SOURCE_FILE_SUFFIX = "original.bmp";
 
+		private static string _getTestDataPath() {
+
+			var dirInfo = new DirectoryInfo(Environment.CurrentDirectory);
+			var exists = false;
+			while (dirInfo != null) {
+				if (Directory.Exists(Path.Combine(dirInfo.FullName, "TestData"))) {
+					exists = true;
+					break;
+				}
+				dirInfo = dirInfo.Parent;
+			}
+			if (exists) {
+				return Path.Combine(dirInfo.FullName, "TestData");
+			}
+
+			throw new DirectoryNotFoundException("TestData directory could not be solved!");
+		}
+
 		public static string GetSourcePath() {
-			var sourcePath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestData\Source");
+			var basePath = _getTestDataPath();
+			var sourcePath = Path.Combine(basePath, "Source");
 			var dirInfo = new DirectoryInfo(sourcePath);
 			return dirInfo.FullName;
 		}
 		public static string GetDestinationPath() {
-			var sourcePath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestData\Destination");
+			var basePath = _getTestDataPath();
+			var sourcePath = Path.Combine(basePath, "Destination");
 			var dirInfo = new DirectoryInfo(sourcePath);
 			return dirInfo.FullName;
 		}

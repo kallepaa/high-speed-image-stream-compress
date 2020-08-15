@@ -262,4 +262,3 @@ __pycache__/
 
 # Test data
 /StreamCompressTest/TestData/Destination
-/StreamCompressBenchmark/TestData/Destination

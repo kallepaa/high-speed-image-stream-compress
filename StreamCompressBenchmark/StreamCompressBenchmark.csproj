@@ -6,7 +6,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Enviroment.cs" Link="Enviroment.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StreamCompress\StreamCompress.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestData\Destination\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\Source\00000-original.bmp">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
