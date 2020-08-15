@@ -11,8 +11,6 @@
 
 Ohjelma suoritetaan komentokehotteesta käynnistämällä ohjelma komennolla *StreamCompress [options]*. Alla listaus ohjelman vastaanottamista syötteistä.
 
-## Minkä muotoisia syötteitä ohjelma hyväksyy
-
 **Usage:**
 
 StreamCompress [options]
@@ -52,6 +50,10 @@ StreamCompress [options]
 --version Show version information
 
 -?, -h, --help Show help and usage information
+
+## Minkä muotoisia syötteitä ohjelma hyväksyy
+
+Ohjelman osaa lukea 24 bittisä bittikartta (.bmp) kuvia, sekä ohjelman pakkaustiedostoja.
 
 ### Esimerkkejä
 
