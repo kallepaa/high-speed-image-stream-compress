@@ -1,5 +1,10 @@
 ﻿namespace StreamCompress.Domain.LZ {
 
+
+	/// <summary>
+	/// Implements trie algoritmin using dynamic size node table
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public class Tries<T> : ILZ78CodingTable<T> {
 
 		public TriesContainer<T> Root { get; }

@@ -148,6 +148,8 @@
 - [Program](#T-StreamCompress-Program 'StreamCompress.Program')
   - [SourceLooper\`\`2(cmdArgs,func)](#M-StreamCompress-Program-SourceLooper``2-StreamCompress-Program-CommandLineArgs,System-Func{System-Int32,StreamCompress-Program-CommandLineArgs,``0,StreamCompress-Utils-ISaveable{``1}}- 'StreamCompress.Program.SourceLooper``2(StreamCompress.Program.CommandLineArgs,System.Func{System.Int32,StreamCompress.Program.CommandLineArgs,``0,StreamCompress.Utils.ISaveable{``1}})')
   - [_filePath(i,path,suffix)](#M-StreamCompress-Program-_filePath-System-Int32,System-String,System-String- 'StreamCompress.Program._filePath(System.Int32,System.String,System.String)')
+- [Tries256\`1](#T-StreamCompress-Domain-LZ-Tries256`1 'StreamCompress.Domain.LZ.Tries256`1')
+- [Tries\`1](#T-StreamCompress-Domain-LZ-Tries`1 'StreamCompress.Domain.LZ.Tries`1')
 
 <a name='T-StreamCompress-Utils-BitAndByteExtensions'></a>
 ## BitAndByteExtensions `type`
@@ -2085,3 +2087,37 @@ Full path
 | i | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | File index |
 | path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | File path |
 | suffix | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | File suffix |
+
+<a name='T-StreamCompress-Domain-LZ-Tries256`1'></a>
+## Tries256\`1 `type`
+
+##### Namespace
+
+StreamCompress.Domain.LZ
+
+##### Summary
+
+Implements trie algoritm using fixed length node table
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| T |  |
+
+<a name='T-StreamCompress-Domain-LZ-Tries`1'></a>
+## Tries\`1 `type`
+
+##### Namespace
+
+StreamCompress.Domain.LZ
+
+##### Summary
+
+Implements trie algoritmin using dynamic size node table
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| T |  |

@@ -54,14 +54,14 @@
   <Class Name="StreamCompress.DomainExtensions.Image.Extensions" Collapsed="true">
     <Position X="0.75" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABAAAAAAAECAADAAAAAAAAAQAACgAEAAAAAABAAAAAA=</HashCode>
+      <HashCode>ABAAAAAAIECAADAAAAAAAAAQAACgAEAABAAABAAAAAA=</HashCode>
       <FileName>DomainExtensions\Image\Extensions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StreamCompress.DomainExtensions.LZ.Extensions" Collapsed="true">
     <Position X="6.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAMAAAAAgAAAAAAAACAAAA=</HashCode>
+      <HashCode>AAAAIEAAAAAAAEAAAAAAAAAMAAAAAgAAAAAAAACAAAA=</HashCode>
       <FileName>DomainExtensions\LZ\Extensions.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -73,7 +73,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="StreamCompress.Domain.LZ.Tries&lt;T&gt;" Collapsed="true">
-    <Position X="8.5" Y="8.5" Width="1.5" />
+    <Position X="7.25" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEAEAAAAACAAAAAAAAQAAAAAAEAAgAAAAAAgAAA=</HashCode>
       <FileName>Domain\LZ\Tries.cs</FileName>
@@ -81,7 +81,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="StreamCompress.Domain.LZ.HashTable&lt;T&gt;" Collapsed="true">
-    <Position X="6" Y="8.5" Width="1.5" />
+    <Position X="5.5" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAAAAAAAAAAAAAAAQAAAAAAEAAgABAAAAgAAA=</HashCode>
       <FileName>Domain\LZ\HashTable.cs</FileName>
@@ -137,6 +137,14 @@
       <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAIAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="StreamCompress.Domain.LZ.Tries256&lt;T&gt;" Collapsed="true">
+    <Position X="9" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAACAAAAAAAAQAAAAAAEAAgAAAAAAgAAA=</HashCode>
+      <FileName>Domain\LZ\Tries256.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Interface Name="StreamCompress.Domain.LZ.ILZ78CodingTable&lt;T&gt;" Collapsed="true">
     <Position X="6.75" Y="7.5" Width="1.5" />

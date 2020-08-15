@@ -1,5 +1,9 @@
 ﻿namespace StreamCompress.Domain.LZ {
 
+	/// <summary>
+	/// Implements trie algoritm using fixed length node table
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public class Tries256<T> : ILZ78CodingTable<T> {
 
 		public TriesContainer256<T> Root { get; }
