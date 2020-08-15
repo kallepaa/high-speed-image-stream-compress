@@ -52,72 +52,72 @@ StreamCompress [options]
 
 ### Esimerkkejä
 
-Kuvan kroppaaminen, muuntaminen harmaasävyiseksi ja pakkaaminen LZ78 algoritmillä käyttäen oletus hakemistoa
+* Kuvan kroppaaminen, muuntaminen harmaasävyiseksi ja pakkaaminen LZ78 algoritmillä käyttäen oletus hakemistoa
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-cropped-as-lz78-encoded --start-index 1 --count 1 --method AsGrayScaleAsLZ78Encoded --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96
 
-LZ78 pakatun harmaasävyisen kuvan dekoodaminen
+* LZ78 pakatun harmaasävyisen kuvan dekoodaminen
 
 >--source-path C:\Temp\Destination --source-file-suffix as-gray-scale-cropped-as-lz78-encoded --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-cropped-as-lz78-encoded-decoded.bmp --start-index 1 --count 1 --method AsGrayScaleAsLZ78Decoded
 
-Kuvan kroppaaminen ja muuntaminen harmaasävyiseksi kuvaksi jossa 256 sävyä
+* Kuvan kroppaaminen ja muuntaminen harmaasävyiseksi kuvaksi jossa 256 sävyä
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-cropped.bmp --start-index 1 --count 1 --method AsGrayScale --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96
 
 
-Kuvan kroppaaminen ja pakkaaminen LZ78 algoritmilla
+* Kuvan kroppaaminen ja pakkaaminen LZ78 algoritmilla
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix cropped-as-lz78-encoded --start-index 1 --count 1 --method AsLZ78Encoded --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96
 
-LZ78 pakatun kuvan dekoodaminen
+* LZ78 pakatun kuvan dekoodaminen
 
 >--source-path C:\Temp\Destination --source-file-suffix cropped-as-lz78-encoded --destination-path C:\Temp\Destination --destination-file-suffix cropped-as-lz78-encoded-decoded.bmp --start-index 1 --count 1 --method AsLZ78Decoded
 
-Kuvan kroppaaminen, muuntaminen harmaasävyiseksi ja pakkaaminen Huffman algoritmillä
+* Kuvan kroppaaminen, muuntaminen harmaasävyiseksi ja pakkaaminen Huffman algoritmillä
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-cropped-as-huffman-encoded --start-index 1 --count 1 --method AsGrayScaleAsHuffmanEncoded --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96
 
-Huffman pakatun harmaasävyisen kuvan dekoodaaminen
+* Huffman pakatun harmaasävyisen kuvan dekoodaaminen
 
 >--source-path C:\Temp\Destination --source-file-suffix as-gray-scale-cropped-as-huffman-encoded --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-cropped-as-huffman-encoded-decoded.bmp --start-index 1 --count 1 --method AsGrayScaleAsHuffmanDecoded
 
-Kuvan muuntaminen harmaasävyiseksi kuvaksi jossa 256 sävyä
+* Kuvan muuntaminen harmaasävyiseksi kuvaksi jossa 256 sävyä
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale.bmp --start-index 1 --count 1 --method AsGrayScale
 
-Kuvan muuntaminen harmaasävyiseksi ja pakkaaminen Huffman algoritmillä
+* Kuvan muuntaminen harmaasävyiseksi ja pakkaaminen Huffman algoritmillä
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-as-huffman-encoded --start-index 1 --count 1 --method AsGrayScaleAsHuffmanEncoded
 
-Kuvan pakkaaminen LZ78 algoritmillä käyttäen oletus hakemistoa
+* Kuvan pakkaaminen LZ78 algoritmillä käyttäen oletus hakemistoa
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-lz78-encoded --start-index 1 --count 1 --method AsLZ78Encoded
 
-Kuvan kroppaaminen ja pakkaaminen LZ78 algoritmillä käyttäen Trie256 hakemistoa
+* Kuvan kroppaaminen ja pakkaaminen LZ78 algoritmillä käyttäen Trie256 hakemistoa
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix cropped-as-lz78-dic-trie-256-encoded --start-index 1 --count 1 --method AsLZ78Encoded --lz-compression-dictionary Trie256 --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96
 
-Kuvan pakkaaminen LZ78 algoritmillä käyttäen Trie256 hakemistoa
+* Kuvan pakkaaminen LZ78 algoritmillä käyttäen Trie256 hakemistoa
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-lz78-dic-trie-256-encoded --start-index 1 --count 1 --method AsLZ78Encoded --lz-compression-dictionary Trie256
 
-LZ78 pakatun kuvan dekoodaminen käyttäen Trie256 hakemistoa
+* LZ78 pakatun kuvan dekoodaminen käyttäen Trie256 hakemistoa
 
 >--source-path C:\Temp\Destination --source-file-suffix cropped-as-lz78-dic-trie-256-encoded --destination-path C:\Temp\Destination --destination-file-suffix cropped-as-lz78-dic-trie-256-encoded-decoded.bmp --start-index 1 --count 1 --method AsLZ78Decoded --lz-compression-dictionary Trie256
 
-Kuvan muuntaminen harmaasävyiseksi ja pakkaaminen LZ78 algoritmiä
+* Kuvan muuntaminen harmaasävyiseksi ja pakkaaminen LZ78 algoritmiä
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-as-lz78-encoded --start-index 1 --count 1 --method AsGrayScaleAsLZ78Encoded
 
-LZ78 pakatun harmaasävyisen kuvan dekoodaminen käyttäen oletus hakemistoa
+* LZ78 pakatun harmaasävyisen kuvan dekoodaminen käyttäen oletus hakemistoa
 
 >--source-path C:\Temp\Destination --source-file-suffix as-gray-scale-as-lz78-encoded --destination-path C:\Temp\Destination --destination-file-suffix as-gray-scale-as-lz78-encoded-decoded.bmp --start-index 1 --count 1 --method AsGrayScaleAsLZ78Decoded
 
-Kuvan kroppaaminen ja pakkaaminen LZ78 algoritmillä käyttäen Trie hakemistoa
+* Kuvan kroppaaminen ja pakkaaminen LZ78 algoritmillä käyttäen Trie hakemistoa
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix cropped-as-lz78-dic-trie-encoded --start-index 1 --count 1 --method AsLZ78Encoded --lz-compression-dictionary Trie --lz-compression-trie-initial-capacity 1 --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96
 
-Kuvan pakkaaminen LZ78 algoritmillä käyttäen Trie hakemistoa
+* Kuvan pakkaaminen LZ78 algoritmillä käyttäen Trie hakemistoa
 
 >--source-path C:\Temp\Source --source-file-suffix original.bmp --destination-path C:\Temp\Destination --destination-file-suffix as-lz78-dic-trie-encoded --start-index 1 --count 1 --method AsLZ78Encoded --lz-compression-dictionary Trie --lz-compression-trie-initial-capacity 1
 
