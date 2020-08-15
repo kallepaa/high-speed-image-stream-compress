@@ -43,7 +43,8 @@ namespace StreamCompress {
 		/// </summary>
 		public enum LZCompressionDictionary {
 			HashTable,
-			Trie
+			Trie,
+			Trie256
 		}
 
 		/// <summary>
@@ -216,6 +217,8 @@ namespace StreamCompress {
 										 return image.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
 									 case LZCompressionDictionary.Trie:
 										 return image.AsLZEncodedUsingTrie(a.LZCompressionTrieInitialCapacity);
+									 case LZCompressionDictionary.Trie256:
+										 return image.AsLZEncodedUsingTrie256();
 									 default:
 										 throw new NotSupportedException();
 								 }
@@ -228,6 +231,8 @@ namespace StreamCompress {
 										 return image.AsImageFrameUsingHashTable<ImageFrame>(a.LZCompressionHashTablePrime);
 									 case LZCompressionDictionary.Trie:
 										 return image.AsImageFrameUsingTrie<ImageFrame>(a.LZCompressionTrieInitialCapacity);
+									 case LZCompressionDictionary.Trie256:
+										 return image.AsImageFrameUsingTrie256<ImageFrame>();
 									 default:
 										 throw new NotSupportedException();
 								 }
@@ -244,6 +249,8 @@ namespace StreamCompress {
 										 return retData.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
 									 case LZCompressionDictionary.Trie:
 										 return retData.AsLZEncodedUsingTrie(a.LZCompressionTrieInitialCapacity);
+									 case LZCompressionDictionary.Trie256:
+										 return retData.AsLZEncodedUsingTrie256();
 									 default:
 										 throw new NotSupportedException();
 								 }
@@ -256,6 +263,8 @@ namespace StreamCompress {
 										 return image.AsImageFrameUsingHashTable<ImageFrameGrayScale>(a.LZCompressionHashTablePrime);
 									 case LZCompressionDictionary.Trie:
 										 return image.AsImageFrameUsingTrie<ImageFrameGrayScale>(a.LZCompressionTrieInitialCapacity);
+									 case LZCompressionDictionary.Trie256:
+										 return image.AsImageFrameUsingTrie256<ImageFrameGrayScale>();
 									 default:
 										 throw new NotSupportedException();
 								 }

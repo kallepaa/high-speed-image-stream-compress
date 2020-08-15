@@ -110,6 +110,76 @@ namespace StreamCompressTest {
 		}
 
 
+		public class Tries256Tests {
+
+			[Fact]
+			public void InsertAndExists() {
+
+				var words = new[] { "Car", "Cat" };
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+
+				var sut = new Tries256<string>();
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					sut.Insert(b, words[i]);
+				}
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					var match = sut.Search(b);
+					Assert.True(match != null && match.CodeWord == words[i]);
+				}
+			}
+
+			[Fact]
+			public void InsertAndCount() {
+
+				var words = new[] { "Car", "Cat", "Car", "Cat" };
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+
+				var sut = new Tries256<string>();
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					sut.Insert(b, words[i]);
+				}
+
+				Assert.True(sut.Count == words.Distinct().Count());
+			}
+
+
+			[Fact]
+			public void InsertAndExistsAndNotExists() {
+
+				var words = new[] { "Car", "Cat" };
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+
+				var sut = new Tries256<string>();
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					sut.Insert(b, words[i]);
+				}
+
+				for (int i = 0; i < words.Length; i++) {
+					var b = strEncoder.GetBytes(words[i]);
+					var match = sut.Search(b);
+					Assert.True(match != null && match.CodeWord == words[i]);
+				}
+
+				var wordsNotExist = new[] { "car", "cat", "tac", "rac", "r", "ca", "catastrophe" };
+
+				for (int i = 0; i < wordsNotExist.Length; i++) {
+					var b = strEncoder.GetBytes(wordsNotExist[i]);
+					var match = sut.Search(b);
+					Assert.True(match == null);
+				}
+
+			}
+		}
+
+
 		public class LZCompressionUsingHashTableTests {
 
 			[Theory]
@@ -180,6 +250,42 @@ namespace StreamCompressTest {
 		}
 
 
+		public class LZCompressionUsingTrie256Tests {
+
+			[Theory]
+			[InlineData("babaabaaa")]
+			public void AsLZEncodedAndDecoded(string val) {
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+				var b = strEncoder.GetBytes(val);
+				var encoded = b.BytesAsLZEncodedUsingTrie256();
+				var decoded = encoded.AsLZDecodedUsingTrie256();
+				var valDecoded = strEncoder.GetString(decoded);
+				Assert.Equal(val, valDecoded);
+			}
+
+			[Theory]
+			[InlineData(10)]
+			[InlineData(100)]
+			[InlineData(1000)]
+			[InlineData(10000)]
+			[InlineData(100000)]
+			public void AsLZEncodedAndDecodedRandom(int length) {
+				var strEncoder = Encoding.GetEncoding("iso-8859-1");
+				var b = new byte[length];
+				var rand = new Random();
+				for (int i = 0; i < length; i++) {
+					b[i] = (byte)rand.Next(0, 255);
+				}
+				var val = strEncoder.GetString(b);
+				var encoded = b.BytesAsLZEncodedUsingTrie256();
+				var decoded = encoded.AsLZDecodedUsingTrie256();
+				var valDecoded = strEncoder.GetString(decoded);
+				Assert.Equal(val, valDecoded);
+			}
+		}
+
+
+
 		public class ImageFrameLZCompressionHashTableTests {
 			[Theory]
 			[InlineData(12289)]
@@ -206,6 +312,17 @@ namespace StreamCompressTest {
 			}
 		}
 
+		public class ImageFrameLZCompressionTrie256Tests {
+			[Fact]
+			public void AsLZEncodedAndDecoded() {
+				var i = 2;
+				var sourceFile = GetSourceImagePath(i);
+				var image = ImageFrame.FromFile(sourceFile);
+				var encoded = image.AsLZEncodedUsingTrie256();
+				var decoded = encoded.AsImageFrameUsingTrie256<ImageFrame>();
+				Assert.True(image.Image.Compare(decoded.Image));
+			}
+		}
 
 		public class ImageFrameGrayScaleHuffmanCodeCompressionTests {
 
@@ -390,6 +507,8 @@ namespace StreamCompressTest {
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
 			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
 			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-256-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
+			[InlineData(Program.Method.AsLZ78Encoded, SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-256-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
 			public void AllMethods(
 				Program.Method method,
 				string sourceFileSuffix,
@@ -445,6 +564,8 @@ namespace StreamCompressTest {
 							break;
 						case Program.LZCompressionDictionary.Trie:
 							args.AddRange(new[] { "--lz-compression-trie-initial-capacity", "1" });
+							break;
+						case Program.LZCompressionDictionary.Trie256:
 							break;
 						default:
 							throw new ArgumentException();

@@ -396,6 +396,31 @@ namespace StreamCompress.DomainExtensions.Image {
 
 		#endregion
 
+		#region LZ78 Using fixed length Trie as dictionary
+
+		/// <summary>
+		/// Encodes bytes using LZ and fixed length trie as dictionary
+		/// </summary>
+		/// <param name="input">Byte array</param>
+		/// <returns></returns>
+		public static byte[] BytesAsLZEncodedUsingTrie256(this byte[] input) {
+			var encoderDic = new Tries256<int>();
+			return _asLZEncoded(input, encoderDic);
+		}
+
+		/// <summary>
+		/// Encodes image using LZ and fixed length trie as dictionary
+		/// </summary>
+		/// <typeparam name="T">Type of image</typeparam>
+		/// <param name="image">Image to encode</param>
+		/// <returns></returns>
+		public static LZImageFrame AsLZEncodedUsingTrie256<T>(this T image) where T : ImageFrame {
+			return new LZImageFrame(image.Image.BytesAsLZEncodedUsingTrie256());
+		}
+
+		#endregion
+
+
 		/// <summary>
 		/// Create crop setup from command line arguments
 		/// </summary>

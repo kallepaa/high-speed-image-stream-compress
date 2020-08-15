@@ -95,6 +95,21 @@
             <param name="nodeInitialCapacity">Node table initial size</param>
             <returns></returns>
         </member>
+        <member name="M:StreamCompress.DomainExtensions.Image.Extensions.BytesAsLZEncodedUsingTrie256(System.Byte[])">
+            <summary>
+            Encodes bytes using LZ and fixed length trie as dictionary
+            </summary>
+            <param name="input">Byte array</param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamCompress.DomainExtensions.Image.Extensions.AsLZEncodedUsingTrie256``1(``0)">
+            <summary>
+            Encodes image using LZ and fixed length trie as dictionary
+            </summary>
+            <typeparam name="T">Type of image</typeparam>
+            <param name="image">Image to encode</param>
+            <returns></returns>
+        </member>
         <member name="M:StreamCompress.DomainExtensions.Image.Extensions.AsCropSetup(StreamCompress.Program.CommandLineArgs)">
             <summary>
             Create crop setup from command line arguments
@@ -147,6 +162,21 @@
             <typeparam name="T">Type of image</typeparam>
             <param name="encodedImage">LZ encoded image frame</param>
             <param name="nodeInitialCapacity">Node table initial size</param>
+            <returns>Return image frame of type T</returns>
+        </member>
+        <member name="M:StreamCompress.DomainExtensions.LZ.Extensions.AsLZDecodedUsingTrie256(System.Byte[])">
+            <summary>
+            Decodes compressed bytes
+            </summary>
+            <param name="codes">Compressed bytes</param>
+            <returns>Decompressed data</returns>
+        </member>
+        <member name="M:StreamCompress.DomainExtensions.LZ.Extensions.AsImageFrameUsingTrie256``1(StreamCompress.Domain.LZ.LZImageFrame)">
+            <summary>
+            Decodes LZ compressed data
+            </summary>
+            <typeparam name="T">Type of image</typeparam>
+            <param name="encodedImage">LZ encoded image frame</param>
             <returns>Return image frame of type T</returns>
         </member>
         <member name="T:StreamCompress.Domain.Huffman.HuffmanImageFrame">

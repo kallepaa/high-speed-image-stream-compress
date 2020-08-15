@@ -119,5 +119,32 @@ namespace StreamCompress.DomainExtensions.LZ {
 
 		#endregion
 
+
+		#region LZ78 Using fixed length Trie as dictionary
+
+		/// <summary>
+		/// Decodes compressed bytes
+		/// </summary>
+		/// <param name="codes">Compressed bytes</param>
+		/// <returns>Decompressed data</returns>
+		public static byte[] AsLZDecodedUsingTrie256(this byte[] codes) {
+			var decoderDic = new Tries256<byte[]>();
+			return _asLZDecoded(codes, decoderDic);
+		}
+
+		/// <summary>
+		/// Decodes LZ compressed data
+		/// </summary>
+		/// <typeparam name="T">Type of image</typeparam>
+		/// <param name="encodedImage">LZ encoded image frame</param>
+		/// <returns>Return image frame of type T</returns>
+		public static T AsImageFrameUsingTrie256<T>(this LZImageFrame encodedImage) where T : ImageFrame, new() {
+			var ret = new T();
+			ret.FromBytes(encodedImage.Codes.AsLZDecodedUsingTrie256());
+			return ret;
+		}
+
+		#endregion
+
 	}
 }

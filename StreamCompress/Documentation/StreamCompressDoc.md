@@ -34,15 +34,19 @@
   - [AsGrayScale(image,colors)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsGrayScale-StreamCompress-Domain-Image-ImageFrame,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsGrayScale(StreamCompress.Domain.Image.ImageFrame,System.Int32)')
   - [AsHuffmanEncoded(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsHuffmanEncoded-StreamCompress-Domain-Image-ImageFrameGrayScale- 'StreamCompress.DomainExtensions.Image.Extensions.AsHuffmanEncoded(StreamCompress.Domain.Image.ImageFrameGrayScale)')
   - [AsLZEncodedUsingHashTable\`\`1(image,hashPrime)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingHashTable``1-``0,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsLZEncodedUsingHashTable``1(``0,System.Int32)')
+  - [AsLZEncodedUsingTrie256\`\`1(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingTrie256``1-``0- 'StreamCompress.DomainExtensions.Image.Extensions.AsLZEncodedUsingTrie256``1(``0)')
   - [AsLZEncodedUsingTrie\`\`1(image,nodeInitialCapacity)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingTrie``1-``0,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsLZEncodedUsingTrie``1(``0,System.Int32)')
   - [AsPlanted(image,plantWidthPx,plantHeightPx)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsPlanted-StreamCompress-Domain-Image-ImageFrameGrayScale,System-Int32,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsPlanted(StreamCompress.Domain.Image.ImageFrameGrayScale,System.Int32,System.Int32)')
   - [BytesAsLZEncodedUsingHashTable(input,hashPrime)](#M-StreamCompress-DomainExtensions-Image-Extensions-BytesAsLZEncodedUsingHashTable-System-Byte[],System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.BytesAsLZEncodedUsingHashTable(System.Byte[],System.Int32)')
   - [BytesAsLZEncodedUsingTrie(input,nodeInitialCapacity)](#M-StreamCompress-DomainExtensions-Image-Extensions-BytesAsLZEncodedUsingTrie-System-Byte[],System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.BytesAsLZEncodedUsingTrie(System.Byte[],System.Int32)')
+  - [BytesAsLZEncodedUsingTrie256(input)](#M-StreamCompress-DomainExtensions-Image-Extensions-BytesAsLZEncodedUsingTrie256-System-Byte[]- 'StreamCompress.DomainExtensions.Image.Extensions.BytesAsLZEncodedUsingTrie256(System.Byte[])')
   - [_asLZEncoded(input,encoderDic)](#M-StreamCompress-DomainExtensions-Image-Extensions-_asLZEncoded-System-Byte[],StreamCompress-Domain-LZ-ILZ78CodingTable{System-Int32}- 'StreamCompress.DomainExtensions.Image.Extensions._asLZEncoded(System.Byte[],StreamCompress.Domain.LZ.ILZ78CodingTable{System.Int32})')
   - [AsImageFrameUsingHashTable\`\`1(encodedImage,hashPrime)](#M-StreamCompress-DomainExtensions-LZ-Extensions-AsImageFrameUsingHashTable``1-StreamCompress-Domain-LZ-LZImageFrame,System-Int32- 'StreamCompress.DomainExtensions.LZ.Extensions.AsImageFrameUsingHashTable``1(StreamCompress.Domain.LZ.LZImageFrame,System.Int32)')
+  - [AsImageFrameUsingTrie256\`\`1(encodedImage)](#M-StreamCompress-DomainExtensions-LZ-Extensions-AsImageFrameUsingTrie256``1-StreamCompress-Domain-LZ-LZImageFrame- 'StreamCompress.DomainExtensions.LZ.Extensions.AsImageFrameUsingTrie256``1(StreamCompress.Domain.LZ.LZImageFrame)')
   - [AsImageFrameUsingTrie\`\`1(encodedImage,nodeInitialCapacity)](#M-StreamCompress-DomainExtensions-LZ-Extensions-AsImageFrameUsingTrie``1-StreamCompress-Domain-LZ-LZImageFrame,System-Int32- 'StreamCompress.DomainExtensions.LZ.Extensions.AsImageFrameUsingTrie``1(StreamCompress.Domain.LZ.LZImageFrame,System.Int32)')
   - [AsLZDecodedUsingHashTable(codes,hashPrime)](#M-StreamCompress-DomainExtensions-LZ-Extensions-AsLZDecodedUsingHashTable-System-Byte[],System-Int32- 'StreamCompress.DomainExtensions.LZ.Extensions.AsLZDecodedUsingHashTable(System.Byte[],System.Int32)')
   - [AsLZDecodedUsingTrie(codes,nodeInitialCapacity)](#M-StreamCompress-DomainExtensions-LZ-Extensions-AsLZDecodedUsingTrie-System-Byte[],System-Int32- 'StreamCompress.DomainExtensions.LZ.Extensions.AsLZDecodedUsingTrie(System.Byte[],System.Int32)')
+  - [AsLZDecodedUsingTrie256(codes)](#M-StreamCompress-DomainExtensions-LZ-Extensions-AsLZDecodedUsingTrie256-System-Byte[]- 'StreamCompress.DomainExtensions.LZ.Extensions.AsLZDecodedUsingTrie256(System.Byte[])')
   - [_asLZDecoded(codes,decoderDic)](#M-StreamCompress-DomainExtensions-LZ-Extensions-_asLZDecoded-System-Byte[],StreamCompress-Domain-LZ-ILZ78CodingTable{System-Byte[]}- 'StreamCompress.DomainExtensions.LZ.Extensions._asLZDecoded(System.Byte[],StreamCompress.Domain.LZ.ILZ78CodingTable{System.Byte[]})')
 - [FileExtensions](#T-StreamCompress-Utils-FileExtensions 'StreamCompress.Utils.FileExtensions')
   - [PathCombine(paths)](#M-StreamCompress-Utils-FileExtensions-PathCombine-System-String[]- 'StreamCompress.Utils.FileExtensions.PathCombine(System.String[])')
@@ -595,6 +599,29 @@ Encodes image using LZ and hash table as dictionary
 | ---- | ----------- |
 | T | Type of image |
 
+<a name='M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingTrie256``1-``0-'></a>
+### AsLZEncodedUsingTrie256\`\`1(image) `method`
+
+##### Summary
+
+Encodes image using LZ and fixed length trie as dictionary
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| image | [\`\`0](#T-``0 '``0') | Image to encode |
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| T | Type of image |
+
 <a name='M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingTrie``1-``0,System-Int32-'></a>
 ### AsLZEncodedUsingTrie\`\`1(image,nodeInitialCapacity) `method`
 
@@ -674,6 +701,23 @@ Encodes bytes using LZ and trie as dictionary
 | input | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Byte array |
 | nodeInitialCapacity | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Node table initial size |
 
+<a name='M-StreamCompress-DomainExtensions-Image-Extensions-BytesAsLZEncodedUsingTrie256-System-Byte[]-'></a>
+### BytesAsLZEncodedUsingTrie256(input) `method`
+
+##### Summary
+
+Encodes bytes using LZ and fixed length trie as dictionary
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| input | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Byte array |
+
 <a name='M-StreamCompress-DomainExtensions-Image-Extensions-_asLZEncoded-System-Byte[],StreamCompress-Domain-LZ-ILZ78CodingTable{System-Int32}-'></a>
 ### _asLZEncoded(input,encoderDic) `method`
 
@@ -709,6 +753,29 @@ Decompressed data
 | ---- | ---- | ----------- |
 | encodedImage | [StreamCompress.Domain.LZ.LZImageFrame](#T-StreamCompress-Domain-LZ-LZImageFrame 'StreamCompress.Domain.LZ.LZImageFrame') | LZ encoded image frame |
 | hashPrime | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | m value used in hash table |
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| T | Type of image |
+
+<a name='M-StreamCompress-DomainExtensions-LZ-Extensions-AsImageFrameUsingTrie256``1-StreamCompress-Domain-LZ-LZImageFrame-'></a>
+### AsImageFrameUsingTrie256\`\`1(encodedImage) `method`
+
+##### Summary
+
+Decodes LZ compressed data
+
+##### Returns
+
+Return image frame of type T
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| encodedImage | [StreamCompress.Domain.LZ.LZImageFrame](#T-StreamCompress-Domain-LZ-LZImageFrame 'StreamCompress.Domain.LZ.LZImageFrame') | LZ encoded image frame |
 
 ##### Generic Types
 
@@ -775,6 +842,23 @@ Decompressed data
 | ---- | ---- | ----------- |
 | codes | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Compressed bytes |
 | nodeInitialCapacity | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Node table initial size |
+
+<a name='M-StreamCompress-DomainExtensions-LZ-Extensions-AsLZDecodedUsingTrie256-System-Byte[]-'></a>
+### AsLZDecodedUsingTrie256(codes) `method`
+
+##### Summary
+
+Decodes compressed bytes
+
+##### Returns
+
+Decompressed data
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| codes | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Compressed bytes |
 
 <a name='M-StreamCompress-DomainExtensions-LZ-Extensions-_asLZDecoded-System-Byte[],StreamCompress-Domain-LZ-ILZ78CodingTable{System-Byte[]}-'></a>
 ### _asLZDecoded(codes,decoderDic) `method`
