@@ -1,8 +1,11 @@
 # Käyttöohje
 
-* Lataa viimeisin julkaisun zip -paketti koneellesi ja pura paketti.
-* Siirry hakemistoon
-* Aja ohjelma 
+1. [Mene ohjelman julkaisut sivulle](../../releases)
+2. Valitse paketeista oman käyttöjärjestelmäsi versio.
+3. Lataa viimeisin julkaisun zip -paketti koneellesi. 
+4. Lataa paketti ja pura se
+5. Siirry hakemistoon
+6. Aja ohjelma 
 
 ## Miten ohjelma suoritetaan, miten eri toiminnallisuuksia käytetään
 
