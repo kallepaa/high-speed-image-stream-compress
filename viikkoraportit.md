@@ -1,3 +1,29 @@
+# Viikko 5
+
+_Mitä olen tehnyt tällä viikolla?_
+
+* Trie algoritmin totetus vakiokokoisilla 256 paikkaisilla tauluilla
+* Käyttöohjeet
+* Ensimmäinen julkaisu ohjelmasta
+* Suoritukyky / vertailu testauksia
+* Päivittänyt koodin dokumentointia
+
+_Miten ohjelma on edistynyt?_
+
+* Trie algoritmin toteutus ja lisääminen yhdeksi vaihtoehdoksi LZ78 pakkaukseen
+
+_Mitä opin tällä viikolla / tänään?_
+
+* Julkaisun tekeminen GitHubiin
+* Suorituskyky testauksessa käyttämäni BenchmarkDotNet kehikon käyttämistä
+
+_Mikä jäi epäselväksi tai tuottanut vaikeuksia? Vastaa tähän kohtaan rehellisesti, koska saat tarvittaessa apua tämän kohdan perusteella._
+
+_Mitä teen seuraavaksi?_
+
+* Viimeistelen suorituskykytestaukset ja testausdokumentin
+* Viimeistelen toteutusdokumentin
+
 # Viikko 4
 
 _Mitä olen tehnyt tällä viikolla?_

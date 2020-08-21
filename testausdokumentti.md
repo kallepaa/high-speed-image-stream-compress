@@ -11,8 +11,6 @@ Yksikkötestaukseen on käytetty XUnit testauskehikkoa. Yksikkötestauksissa tes
 ReportGenerator tallensin raportin ulkoasun tiedostot hakemistoon *coveragereport*, jonka voi katsella <a href="https://htmlpreview.github.io/?https://github.com/kallepaa/high-speed-image-stream-compress/blob/master/StreamCompressTest/coveragereport/index.html" target="_blank">tästä linkistä</a>
 
 ### Suorituskykytestaus
-Suorituskykytestauksessa testataan eri algoritmien pakkaamistehoa ja pakkaamiseen käytettyä aikaa. Testit ajettiin normaalilla työasemalla.
-
 
 
 ## Minkälaisilla syötteillä testaus tehtiin (vertailupainotteisissa töissä tärkeää)
