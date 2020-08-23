@@ -3,6 +3,7 @@ cd ..
 SET root=%cd%
 SET sourcePath=%root%\StreamCompressTest\TestData\Source
 SET resultPath=%root%\StreamCompress\results
+IF NOT EXIST %resultPath% MKDIR %resultPath%
 SET resultFile=%resultPath%\output.csv
 del %resultFile%
 
