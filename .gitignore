@@ -263,6 +263,6 @@ __pycache__/
 # Test data
 /StreamCompressTest/TestData/Destination
 
-/StreamCompressBenchmark/Artifacts/results/*.html
-/StreamCompressBenchmark/Artifacts/results/*.csv
-/StreamCompressBenchmark/Artifacts/*.log
+/StreamCompressBenchmark/results/*.html
+/StreamCompressBenchmark/results/*.csv
+/StreamCompressBenchmark/*.log
