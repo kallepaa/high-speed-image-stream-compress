@@ -6,6 +6,7 @@ using StreamCompress.DomainExtensions.Image;
 using StreamCompress.DomainExtensions.LZ;
 using StreamCompress.Utils;
 using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
@@ -217,7 +218,7 @@ namespace StreamCompress {
 					description: "LZ compression trie node container initial capacity")};
 
 			command.Description = "Stream Compress App";
-
+			var commandResults = new List<CommandResult>();
 
 
 			command.Handler = CommandHandler.Create(
@@ -267,7 +268,7 @@ namespace StreamCompress {
 						 throw new ArgumentException($"Invalid argument {nameof(cmdArgs.LZCompressionTrieInitialCapacity)} '{cmdArgs.LZCompressionTrieInitialCapacity}'!");
 					 }
 
-					 for (int i = cmdArgs.StartIndex; i < cmdArgs.Count; i++) {
+					 for (int i = cmdArgs.StartIndex; i < cmdArgs.StartIndex + cmdArgs.Count; i++) {
 						 var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
 
 						 if (!File.Exists(sourceFile)) {
@@ -279,14 +280,14 @@ namespace StreamCompress {
 
 					 switch (method) {
 						 case Method.AsGrayScale:
-							 SourceLooper<ImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<ImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
 								 return image
 								 .AsCroppedImage(a.AsCropSetup())
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
 							 });
 							 break;
 						 case Method.AsGrayScaleAsHuffmanEncoded:
-							 SourceLooper<ImageFrame, HuffmanImageFrame>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<ImageFrame, HuffmanImageFrame>(cmdArgs, (index, a, image) => {
 								 return image
 								 .AsCroppedImage(a.AsCropSetup())
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
@@ -294,26 +295,31 @@ namespace StreamCompress {
 							 });
 							 break;
 						 case Method.AsGrayScaleAsHuffmanDecoded:
-							 SourceLooper<HuffmanImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<HuffmanImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
 								 return image.AsImageGrayScaleFrame();
 							 });
 							 break;
 						 case Method.AsLZ78Encoded:
-							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
+
+								 var retData = image
+								 .AsCroppedImage(a.AsCropSetup());
+
+
 								 switch (a.LZCompressionDictionary) {
 									 case LZCompressionDictionary.HashTable:
-										 return image.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
+										 return retData.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
 									 case LZCompressionDictionary.Trie:
-										 return image.AsLZEncodedUsingTrie(a.LZCompressionTrieInitialCapacity);
+										 return retData.AsLZEncodedUsingTrie(a.LZCompressionTrieInitialCapacity);
 									 case LZCompressionDictionary.Trie256:
-										 return image.AsLZEncodedUsingTrie256();
+										 return retData.AsLZEncodedUsingTrie256();
 									 default:
 										 throw new NotSupportedException();
 								 }
 							 });
 							 break;
 						 case Method.AsLZ78Decoded:
-							 SourceLooper<LZImageFrame, ImageFrame>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<LZImageFrame, ImageFrame>(cmdArgs, (index, a, image) => {
 								 switch (a.LZCompressionDictionary) {
 									 case LZCompressionDictionary.HashTable:
 										 return image.AsImageFrameUsingHashTable<ImageFrame>(a.LZCompressionHashTablePrime);
@@ -327,7 +333,7 @@ namespace StreamCompress {
 							 });
 							 break;
 						 case Method.AsGrayScaleAsLZ78Encoded:
-							 SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<ImageFrame, LZImageFrame>(cmdArgs, (index, a, image) => {
 								 var retData = image
 								 .AsCroppedImage(a.AsCropSetup())
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
@@ -345,7 +351,7 @@ namespace StreamCompress {
 							 });
 							 break;
 						 case Method.AsGrayScaleAsLZ78Decoded:
-							 SourceLooper<LZImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+							 commandResults = SourceLooper<LZImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
 								 switch (a.LZCompressionDictionary) {
 									 case LZCompressionDictionary.HashTable:
 										 return image.AsImageFrameUsingHashTable<ImageFrameGrayScale>(a.LZCompressionHashTablePrime);
@@ -361,7 +367,16 @@ namespace StreamCompress {
 					 }
 				 });
 
-			return command.InvokeAsync(args).Result;
+
+			var commandRet = command.Invoke(args);
+
+			if (commandRet == 0) {
+				commandResults.ForEach(cr => {
+					Console.WriteLine($"{cr.SourceBytesLenght};{cr.DestinationBytesLenght};{Math.Round(cr.CalculatePercent().GetValueOrDefault(), 2)} %");
+				});
+			}
+
+			return commandRet;
 		}
 
 		/// <summary>
@@ -383,9 +398,11 @@ namespace StreamCompress {
 		/// <typeparam name="R">Type of domain object</typeparam>
 		/// <param name="cmdArgs">Command line arguments</param>
 		/// <param name="func">Executing function</param>
-		private static void SourceLooper<T, R>(
+		private static List<CommandResult> SourceLooper<T, R>(
 			CommandLineArgs cmdArgs,
 			Func<int, CommandLineArgs, T, ISaveable<R>> func) where T : ISaveable<T>, new() {
+
+			var commandRet = new List<CommandResult>();
 
 			for (int i = cmdArgs.StartIndex; i < cmdArgs.Count + cmdArgs.StartIndex; i++) {
 				var sourceFile = _filePath(i, cmdArgs.SourcePath, cmdArgs.SourceFileSuffix);
@@ -397,7 +414,48 @@ namespace StreamCompress {
 				var destFile = _filePath(i, cmdArgs.DestinationPath, cmdArgs.DestinationFileSuffix);
 				//saves file
 				ret.Save(destFile);
+
+				switch (cmdArgs.Method.Value) {
+					case Method.AsGrayScale:
+					case Method.AsLZ78Encoded:
+					case Method.AsGrayScaleAsLZ78Encoded:
+					case Method.AsGrayScaleAsHuffmanEncoded:
+						var sfInfo = new FileInfo(sourceFile);
+						var dfInfo = new FileInfo(destFile);
+						var commandResult = new CommandResult {
+							SourceFileName = sfInfo.Name,
+							SourceBytesLenght = sfInfo.Length,
+							DestinationFileName = dfInfo.Name,
+							DestinationBytesLenght = dfInfo.Length
+						};
+						commandRet.Add(commandResult);
+						break;
+					case Method.AsGrayScaleAsHuffmanDecoded:
+					case Method.AsLZ78Decoded:
+					case Method.AsGrayScaleAsLZ78Decoded:
+					default:
+						break;
+				}
 			}
+
+			return commandRet;
+		}
+
+		private class CommandResult {
+			public string SourceFileName { get; set; }
+			public string DestinationFileName { get; set; }
+			public long SourceBytesLenght { get; set; }
+			public long DestinationBytesLenght { get; set; }
+			public long BytesLenghtDiff => Math.Abs(SourceBytesLenght - DestinationBytesLenght);
+			public decimal? CalculatePercent() {
+				var min = Math.Min(SourceBytesLenght, DestinationBytesLenght);
+				var max = Math.Max(SourceBytesLenght, DestinationBytesLenght);
+				if (max > 0) {
+					return Math.Round(((1.00m - min / (decimal)max) * 100.00m), 2);
+				}
+				return null;
+			}
+
 		}
 
 	}

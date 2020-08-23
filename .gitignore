@@ -266,3 +266,4 @@ __pycache__/
 /StreamCompressBenchmark/results/*.html
 /StreamCompressBenchmark/results/*.csv
 /StreamCompressBenchmark/*.log
+/StreamCompress/results/**
