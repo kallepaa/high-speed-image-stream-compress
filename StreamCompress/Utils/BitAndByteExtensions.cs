@@ -236,7 +236,6 @@ namespace StreamCompress.Utils {
 				for (int j = 0; j < bitTable.Length; j++) {
 					//write bits to byte from right to left
 					if (retBitIndex == 8) {
-						//switch to next byte and start writing from left of byte (most significant bit)
 						retBitIndex = 0;
 						retByteIndex++;
 					}
@@ -250,6 +249,11 @@ namespace StreamCompress.Utils {
 			return retBytes;
 		}
 
+		/// <summary>
+		/// Decompress bytes compressed by AsCompressed method
+		/// </summary>
+		/// <param name="val"></param>
+		/// <returns></returns>
 		public static byte[] AsDecompressed(this byte[] val) {
 
 			var bitsPerValue = val[0];
@@ -286,9 +290,6 @@ namespace StreamCompress.Utils {
 				}
 				intByteIndex += 4 - intByteIndex % 4;
 			}
-
-
-
 
 			return ret;
 		}
