@@ -1,8 +1,11 @@
-﻿using StreamCompress.Domain.Huffman;
+﻿using StreamCompress.Domain.GZip;
+using StreamCompress.Domain.Huffman;
 using StreamCompress.Domain.Image;
 using StreamCompress.Domain.LZ;
 using StreamCompress.Utils;
 using System;
+using System.IO;
+using System.IO.Compression;
 
 namespace StreamCompress.DomainExtensions.Image {
 
@@ -307,12 +310,15 @@ namespace StreamCompress.DomainExtensions.Image {
 		/// <returns>Encoded byte array</returns>
 		private static byte[] _asLZEncoded(this byte[] input, ILZ78CodingTable<int> encoderDic) {
 
+			var twoPass = true;
 
 			for (int i = 0; i < 256; i++) {
 				var searchKey = new[] { (byte)i };
 				var codeWord = i;
 				encoderDic.Insert(searchKey, codeWord);
 			}
+
+			var addedCodeWords = 0;
 
 			using (var encodedOutput = new ByteMemoryStream((int)(input.Length / 0.6))) {
 
@@ -331,6 +337,7 @@ namespace StreamCompress.DomainExtensions.Image {
 						var item2 = encoderDic.Search(P);
 
 						encodedOutput.AddBytes(item2.CodeWord.AsBytes());
+						addedCodeWords++;
 						encoderDic.Insert(PC, encoderDic.Count);
 						P = C;
 					}
@@ -338,9 +345,19 @@ namespace StreamCompress.DomainExtensions.Image {
 
 				var item3 = encoderDic.Search(P);
 				encodedOutput.AddBytes(item3.CodeWord.AsBytes());
+				addedCodeWords++;
 
-				return encodedOutput.ReadBytes();
+				var encodedBytes = encodedOutput.ReadBytes();
+
+				if (twoPass) {
+					return encodedBytes.AsCompressed(encoderDic.Count - 1, addedCodeWords);
+				} else {
+					return encodedBytes;
+				}
 			}
+
+
+
 		}
 
 
@@ -429,6 +446,24 @@ namespace StreamCompress.DomainExtensions.Image {
 		public static CropSetup AsCropSetup(this Program.CommandLineArgs a) {
 			return new CropSetup { LeftPx = a.CropLeftPx, RightPx = a.CropRightPx, TopPx = a.CropTopPx, BottomPx = a.CropBottomPx };
 		}
+
+		/// <summary>
+		/// Compress bytes using .Net Core impl. of GZip 
+		/// Just for benchmark reason
+		/// </summary>
+		/// <param name="image"></param>
+		/// <returns></returns>
+		public static GZipImageFrame AsGZip<T>(this T image) where T : ImageFrame {
+			var ret = default(byte[]);
+			using (var inputMs = new ByteMemoryStream(image.Image))
+			using (var outputMs = new ByteMemoryStream(image.Image.Length / 2))
+			using (GZipStream compressionStream = new GZipStream(outputMs.MemoryStream, CompressionMode.Compress)) {
+				inputMs.MemoryStream.CopyTo(compressionStream);
+				ret = outputMs.ReadBytes();
+			}
+			return new GZipImageFrame(ret);
+		}
+
 
 	}
 }

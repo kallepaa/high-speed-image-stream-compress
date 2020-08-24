@@ -7,7 +7,8 @@
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.Int32)')
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-UInt32- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.UInt32)')
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-UInt16- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.UInt16)')
-  - [AsInt(bytes,offset)](#M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsInt(System.Byte[],System.Int32)')
+  - [AsCompressed(val,maxValue,valueCount)](#M-StreamCompress-Utils-BitAndByteExtensions-AsCompressed-System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsCompressed(System.Byte[],System.Int32,System.Int32)')
+  - [AsInt(bytes,offset,count)](#M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsInt(System.Byte[],System.Int32,System.Int32)')
   - [AsUInt16(bytes,offset)](#M-StreamCompress-Utils-BitAndByteExtensions-AsUInt16-System-Byte[],System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsUInt16(System.Byte[],System.Int32)')
   - [Compare(b1,b2)](#M-StreamCompress-Utils-BitAndByteExtensions-Compare-System-Byte[],System-Byte[]- 'StreamCompress.Utils.BitAndByteExtensions.Compare(System.Byte[],System.Byte[])')
   - [Concatenate(bytes1,bytes2)](#M-StreamCompress-Utils-BitAndByteExtensions-Concatenate-System-Byte[],System-Byte[]- 'StreamCompress.Utils.BitAndByteExtensions.Concatenate(System.Byte[],System.Byte[])')
@@ -15,9 +16,11 @@
   - [CopyBytesTo(val,srcOffSet,dest,destOffSet,count)](#M-StreamCompress-Utils-BitAndByteExtensions-CopyBytesTo-System-Byte[],System-Int32,System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.CopyBytesTo(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32)')
   - [CopyBytesTo(val,dest,destOffSet)](#M-StreamCompress-Utils-BitAndByteExtensions-CopyBytesTo-System-Byte[],System-Byte[],System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.CopyBytesTo(System.Byte[],System.Byte[],System.Int32)')
   - [GetBitFromByte(b,bitIndex)](#M-StreamCompress-Utils-BitAndByteExtensions-GetBitFromByte-System-Byte,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.GetBitFromByte(System.Byte,System.Int32)')
+  - [GetBitTable(val,bits)](#M-StreamCompress-Utils-BitAndByteExtensions-GetBitTable-System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.GetBitTable(System.Int32,System.Int32)')
   - [SetBitToByte(b,bitIndex)](#M-StreamCompress-Utils-BitAndByteExtensions-SetBitToByte-System-Byte,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.SetBitToByte(System.Byte,System.Int32)')
 - [ByteMemoryStream](#T-StreamCompress-Utils-ByteMemoryStream 'StreamCompress.Utils.ByteMemoryStream')
   - [#ctor(initialSize)](#M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Int32- 'StreamCompress.Utils.ByteMemoryStream.#ctor(System.Int32)')
+  - [#ctor(buffer)](#M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Byte[]- 'StreamCompress.Utils.ByteMemoryStream.#ctor(System.Byte[])')
   - [AddBytes(bytes)](#M-StreamCompress-Utils-ByteMemoryStream-AddBytes-System-Byte[]- 'StreamCompress.Utils.ByteMemoryStream.AddBytes(System.Byte[])')
   - [Dispose()](#M-StreamCompress-Utils-ByteMemoryStream-Dispose 'StreamCompress.Utils.ByteMemoryStream.Dispose')
   - [ReadBytes()](#M-StreamCompress-Utils-ByteMemoryStream-ReadBytes 'StreamCompress.Utils.ByteMemoryStream.ReadBytes')
@@ -42,12 +45,15 @@
   - [LeftPx](#P-StreamCompress-Domain-Image-CropSetup-LeftPx 'StreamCompress.Domain.Image.CropSetup.LeftPx')
   - [RightPx](#P-StreamCompress-Domain-Image-CropSetup-RightPx 'StreamCompress.Domain.Image.CropSetup.RightPx')
   - [TopPx](#P-StreamCompress-Domain-Image-CropSetup-TopPx 'StreamCompress.Domain.Image.CropSetup.TopPx')
+- [Extensions](#T-StreamCompress-DomainExtensions-GZip-Extensions 'StreamCompress.DomainExtensions.GZip.Extensions')
 - [Extensions](#T-StreamCompress-DomainExtensions-Huffman-Extensions 'StreamCompress.DomainExtensions.Huffman.Extensions')
 - [Extensions](#T-StreamCompress-DomainExtensions-Image-Extensions 'StreamCompress.DomainExtensions.Image.Extensions')
 - [Extensions](#T-StreamCompress-DomainExtensions-LZ-Extensions 'StreamCompress.DomainExtensions.LZ.Extensions')
+  - [AsImageFrame\`\`1(encodedImage)](#M-StreamCompress-DomainExtensions-GZip-Extensions-AsImageFrame``1-StreamCompress-Domain-GZip-GZipImageFrame- 'StreamCompress.DomainExtensions.GZip.Extensions.AsImageFrame``1(StreamCompress.Domain.GZip.GZipImageFrame)')
   - [AsImageGrayScaleFrame(encodedImage)](#M-StreamCompress-DomainExtensions-Huffman-Extensions-AsImageGrayScaleFrame-StreamCompress-Domain-Huffman-HuffmanImageFrame- 'StreamCompress.DomainExtensions.Huffman.Extensions.AsImageGrayScaleFrame(StreamCompress.Domain.Huffman.HuffmanImageFrame)')
   - [AsCropSetup(a)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsCropSetup-StreamCompress-Program-CommandLineArgs- 'StreamCompress.DomainExtensions.Image.Extensions.AsCropSetup(StreamCompress.Program.CommandLineArgs)')
   - [AsCroppedImage(image,cropSetup)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsCroppedImage-StreamCompress-Domain-Image-ImageFrame,StreamCompress-Domain-Image-CropSetup- 'StreamCompress.DomainExtensions.Image.Extensions.AsCroppedImage(StreamCompress.Domain.Image.ImageFrame,StreamCompress.Domain.Image.CropSetup)')
+  - [AsGZip\`\`1(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsGZip``1-``0- 'StreamCompress.DomainExtensions.Image.Extensions.AsGZip``1(``0)')
   - [AsGrayScale(image,colors)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsGrayScale-StreamCompress-Domain-Image-ImageFrame,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsGrayScale(StreamCompress.Domain.Image.ImageFrame,System.Int32)')
   - [AsHuffmanEncoded(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsHuffmanEncoded-StreamCompress-Domain-Image-ImageFrameGrayScale- 'StreamCompress.DomainExtensions.Image.Extensions.AsHuffmanEncoded(StreamCompress.Domain.Image.ImageFrameGrayScale)')
   - [AsLZEncodedUsingHashTable\`\`1(image,hashPrime)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingHashTable``1-``0,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsLZEncodedUsingHashTable``1(``0,System.Int32)')
@@ -69,6 +75,12 @@
   - [PathCombine(paths)](#M-StreamCompress-Utils-FileExtensions-PathCombine-System-String[]- 'StreamCompress.Utils.FileExtensions.PathCombine(System.String[])')
   - [ReadAllBytes(filename)](#M-StreamCompress-Utils-FileExtensions-ReadAllBytes-System-String- 'StreamCompress.Utils.FileExtensions.ReadAllBytes(System.String)')
   - [SaveToFile(bytes,filename)](#M-StreamCompress-Utils-FileExtensions-SaveToFile-System-Byte[],System-String- 'StreamCompress.Utils.FileExtensions.SaveToFile(System.Byte[],System.String)')
+- [GZipImageFrame](#T-StreamCompress-Domain-GZip-GZipImageFrame 'StreamCompress.Domain.GZip.GZipImageFrame')
+  - [#ctor(data)](#M-StreamCompress-Domain-GZip-GZipImageFrame-#ctor-System-Byte[]- 'StreamCompress.Domain.GZip.GZipImageFrame.#ctor(System.Byte[])')
+  - [#ctor()](#M-StreamCompress-Domain-GZip-GZipImageFrame-#ctor 'StreamCompress.Domain.GZip.GZipImageFrame.#ctor')
+  - [Data](#P-StreamCompress-Domain-GZip-GZipImageFrame-Data 'StreamCompress.Domain.GZip.GZipImageFrame.Data')
+  - [Open(path)](#M-StreamCompress-Domain-GZip-GZipImageFrame-Open-System-String- 'StreamCompress.Domain.GZip.GZipImageFrame.Open(System.String)')
+  - [Save(path)](#M-StreamCompress-Domain-GZip-GZipImageFrame-Save-System-String- 'StreamCompress.Domain.GZip.GZipImageFrame.Save(System.String)')
 - [GrayScaleColors](#T-StreamCompress-Program-GrayScaleColors 'StreamCompress.Program.GrayScaleColors')
   - [Full](#F-StreamCompress-Program-GrayScaleColors-Full 'StreamCompress.Program.GrayScaleColors.Full')
   - [Half](#F-StreamCompress-Program-GrayScaleColors-Half 'StreamCompress.Program.GrayScaleColors.Half')
@@ -190,7 +202,11 @@
   - [Open(path)](#M-StreamCompress-Domain-LZ-LZImageFrame-Open-System-String- 'StreamCompress.Domain.LZ.LZImageFrame.Open(System.String)')
   - [Save(path)](#M-StreamCompress-Domain-LZ-LZImageFrame-Save-System-String- 'StreamCompress.Domain.LZ.LZImageFrame.Save(System.String)')
 - [Method](#T-StreamCompress-Program-Method 'StreamCompress.Program.Method')
+  - [AsGZipDecoded](#F-StreamCompress-Program-Method-AsGZipDecoded 'StreamCompress.Program.Method.AsGZipDecoded')
+  - [AsGZipEncoded](#F-StreamCompress-Program-Method-AsGZipEncoded 'StreamCompress.Program.Method.AsGZipEncoded')
   - [AsGrayScale](#F-StreamCompress-Program-Method-AsGrayScale 'StreamCompress.Program.Method.AsGrayScale')
+  - [AsGrayScaleAsGZipDecoded](#F-StreamCompress-Program-Method-AsGrayScaleAsGZipDecoded 'StreamCompress.Program.Method.AsGrayScaleAsGZipDecoded')
+  - [AsGrayScaleAsGZipEncoded](#F-StreamCompress-Program-Method-AsGrayScaleAsGZipEncoded 'StreamCompress.Program.Method.AsGrayScaleAsGZipEncoded')
   - [AsGrayScaleAsHuffmanDecoded](#F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanDecoded 'StreamCompress.Program.Method.AsGrayScaleAsHuffmanDecoded')
   - [AsGrayScaleAsHuffmanEncoded](#F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanEncoded 'StreamCompress.Program.Method.AsGrayScaleAsHuffmanEncoded')
   - [AsGrayScaleAsLZ78Decoded](#F-StreamCompress-Program-Method-AsGrayScaleAsLZ78Decoded 'StreamCompress.Program.Method.AsGrayScaleAsLZ78Decoded')
@@ -309,12 +325,31 @@ Value as byte array
 | ---- | ---- | ----------- |
 | val | [System.UInt16](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.UInt16 'System.UInt16') | Value |
 
-<a name='M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32-'></a>
-### AsInt(bytes,offset) `method`
+<a name='M-StreamCompress-Utils-BitAndByteExtensions-AsCompressed-System-Byte[],System-Int32,System-Int32-'></a>
+### AsCompressed(val,maxValue,valueCount) `method`
 
 ##### Summary
 
-Converts 4 bytes as 32 bit integer
+Compress byte array of int values to byte array, which use minimum amount space based max int value
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| val | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Byte array of 32 bit integers |
+| maxValue | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+| valueCount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+
+<a name='M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32,System-Int32-'></a>
+### AsInt(bytes,offset,count) `method`
+
+##### Summary
+
+Converts 1 - 4 bytes as 32 bit integer
 
 ##### Returns
 
@@ -326,6 +361,7 @@ Converts 4 bytes as 32 bit integer
 | ---- | ---- | ----------- |
 | bytes | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Source bytes |
 | offset | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Source offset |
+| count | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Source bytes count |
 
 <a name='M-StreamCompress-Utils-BitAndByteExtensions-AsUInt16-System-Byte[],System-Int32-'></a>
 ### AsUInt16(bytes,offset) `method`
@@ -446,6 +482,24 @@ True when bit is set to 1, otherwise false
 | b | [System.Byte](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte 'System.Byte') | Byte |
 | bitIndex | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Bit index |
 
+<a name='M-StreamCompress-Utils-BitAndByteExtensions-GetBitTable-System-Int32,System-Int32-'></a>
+### GetBitTable(val,bits) `method`
+
+##### Summary
+
+Populates bits code in array using order so that last index has most significant bit
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| val | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Input value |
+| bits | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | How many bits |
+
 <a name='M-StreamCompress-Utils-BitAndByteExtensions-SetBitToByte-System-Byte,System-Int32-'></a>
 ### SetBitToByte(b,bitIndex) `method`
 
@@ -487,6 +541,19 @@ Constructor for new memory stream
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | initialSize | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Initial buffer size |
+
+<a name='M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Byte[]-'></a>
+### #ctor(buffer) `constructor`
+
+##### Summary
+
+Constructor for new memory stream
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| buffer | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Initial data |
 
 <a name='M-StreamCompress-Utils-ByteMemoryStream-AddBytes-System-Byte[]-'></a>
 ### AddBytes(bytes) `method`
@@ -682,6 +749,17 @@ Pixels to crop from right
 
 Pixels to crop from top
 
+<a name='T-StreamCompress-DomainExtensions-GZip-Extensions'></a>
+## Extensions `type`
+
+##### Namespace
+
+StreamCompress.DomainExtensions.GZip
+
+##### Summary
+
+GZip extensions
+
 <a name='T-StreamCompress-DomainExtensions-Huffman-Extensions'></a>
 ## Extensions `type`
 
@@ -714,6 +792,29 @@ StreamCompress.DomainExtensions.LZ
 ##### Summary
 
 Domain extensions for domain objects manipulation
+
+<a name='M-StreamCompress-DomainExtensions-GZip-Extensions-AsImageFrame``1-StreamCompress-Domain-GZip-GZipImageFrame-'></a>
+### AsImageFrame\`\`1(encodedImage) `method`
+
+##### Summary
+
+Decodes compressed image
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| encodedImage | [StreamCompress.Domain.GZip.GZipImageFrame](#T-StreamCompress-Domain-GZip-GZipImageFrame 'StreamCompress.Domain.GZip.GZipImageFrame') | Image encoded bytes |
+
+##### Generic Types
+
+| Name | Description |
+| ---- | ----------- |
+| T | Type of image |
 
 <a name='M-StreamCompress-DomainExtensions-Huffman-Extensions-AsImageGrayScaleFrame-StreamCompress-Domain-Huffman-HuffmanImageFrame-'></a>
 ### AsImageGrayScaleFrame(encodedImage) `method`
@@ -766,6 +867,24 @@ Cropped image
 | ---- | ---- | ----------- |
 | image | [StreamCompress.Domain.Image.ImageFrame](#T-StreamCompress-Domain-Image-ImageFrame 'StreamCompress.Domain.Image.ImageFrame') | Image to crop |
 | cropSetup | [StreamCompress.Domain.Image.CropSetup](#T-StreamCompress-Domain-Image-CropSetup 'StreamCompress.Domain.Image.CropSetup') | Crop setup |
+
+<a name='M-StreamCompress-DomainExtensions-Image-Extensions-AsGZip``1-``0-'></a>
+### AsGZip\`\`1(image) `method`
+
+##### Summary
+
+Compress bytes using .Net Core impl. of GZip 
+Just for benchmark reason
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| image | [\`\`0](#T-``0 '``0') |  |
 
 <a name='M-StreamCompress-DomainExtensions-Image-Extensions-AsGrayScale-StreamCompress-Domain-Image-ImageFrame,System-Int32-'></a>
 ### AsGrayScale(image,colors) `method`
@@ -1163,6 +1282,82 @@ Save byte array to file
 | ---- | ---- | ----------- |
 | bytes | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Byte array |
 | filename | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Filename |
+
+<a name='T-StreamCompress-Domain-GZip-GZipImageFrame'></a>
+## GZipImageFrame `type`
+
+##### Namespace
+
+StreamCompress.Domain.GZip
+
+##### Summary
+
+Presents single image frame in GZip compressed form
+
+<a name='M-StreamCompress-Domain-GZip-GZipImageFrame-#ctor-System-Byte[]-'></a>
+### #ctor(data) `constructor`
+
+##### Summary
+
+Constructor to create frame from byte array
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| data | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') |  |
+
+<a name='M-StreamCompress-Domain-GZip-GZipImageFrame-#ctor'></a>
+### #ctor() `constructor`
+
+##### Summary
+
+Parametless constructor
+
+##### Parameters
+
+This constructor has no parameters.
+
+<a name='P-StreamCompress-Domain-GZip-GZipImageFrame-Data'></a>
+### Data `property`
+
+##### Summary
+
+Byte array which contains compressed image
+
+<a name='M-StreamCompress-Domain-GZip-GZipImageFrame-Open-System-String-'></a>
+### Open(path) `method`
+
+##### Summary
+
+Reads comressed image frame from file
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') |  |
+
+<a name='M-StreamCompress-Domain-GZip-GZipImageFrame-Save-System-String-'></a>
+### Save(path) `method`
+
+##### Summary
+
+Saves compressed image frame to file
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') |  |
 
 <a name='T-StreamCompress-Program-GrayScaleColors'></a>
 ## GrayScaleColors `type`
@@ -2458,12 +2653,40 @@ StreamCompress.Program
 
 Supported methods
 
+<a name='F-StreamCompress-Program-Method-AsGZipDecoded'></a>
+### AsGZipDecoded `constants`
+
+##### Summary
+
+Decodes image using GZip compression
+
+<a name='F-StreamCompress-Program-Method-AsGZipEncoded'></a>
+### AsGZipEncoded `constants`
+
+##### Summary
+
+Encodes image using GZip compression
+
 <a name='F-StreamCompress-Program-Method-AsGrayScale'></a>
 ### AsGrayScale `constants`
 
 ##### Summary
 
 Converts image as gray scale
+
+<a name='F-StreamCompress-Program-Method-AsGrayScaleAsGZipDecoded'></a>
+### AsGrayScaleAsGZipDecoded `constants`
+
+##### Summary
+
+Decodes gray scale image using GZip compression
+
+<a name='F-StreamCompress-Program-Method-AsGrayScaleAsGZipEncoded'></a>
+### AsGrayScaleAsGZipEncoded `constants`
+
+##### Summary
+
+Converts image as gray scale and encodes image using GZip compression
 
 <a name='F-StreamCompress-Program-Method-AsGrayScaleAsHuffmanDecoded'></a>
 ### AsGrayScaleAsHuffmanDecoded `constants`

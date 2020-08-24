@@ -8,7 +8,7 @@ namespace StreamCompress.Utils {
 	/// </summary>
 	public sealed class ByteMemoryStream : IDisposable {
 
-		private readonly MemoryStream _memoryStream;
+		public readonly MemoryStream MemoryStream;
 		private int Count { get; set; }
 
 		/// <summary>
@@ -16,7 +16,16 @@ namespace StreamCompress.Utils {
 		/// </summary>
 		/// <param name="initialSize">Initial buffer size</param>
 		public ByteMemoryStream(int initialSize) {
-			_memoryStream = new MemoryStream(initialSize);
+			MemoryStream = new MemoryStream(initialSize);
+		}
+
+		/// <summary>
+		/// Constructor for new memory stream
+		/// </summary>
+		/// <param name="buffer">Initial data</param>
+		public ByteMemoryStream(byte[] buffer) {
+			MemoryStream = new MemoryStream(buffer);
+			Count = buffer.Length;
 		}
 
 		/// <summary>
@@ -24,7 +33,7 @@ namespace StreamCompress.Utils {
 		/// </summary>
 		/// <param name="bytes">Bytes to add</param>
 		public void AddBytes(byte[] bytes) {
-			_memoryStream.Write(bytes, 0, bytes.Length);
+			MemoryStream.Write(bytes, 0, bytes.Length);
 			Count += bytes.Length;
 		}
 
@@ -34,9 +43,9 @@ namespace StreamCompress.Utils {
 		/// <returns></returns>
 		public byte[] ReadBytes() {
 			var bytes = new byte[Count];
-			_memoryStream.Position = 0;
-			_memoryStream.Flush();
-			_memoryStream.Read(bytes,0, bytes.Length);
+			MemoryStream.Position = 0;
+			MemoryStream.Flush();
+			MemoryStream.Read(bytes,0, bytes.Length);
 			return bytes;
 		}
 
@@ -44,7 +53,7 @@ namespace StreamCompress.Utils {
 		/// Finalize intance and release resources
 		/// </summary>
 		public void Dispose() {
-			_memoryStream.Dispose();
+			MemoryStream.Dispose();
 			// Suppress finalization.
 			GC.SuppressFinalize(this);
 		}

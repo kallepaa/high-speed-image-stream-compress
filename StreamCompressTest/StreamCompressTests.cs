@@ -470,6 +470,48 @@ namespace StreamCompressTest {
 				var b1 = new byte[] { 1 };
 				Assert.True(b1.AsInt(0) == 1);
 			}
+
+			[Fact]
+			public void AsInt24BitByteArray() {
+				var b1 = new byte[] { 1, 0, 0, 1 };
+				Assert.True(b1.AsInt(0, 3) == 1);
+			}
+
+			[Fact]
+			public void CodesCompressionRoundTrip() {
+
+				var intArray = new int[] { 500, 7, 100 };
+				var intArrayAsBytes = new byte[intArray.Length * 4];
+				for (int i = 0; i < intArray.Length; i++) {
+					intArray[i].AsBytes().CopyBytesTo(intArrayAsBytes, i * 4);
+				}
+
+				var compressed = intArrayAsBytes.AsCompressed(500, intArray.Length);
+				var decompressed = compressed.AsDecompressed();
+
+				Assert.True(decompressed.Compare(intArrayAsBytes));
+
+			}
+
+
+			[Theory]
+			[InlineData(7)]
+			[InlineData(128)]
+			[InlineData(257)]
+			[InlineData(int.MinValue)]
+			[InlineData(int.MaxValue)]
+			public void IntAs24BitRoundTrip(int val) {
+
+				if (!(val == int.MinValue || val == int.MaxValue)) {
+					var b = val.AsBytes(3);
+					var test = b.AsInt(0);
+					Assert.True(test == val);
+				} else {
+					Assert.Throws<ArgumentException>(() => val.AsBytes(3));
+				}
+
+			}
+
 		}
 
 		public class CLITests {

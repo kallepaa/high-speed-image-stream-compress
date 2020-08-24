@@ -1,9 +1,11 @@
-﻿using StreamCompress.Domain.Huffman;
+﻿using StreamCompress.Domain.GZip;
+using StreamCompress.Domain.Huffman;
 using StreamCompress.Domain.Image;
 using StreamCompress.Domain.LZ;
 using StreamCompress.DomainExtensions.Huffman;
 using StreamCompress.DomainExtensions.Image;
 using StreamCompress.DomainExtensions.LZ;
+using StreamCompress.DomainExtensions.GZip;
 using StreamCompress.Utils;
 using System;
 using System.Collections.Generic;
@@ -48,7 +50,24 @@ namespace StreamCompress {
 			/// <summary>
 			/// Decodes gray scale image using LZ78 compression
 			/// </summary>
-			AsGrayScaleAsLZ78Decoded
+			AsGrayScaleAsLZ78Decoded,
+			/// <summary>
+			/// Encodes image using GZip compression
+			/// </summary>
+			AsGZipEncoded,
+			/// <summary>
+			/// Decodes image using GZip compression
+			/// </summary>
+			AsGZipDecoded,
+			/// <summary>
+			/// Converts image as gray scale and encodes image using GZip compression
+			/// </summary>
+			AsGrayScaleAsGZipEncoded,
+			/// <summary>
+			/// Decodes gray scale image using GZip compression
+			/// </summary>
+			AsGrayScaleAsGZipDecoded
+
 		}
 
 		/// <summary>
@@ -305,7 +324,6 @@ namespace StreamCompress {
 								 var retData = image
 								 .AsCroppedImage(a.AsCropSetup());
 
-
 								 switch (a.LZCompressionDictionary) {
 									 case LZCompressionDictionary.HashTable:
 										 return retData.AsLZEncodedUsingHashTable(a.LZCompressionHashTablePrime);
@@ -364,6 +382,32 @@ namespace StreamCompress {
 								 }
 							 });
 							 break;
+						 case Method.AsGZipEncoded:
+							 commandResults = SourceLooper<ImageFrame, GZipImageFrame>(cmdArgs, (index, a, image) => {
+								 return image
+								 .AsCroppedImage(a.AsCropSetup())
+								 .AsGZip();
+							 });
+							 break;
+						 case Method.AsGZipDecoded:
+							 commandResults = SourceLooper<GZipImageFrame, ImageFrame>(cmdArgs, (index, a, image) => {
+								 return image.AsImageFrame<ImageFrame>();
+							 });
+							 break;
+						 case Method.AsGrayScaleAsGZipEncoded:
+							 commandResults = SourceLooper<ImageFrame, GZipImageFrame>(cmdArgs, (index, a, image) => {
+								 return image
+								 .AsCroppedImage(a.AsCropSetup())
+								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
+								 .AsGZip();
+							 });
+							 break;
+						 case Method.AsGrayScaleAsGZipDecoded:
+							 commandResults = SourceLooper<GZipImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
+								 return image.AsImageFrame<ImageFrameGrayScale>();
+							 });
+							 break;
+
 					 }
 				 });
 

@@ -24,9 +24,12 @@ namespace StreamCompress.DomainExtensions.LZ {
 				decoderDic.Insert(searchKey, codeWord);
 			}
 
-			using (var decodedOutPut = new ByteMemoryStream(codes.Length * 2)) {
+			//decompress compressed codes as int 32 byte array
+			var decompressedCodes = codes.AsDecompressed();
 
-				var O = codes.AsInt(0).AsBytes();
+			using (var decodedOutPut = new ByteMemoryStream(decompressedCodes.Length * 2)) {
+
+				var O = decompressedCodes.AsInt(0).AsBytes();
 				var S = new byte[0];
 				var C2 = new byte[0];
 
@@ -34,9 +37,9 @@ namespace StreamCompress.DomainExtensions.LZ {
 
 				decodedOutPut.AddBytes(item.CodeWord);
 
-				for (int i = 4; i < codes.Length; i += 4) {
+				for (int i = 4; i < decompressedCodes.Length; i += 4) {
 
-					var N = codes.AsInt(i).AsBytes();
+					var N = decompressedCodes.AsInt(i).AsBytes();
 
 					var itemN = decoderDic.Search(N);
 					var itemO = decoderDic.Search(O);

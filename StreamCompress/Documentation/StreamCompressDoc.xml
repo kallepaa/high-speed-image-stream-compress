@@ -4,6 +4,19 @@
         <name>StreamCompress</name>
     </assembly>
     <members>
+        <member name="T:StreamCompress.DomainExtensions.GZip.Extensions">
+            <summary>
+            GZip extensions
+            </summary>
+        </member>
+        <member name="M:StreamCompress.DomainExtensions.GZip.Extensions.AsImageFrame``1(StreamCompress.Domain.GZip.GZipImageFrame)">
+            <summary>
+            Decodes compressed image
+            </summary>
+            <typeparam name="T">Type of image</typeparam>
+            <param name="encodedImage">Image encoded bytes</param>
+            <returns></returns>
+        </member>
         <member name="T:StreamCompress.DomainExtensions.Huffman.Extensions">
             <summary>
             Domain extensions for domain objects manipulation
@@ -117,6 +130,14 @@
             <param name="a">Command line arguments</param>
             <returns>Crop setup</returns>
         </member>
+        <member name="M:StreamCompress.DomainExtensions.Image.Extensions.AsGZip``1(``0)">
+            <summary>
+            Compress bytes using .Net Core impl. of GZip 
+            Just for benchmark reason
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
         <member name="T:StreamCompress.DomainExtensions.LZ.Extensions">
             <summary>
             Domain extensions for domain objects manipulation
@@ -178,6 +199,41 @@
             <typeparam name="T">Type of image</typeparam>
             <param name="encodedImage">LZ encoded image frame</param>
             <returns>Return image frame of type T</returns>
+        </member>
+        <member name="T:StreamCompress.Domain.GZip.GZipImageFrame">
+            <summary>
+            Presents single image frame in GZip compressed form
+            </summary>
+        </member>
+        <member name="P:StreamCompress.Domain.GZip.GZipImageFrame.Data">
+            <summary>
+            Byte array which contains compressed image
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.GZip.GZipImageFrame.#ctor(System.Byte[])">
+            <summary>
+            Constructor to create frame from byte array
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:StreamCompress.Domain.GZip.GZipImageFrame.#ctor">
+            <summary>
+            Parametless constructor
+            </summary>
+        </member>
+        <member name="M:StreamCompress.Domain.GZip.GZipImageFrame.Save(System.String)">
+            <summary>
+            Saves compressed image frame to file
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamCompress.Domain.GZip.GZipImageFrame.Open(System.String)">
+            <summary>
+            Reads comressed image frame from file
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
         </member>
         <member name="T:StreamCompress.Domain.Huffman.HuffmanImageFrame">
             <summary>
@@ -1136,6 +1192,26 @@
             Decodes gray scale image using LZ78 compression
             </summary>
         </member>
+        <member name="F:StreamCompress.Program.Method.AsGZipEncoded">
+            <summary>
+            Encodes image using GZip compression
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGZipDecoded">
+            <summary>
+            Decodes image using GZip compression
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScaleAsGZipEncoded">
+            <summary>
+            Converts image as gray scale and encodes image using GZip compression
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Program.Method.AsGrayScaleAsGZipDecoded">
+            <summary>
+            Decodes gray scale image using GZip compression
+            </summary>
+        </member>
         <member name="T:StreamCompress.Program.GrayScaleColors">
             <summary>
             Gray scale image color counts
@@ -1324,12 +1400,13 @@
             <param name="val">Value</param>
             <returns>Value as byte array</returns>
         </member>
-        <member name="M:StreamCompress.Utils.BitAndByteExtensions.AsInt(System.Byte[],System.Int32)">
+        <member name="M:StreamCompress.Utils.BitAndByteExtensions.AsInt(System.Byte[],System.Int32,System.Int32)">
             <summary>
-            Converts 4 bytes as 32 bit integer
+            Converts 1 - 4 bytes as 32 bit integer
             </summary>
             <param name="bytes">Source bytes</param>
             <param name="offset">Source offset</param>
+            <param name="count">Source bytes count</param>
             <returns>4 bytes as 32 bit integer</returns>
         </member>
         <member name="M:StreamCompress.Utils.BitAndByteExtensions.AsUInt16(System.Byte[],System.Int32)">
@@ -1382,6 +1459,23 @@
             <param name="b2">other</param>
             <returns>true when arrays are equal otherwise false</returns>
         </member>
+        <member name="M:StreamCompress.Utils.BitAndByteExtensions.GetBitTable(System.Int32,System.Int32)">
+            <summary>
+            Populates bits code in array using order so that last index has most significant bit
+            </summary>
+            <param name="val">Input value</param>
+            <param name="bits">How many bits</param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamCompress.Utils.BitAndByteExtensions.AsCompressed(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Compress byte array of int values to byte array, which use minimum amount space based max int value
+            </summary>
+            <param name="val">Byte array of 32 bit integers</param>
+            <param name="maxValue"></param>
+            <param name="valueCount"></param>
+            <returns></returns>
+        </member>
         <member name="T:StreamCompress.Utils.ByteMemoryStream">
             <summary>
             Wraps MemoryStream 
@@ -1392,6 +1486,12 @@
             Constructor for new memory stream
             </summary>
             <param name="initialSize">Initial buffer size</param>
+        </member>
+        <member name="M:StreamCompress.Utils.ByteMemoryStream.#ctor(System.Byte[])">
+            <summary>
+            Constructor for new memory stream
+            </summary>
+            <param name="buffer">Initial data</param>
         </member>
         <member name="M:StreamCompress.Utils.ByteMemoryStream.AddBytes(System.Byte[])">
             <summary>

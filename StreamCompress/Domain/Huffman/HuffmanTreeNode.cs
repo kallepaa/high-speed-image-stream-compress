@@ -1,4 +1,6 @@
-﻿namespace StreamCompress.Domain.Huffman {
+﻿using StreamCompress.Utils;
+
+namespace StreamCompress.Domain.Huffman {
 
 	/// <summary>
 	/// Presents one node in huffman tree
@@ -41,14 +43,7 @@
 		/// Populates bits code in array using order so that last index has most significant bit
 		/// </summary>
 		public void PopulateBitTable() {
-			CodeBitTable = new bool[CodeBits];
-			var code = Code;
-			var i = 0;
-			while (code > 0) {
-				var bit = (code & 1) == 1;
-				CodeBitTable[i++] = bit;
-				code = code >> 1;
-			}
+			CodeBitTable = Code.GetBitTable(CodeBits);
 		}
 
 		/// <summary>
