@@ -54,7 +54,7 @@
   - [AsImageGrayScaleFrame(encodedImage)](#M-StreamCompress-DomainExtensions-Huffman-Extensions-AsImageGrayScaleFrame-StreamCompress-Domain-Huffman-HuffmanImageFrame- 'StreamCompress.DomainExtensions.Huffman.Extensions.AsImageGrayScaleFrame(StreamCompress.Domain.Huffman.HuffmanImageFrame)')
   - [AsCropSetup(a)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsCropSetup-StreamCompress-Program-CommandLineArgs- 'StreamCompress.DomainExtensions.Image.Extensions.AsCropSetup(StreamCompress.Program.CommandLineArgs)')
   - [AsCroppedImage(image,cropSetup)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsCroppedImage-StreamCompress-Domain-Image-ImageFrame,StreamCompress-Domain-Image-CropSetup- 'StreamCompress.DomainExtensions.Image.Extensions.AsCroppedImage(StreamCompress.Domain.Image.ImageFrame,StreamCompress.Domain.Image.CropSetup)')
-  - [AsGZip\`\`1(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsGZip``1-``0- 'StreamCompress.DomainExtensions.Image.Extensions.AsGZip``1(``0)')
+  - [AsGZipEncoded\`\`1(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsGZipEncoded``1-``0- 'StreamCompress.DomainExtensions.Image.Extensions.AsGZipEncoded``1(``0)')
   - [AsGrayScale(image,colors)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsGrayScale-StreamCompress-Domain-Image-ImageFrame,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsGrayScale(StreamCompress.Domain.Image.ImageFrame,System.Int32)')
   - [AsHuffmanEncoded(image)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsHuffmanEncoded-StreamCompress-Domain-Image-ImageFrameGrayScale- 'StreamCompress.DomainExtensions.Image.Extensions.AsHuffmanEncoded(StreamCompress.Domain.Image.ImageFrameGrayScale)')
   - [AsLZEncodedUsingHashTable\`\`1(image,hashPrime)](#M-StreamCompress-DomainExtensions-Image-Extensions-AsLZEncodedUsingHashTable``1-``0,System-Int32- 'StreamCompress.DomainExtensions.Image.Extensions.AsLZEncodedUsingHashTable``1(``0,System.Int32)')
@@ -886,8 +886,8 @@ Cropped image
 | image | [StreamCompress.Domain.Image.ImageFrame](#T-StreamCompress-Domain-Image-ImageFrame 'StreamCompress.Domain.Image.ImageFrame') | Image to crop |
 | cropSetup | [StreamCompress.Domain.Image.CropSetup](#T-StreamCompress-Domain-Image-CropSetup 'StreamCompress.Domain.Image.CropSetup') | Crop setup |
 
-<a name='M-StreamCompress-DomainExtensions-Image-Extensions-AsGZip``1-``0-'></a>
-### AsGZip\`\`1(image) `method`
+<a name='M-StreamCompress-DomainExtensions-Image-Extensions-AsGZipEncoded``1-``0-'></a>
+### AsGZipEncoded\`\`1(image) `method`
 
 ##### Summary
 

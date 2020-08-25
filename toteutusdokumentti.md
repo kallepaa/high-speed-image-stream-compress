@@ -2,9 +2,11 @@
 
 ## Ohjelman yleisrakenne
 
-### Luokkakaavio
+### Luokkakaavio ja luokkadokumentti
 
 ![Luokat](StreamCompressClassDiagram.png) Luokkakaavio
+
+[Luokkadokumentti](StreamCompress/Documentation/StreamCompressDoc.md)
 
 ### Pääohjelma (Program)
 
@@ -51,7 +53,7 @@ ILZ78CodingTable rajapinnan toteuttavia luokkia voidaan käyttää hakemistona k
 * BitAndByteExtensions pitää sisällään tavujen ja bittien käsittelyyn tarvittavia operaatioita
 * ISaveable rajapinnan avulla sen totteuttavat "Frame" luokat voidaan lukea ja tallentaa levylle
 * ByteMemoryStream luokka piilottaa MemoryStream toteutuksen muistiin kirjoittamista varten
-
+* GZip enkoodaus ja dekoodaus vertailuja varten
 
 ## Saavutetut aika- ja tilavaativuudet (m.m. O-analyysit pseudokoodista)
 
@@ -65,10 +67,11 @@ Kuvien muokkaamiseen käytetyt algoritmit ovat pääsäntöisesti O(N), joissa k
 
 Huffman koodauksessa on käytetty kurssin materiaaleissa ollutta kekototeutuksen esimerkkiä ja muunnettu se vain maksimikeosta minimikeoksi. Minikeon operaatioista käytetään vain Insert ja DelMin operaatioita. Suoraan materiaalista katsottuna yhden DelMin operaation aikavaatimus on O(log n) kuten myös Insert operaation. Koodauksessa kuitenkin joudutaan käymään syötteen kaikki tavut läpi pariin kertaan, joten algoritmin aikavaatimus on O(n log n). Tilavaatimus muodostuu syötteen, enkoodatun paluuarvo ja keon, sekä aputaulun tarvitsemasta tilasta. Keon tilavaatimus riippuu paljolti syötteestä. Olettaisin että tilavaatimus on kuitenkin O(N) ja keon merkitys kokonaisuudessa pieni.
 
-
 ### LZ koodaus
 
-LZ koodauksessa on käytetty LZ78 koodausta, jossa pääasiallisesti aikavaatimus tulee lisäyksistä ja hauista hakemistoon. Rungon toteutus perustuu löytämääni pseudokoodiin [LZ78]. Hakemistoiksi olen tehnyt hajaustaulun ja trie hakemistot. Käytännössä LZ koodaus tarvitsee vain hakemiston lisäys- ja hakuoperaatioita.
+LZ koodauksessa on käytetty LZ78 koodausta, jossa pääasiallisesti aikavaatimus tulee lisäyksistä ja hauista hakemistoon. Rungon toteutus perustuu löytämääni pseudokoodiin [LZ78]. Hakemistoiksi olen tehnyt hajaustaulun ja trie hakemistoista kaksi eri totetusta. Trie256 käyttää vakiokokoisia tauluja solmuissa ja Trie toteutuksessa taulut dynaamisia. Käytännössä LZ koodaus tarvitsee vain hakemiston lisäys- ja hakuoperaatioita.
+
+Enkoodaus tehdään kaksivaiheisesti niin että ensin syöte koodataan koodisanoiksi käyttäen 32 bittiä. Kun koodaus on tehty niin tiedetään mikä on suurin koodisana ja sen vaatimat bittien määrät. Tämän jälkeen koodataan 32 bittiset koodit sanat maksimi bittimäärällä. Sama tehdä dekoodauksessa avaamalla pakatut koodisanat 32 bittisiksi. Tämän osuuden aikavaatimus pienempi kuin O(N).
 
 ### Enkoodaus
 LZ algoritmi itsessään käy syötteen tavu kerrallaan läpi, joten sen aikavaatimus on O(N). 
@@ -79,12 +82,11 @@ Hajautustaulun toteutus on pääsäntöisesti totetutettu kurssinmateriaalin per
 
 Kurssimateriaalin perusteella lisäysoperaation kesto olisi vakioaikainen O(1) ja hakuoperaation keskimäärin vakioaikainen, joten enkoodauksen aikavaatimus olisi O(N)
 
-#### Trie
+#### Trie ja Trie256
 
-Trie algoritmin totetukseen käytin Youtube videota [Trie], jossa kuvattiin Trie algoritmin periaatteet. Hakuoperaatoiden kesto riippuu hakutekijän pituudesta m, joten sen aikavaatimus on O(m). Lisäys operaation on myös O(m), koska se käytännössä on melkein sama kuin haku. Näin ollen Trie hakemistoa käytettäessä aikavaatimus olisi O(mN). Trie algoritmin tilavaatimus voi olla suuri koska jokainen solmu saattaa sisältää useita null pointtereita. Omassa totetuksessa tein solmujen linkitystaulun kasvavaksi tarpeen mukaan, jonka pitäisi vähentää null pointtereiden määrä. 
+Trie algoritmin totetukseen käytin Youtube videota [Trie], jossa kuvattiin Trie algoritmin periaatteet. Hakuoperaatoiden kesto riippuu hakutekijän pituudesta m, joten sen aikavaatimus on O(m). Lisäys operaation on myös O(m), koska se käytännössä on melkein sama kuin haku. Näin ollen Trie hakemistoa käytettäessä aikavaatimus olisi O(mN). Trie algoritmin tilavaatimus voi olla suuri koska jokainen solmu saattaa sisältää useita null pointtereita. Trie totetuksessa tein solmujen linkitystaulun kasvavaksi tarpeen mukaan, jonka pitäisi vähentää null pointtereiden määrä ja Trie256 vakiokokoisiksi. 
 
 ## Suorituskyky- ja O-analyysivertailu (mikäli työ vertailupainotteinen)
-
 
 
 ## Työn mahdolliset puutteet ja parannusehdotukset

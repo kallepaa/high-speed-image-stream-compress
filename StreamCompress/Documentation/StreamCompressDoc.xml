@@ -130,7 +130,7 @@
             <param name="a">Command line arguments</param>
             <returns>Crop setup</returns>
         </member>
-        <member name="M:StreamCompress.DomainExtensions.Image.Extensions.AsGZip``1(``0)">
+        <member name="M:StreamCompress.DomainExtensions.Image.Extensions.AsGZipEncoded``1(``0)">
             <summary>
             Compress bytes using .Net Core impl. of GZip 
             Just for benchmark reason

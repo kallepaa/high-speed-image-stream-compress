@@ -1,3 +1,32 @@
+# Viikko 6
+
+_Mitä olen tehnyt tällä viikolla?_
+
+* Viimeistellyt testausdokumenttia
+* Parantanut LZ algoritmin pakkaustehoa
+* Lisännyt vertailua varten GZip pakkauksen
+* Päivittänyt totetusdokumenttia
+* Tehnyt uuden julkaisun
+
+_Miten ohjelma on edistynyt?_
+
+* LZ pakkauksen koodisanojen pakkaaminen. Aiemmin nyt 32 bit nyt vain suurimman vaatima bittimäärä. Ero GZip pakkaukseen 5 - 10 % isoilla kuvilla.
+* Lisätty vertailua varten GZip pakkaus yhetnä pakkaus vaihtoehtona
+
+_Mitä opin tällä viikolla / tänään?_
+
+* GZip .Net Core totoetuksen käyttämisen pakkaamisessa
+* Koodisanojen tiivistämisen
+
+_Mikä jäi epäselväksi tai tuottanut vaikeuksia? Vastaa tähän kohtaan rehellisesti, koska saat tarvittaessa apua tämän kohdan perusteella._
+
+* Huffaman koodauksen pakkaustehon lisääminen. Nyt pyörii kuvien pakkaamisessa 90% tietämillä. En tiedä josko tekstin pakkaaminen toisi paremman tuloksen.
+
+_Mitä teen seuraavaksi?_
+
+* Pyrin käymään testituksia läpi
+* Jos kerkeän niin katson josko Huffman algoritmin saisi pakkaamaan tehokkaammin ja / tai testaan pakkaamista tekstitiedostolla.
+
 # Viikko 5
 
 _Mitä olen tehnyt tällä viikolla?_
