@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using StreamCompress.Shared;
+using StreamCompress.DomainExtensions.GZip;
 
 namespace StreamCompressTest {
 	public class StreamCompressTests {
@@ -302,6 +303,18 @@ namespace StreamCompressTest {
 			}
 		}
 
+		public class ImageFrameLZCompressionGZipTests {
+			[Fact]
+			public void AsLZEncodedAndDecoded() {
+				var i = 2;
+				var sourceFile = Common.GetSourceImagePath(i);
+				var image = ImageFrame.FromFile(sourceFile);
+				var encoded = image.AsGZipEncoded();
+				var decoded = encoded.AsImageFrame<ImageFrame>();
+				Assert.True(image.Image.Compare(decoded.Image));
+			}
+		}
+
 		public class ImageFrameGrayScaleHuffmanCodeCompressionTests {
 
 			[Theory]
@@ -523,6 +536,8 @@ namespace StreamCompressTest {
 			[InlineData(Program.Method.AsGrayScaleAsHuffmanEncoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-huffman-encoded", true, Program.Method.AsGrayScaleAsHuffmanDecoded)]
 			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-lz78-encoded", false, Program.Method.AsLZ78Decoded)]
 			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-lz78-encoded", true, Program.Method.AsLZ78Decoded)]
+			[InlineData(Program.Method.AsGZipEncoded, Common.SOURCE_FILE_SUFFIX, "as-gzip-encoded", false, Program.Method.AsGZipDecoded)]
+			[InlineData(Program.Method.AsGZipEncoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-gzip-encoded", true, Program.Method.AsGZipDecoded)]
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-as-lz78-encoded", false, Program.Method.AsGrayScaleAsLZ78Decoded)]
 			[InlineData(Program.Method.AsGrayScaleAsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-cropped-as-lz78-encoded", true, Program.Method.AsGrayScaleAsLZ78Decoded)]
 			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
@@ -598,6 +613,8 @@ namespace StreamCompressTest {
 					case Program.Method.AsGrayScaleAsHuffmanEncoded:
 					case Program.Method.AsLZ78Encoded:
 					case Program.Method.AsGrayScaleAsLZ78Encoded:
+					case Program.Method.AsGZipEncoded:
+					case Program.Method.AsGrayScaleAsGZipEncoded:
 						if (crop) {
 							args.AddRange(new string[] {
 							"--crop-left-px", _cropSetupCorrect.LeftPx.ToString(),
@@ -609,6 +626,7 @@ namespace StreamCompressTest {
 						break;
 					case Program.Method.AsGrayScaleAsHuffmanDecoded:
 					case Program.Method.AsLZ78Decoded:
+					case Program.Method.AsGZipDecoded:
 					case Program.Method.AsGrayScaleAsLZ78Decoded:
 						break;
 					default:

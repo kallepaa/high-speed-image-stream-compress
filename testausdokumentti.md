@@ -12,6 +12,45 @@ ReportGenerator tallensin raportin ulkoasun tiedostot hakemistoon *coveragerepor
 
 ### Suorituskykytestaus
 
+Suorituskykytestauksissa vertailuna käytettiin .Net Core Frameworkin omaa GZip toteutusta, jonka on ohjelmassa yhtenä pakkausvaihtoehtona.
+
+Kaikissa testauksissa käytettiin yhtä alkuperäistä kuvaa 00000-original.bmp, joka löytyy hakemistosta StreamCompressTest/TestData/Source
+
+#### Suoritusnopeus ja muistinkäyttö
+
+Suoritusnopeuden testaamiseen käytettiin BenchmarkDotNet testauskehikkoa. Testeissä testattiin kaikkien pakkaustoteutusten enkoodaus- ja dekoodaus nopeutta eri syötteillä. Testit löytyvät StreamCompressBenchmark projektin Benchmarks.cs tiedostosta. 
+
+* EncodeAndDecode - testaa suoritusnopeutta alkuperäisellä kuvalla
+* EncodeAndDecodeGrayScale - testaa suoritusnopeutta alkuperäisen kuvan harmaasävyiseksi muutettua kuvaa eri harmaasävyiden määrillä
+* EncodeAndDecodeCroppedGrayScale - testaa suoritusnopeutta alkuperäisen kuvan harmaasävyiseksi muutetun kuvan eri kooilla
+* EncodeAndDecodeCropped - testaa suoritusnopeutta alkuperäisellä kuvan eri kooilla
+* EncodeAndDecodeHashTablePrime - testaa suoritusnopeutta alkuperäisen kuvan pakkaamista LZ algoritmilla käyttäen hajatustaulussa eri prime arvoja
+* EncodeAndDecodeTrieCapacity - testaa suoritusnopeutta alkuperäisen kuvan pakkaamista LZ algoritmilla käyttäen trie totetusta ja eri taulukkojen koon alkuarvoja
+
+Kaikki suorituskykymittauksen tulokset löytyvät [täältä](StreamCompressBenchmark/results/StreamCompressBenchmark.report-github.md)
+
+#### Pakkausteho
+ 
+Pakkausteho testattiin sekä värikuvalla ja harmaasävyisellä kuvalla, sekä niiden eri kooilla. 
+
+Käytetyt pakkaus metodit olivat
+
+**Harmaasävy**
+
+* AsGrayScaleAsGZipEncoded (vertailu)
+* AsGrayScaleAsHuffmanEncoded
+* AsGrayScaleAsLZ78Encoded
+
+
+![Harmaasavy](testaus-pakkausteho.png) Harmaasävyisen kuvan pakkaustehon vertailu
+
+**Värikuva**
+
+* AsGZipEncoded (vertailu)
+* AsLZ78Encoded
+
+![Vari](testaus-pakkausteho-vari.png) Värikuvan pakkaustehon vertailu
+
 
 ## Minkälaisilla syötteillä testaus tehtiin (vertailupainotteisissa töissä tärkeää)
 
@@ -20,6 +59,7 @@ Syötteinä käytettiin oikeita kuvia, sekä jossain testeissä generoitua dataa
 
 ### Suorituskykytestaus
 
+Syötteenä käytettiin yhtä kuvaa, josta muokattiin harmaasävyisiä kuvia, sekä kuvaa pienennettiin. 
 
 ## Miten testit voidaan toistaa
 
@@ -28,6 +68,7 @@ Yksikkötestaukset voidaan ajaa Visual Studion kautta.
 
 ### Suorituskykytestaus
 
-## Ohjelman toiminnan empiirisen testauksen tulosten esittäminen graafisessa muodossa.
+#### Suoritusnopeus ja muistinkäyttö
 
+StreamCompressBenchmark kansiossa on oleva komentojonotiedoston ajamalla windows ympäristössä. Vastaa komentojonotiedosto ei valitettavasti ole Linux ja Mac ympäristöihin.
 

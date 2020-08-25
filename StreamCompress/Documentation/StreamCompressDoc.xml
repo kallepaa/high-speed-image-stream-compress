@@ -1476,6 +1476,13 @@
             <param name="valueCount"></param>
             <returns></returns>
         </member>
+        <member name="M:StreamCompress.Utils.BitAndByteExtensions.AsDecompressed(System.Byte[])">
+            <summary>
+            Decompress bytes compressed by AsCompressed method
+            </summary>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
         <member name="T:StreamCompress.Utils.ByteMemoryStream">
             <summary>
             Wraps MemoryStream 
@@ -1501,7 +1508,7 @@
         </member>
         <member name="M:StreamCompress.Utils.ByteMemoryStream.ReadBytes">
             <summary>
-            Reads all bytes from memory stream
+            Reads written bytes from memory stream
             </summary>
             <returns></returns>
         </member>

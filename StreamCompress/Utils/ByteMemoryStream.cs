@@ -38,16 +38,13 @@ namespace StreamCompress.Utils {
 		}
 
 		/// <summary>
-		/// Reads all bytes from memory stream
+		/// Reads written bytes from memory stream
 		/// </summary>
 		/// <returns></returns>
 		public byte[] ReadBytes() {
-			var bytes = new byte[Count];
-			MemoryStream.Position = 0;
-			MemoryStream.Flush();
-			MemoryStream.Read(bytes,0, bytes.Length);
-			return bytes;
+			return MemoryStream.ToArray();
 		}
+
 
 		/// <summary>
 		/// Finalize intance and release resources

@@ -24,8 +24,9 @@ namespace StreamCompress.DomainExtensions.GZip {
 			var ret2 = new T();
 			var ret = default(byte[]);
 			using (var inputMs = new ByteMemoryStream(encodedImage.Data))
-			using (var outputMs = new ByteMemoryStream(encodedImage.Data.Length * 2))
-			using (GZipStream decompressionStream = new GZipStream(inputMs.MemoryStream, CompressionMode.Decompress)) {
+			using (GZipStream decompressionStream = new GZipStream(inputMs.MemoryStream, CompressionMode.Decompress))
+			using (var outputMs = new ByteMemoryStream(1024))
+			{
 				decompressionStream.CopyTo(outputMs.MemoryStream);
 				ret = outputMs.ReadBytes();
 			}

@@ -7,6 +7,8 @@ using StreamCompress.Shared;
 using BenchmarkDotNet.Engines;
 using StreamCompress.DomainExtensions.LZ;
 using StreamCompress.DomainExtensions.Huffman;
+using StreamCompress.Domain.GZip;
+using StreamCompress.DomainExtensions.GZip;
 
 namespace StreamCompressBenchmark {
 
@@ -18,12 +20,14 @@ namespace StreamCompressBenchmark {
 		const int imageIndex = 0;
 		private ImageFrame image;
 		private LZImageFrame LZEncoded;
+		private GZipImageFrame GZipEncoded;
 
 		[GlobalSetup]
 		public void GlobalSetup() {
 			var sourceFile = Common.GetSourceImagePath(imageIndex);
 			image = ImageFrame.FromFile(sourceFile);
 			LZEncoded = image.AsLZEncodedUsingHashTable(12289);
+			GZipEncoded = image.AsGZipEncoded();
 		}
 
 		[Benchmark(Description = "Encode LZ HashTable - Prime 12289")]
@@ -32,6 +36,8 @@ namespace StreamCompressBenchmark {
 		public LZImageFrame EncodeTrie() => image.AsLZEncodedUsingTrie(1);
 		[Benchmark(Description = "Encode LZ Trie256")]
 		public LZImageFrame EncodeTrie256() => image.AsLZEncodedUsingTrie256();
+		[Benchmark(Description = "Encode GZip")]
+		public GZipImageFrame EncodeGZip() => image.AsGZipEncoded();
 
 		[Benchmark(Description = "Decode LZ HashTable - Prime 12289")]
 		public ImageFrame DecodeHashTable() => LZEncoded.AsImageFrameUsingHashTable<ImageFrame>(12289);
@@ -39,6 +45,9 @@ namespace StreamCompressBenchmark {
 		public ImageFrame DecodeTrie() => LZEncoded.AsImageFrameUsingTrie<ImageFrame>(1);
 		[Benchmark(Description = "Decode LZ Trie256")]
 		public ImageFrame DecodeTrie256() => LZEncoded.AsImageFrameUsingTrie256<ImageFrame>();
+		[Benchmark(Description = "Decode GZip")]
+		public ImageFrame DecodeGZip() => GZipEncoded.AsImageFrame<ImageFrame>();
+
 	}
 
 	[SimpleJob(RunStrategy.ColdStart, launchCount: 3, warmupCount: 1, targetCount: 1, id: "EncodeAndDecodeGrayScale")]
@@ -53,6 +62,8 @@ namespace StreamCompressBenchmark {
 		private ImageFrameGrayScale image;
 		private LZImageFrame LZEncoded;
 		private HuffmanImageFrame HuffmanEncoded;
+		private GZipImageFrame GZipEncoded;
+
 
 		[GlobalSetup]
 		public void GlobalSetup() {
@@ -60,6 +71,7 @@ namespace StreamCompressBenchmark {
 			image = ImageFrame.FromFile(sourceFile).AsGrayScale(Colors);
 			LZEncoded = image.AsLZEncodedUsingHashTable(12289);
 			HuffmanEncoded = image.AsHuffmanEncoded();
+			GZipEncoded = image.AsGZipEncoded();
 		}
 
 		[Benchmark(Description = "Encode LZ HashTable - Prime 12289")]
@@ -70,6 +82,9 @@ namespace StreamCompressBenchmark {
 		public LZImageFrame EncodeTrie256() => image.AsLZEncodedUsingTrie256();
 		[Benchmark(Description = "Encode Huffman")]
 		public HuffmanImageFrame EncodeHuffman() => image.AsHuffmanEncoded();
+		[Benchmark(Description = "Encode GZip")]
+		public GZipImageFrame EncodeGZip() => image.AsGZipEncoded();
+
 
 		[Benchmark(Description = "Decode LZ HashTable - Prime 12289")]
 		public ImageFrameGrayScale DecodeHashTable() => LZEncoded.AsImageFrameUsingHashTable<ImageFrameGrayScale>(12289);
@@ -79,6 +94,9 @@ namespace StreamCompressBenchmark {
 		public ImageFrameGrayScale DecodeTrie256() => LZEncoded.AsImageFrameUsingTrie256<ImageFrameGrayScale>();
 		[Benchmark(Description = "Decode Huffman")]
 		public ImageFrameGrayScale DecodeHuffman() => HuffmanEncoded.AsImageGrayScaleFrame();
+		[Benchmark(Description = "Decode GZip")]
+		public ImageFrameGrayScale DecodeGZip() => GZipEncoded.AsImageFrame<ImageFrameGrayScale>();
+
 	}
 
 	[SimpleJob(RunStrategy.ColdStart, launchCount: 3, warmupCount: 1, targetCount: 1, id: "EncodeAndDecodeCroppedGrayScale")]
@@ -90,6 +108,7 @@ namespace StreamCompressBenchmark {
 		private ImageFrameGrayScale image;
 		private LZImageFrame LZEncoded;
 		private HuffmanImageFrame HuffmanEncoded;
+		private GZipImageFrame GZipEncoded;
 
 
 		[Params(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)]
@@ -101,6 +120,7 @@ namespace StreamCompressBenchmark {
 			image = ImageFrame.FromFile(sourceFile).AsCroppedImage(new CropSetup { LeftPx = Crop * 16, RightPx = Crop * 16, TopPx = Crop * 16, BottomPx = Crop * 16 }).AsGrayScale();
 			LZEncoded = image.AsLZEncodedUsingHashTable(12289);
 			HuffmanEncoded = image.AsHuffmanEncoded();
+			GZipEncoded = image.AsGZipEncoded();
 		}
 
 		[Benchmark(Description = "Encode LZ HashTable - Prime 12289")]
@@ -111,6 +131,10 @@ namespace StreamCompressBenchmark {
 		public LZImageFrame EncodeTrie256() => image.AsLZEncodedUsingTrie256();
 		[Benchmark(Description = "Encode Huffman")]
 		public HuffmanImageFrame EncodeHuffman() => image.AsHuffmanEncoded();
+		[Benchmark(Description = "Encode GZip")]
+		public GZipImageFrame EncodeGZip() => image.AsGZipEncoded();
+
+
 
 		[Benchmark(Description = "Decode LZ HashTable - Prime 12289")]
 		public ImageFrameGrayScale DecodeHashTable() => LZEncoded.AsImageFrameUsingHashTable<ImageFrameGrayScale>(12289);
@@ -120,6 +144,9 @@ namespace StreamCompressBenchmark {
 		public ImageFrameGrayScale DecodeTrie256() => LZEncoded.AsImageFrameUsingTrie256<ImageFrameGrayScale>();
 		[Benchmark(Description = "Decode Huffman")]
 		public ImageFrameGrayScale DecodeHuffman() => HuffmanEncoded.AsImageGrayScaleFrame();
+		[Benchmark(Description = "Decode GZip")]
+		public ImageFrameGrayScale DecodeGZip() => GZipEncoded.AsImageFrame<ImageFrameGrayScale>();
+
 	}
 
 	[SimpleJob(RunStrategy.ColdStart, launchCount: 3, warmupCount: 1, targetCount: 1, id: "EncodeAndDecodeCropped")]

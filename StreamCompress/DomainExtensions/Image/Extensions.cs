@@ -453,12 +453,13 @@ namespace StreamCompress.DomainExtensions.Image {
 		/// </summary>
 		/// <param name="image"></param>
 		/// <returns></returns>
-		public static GZipImageFrame AsGZip<T>(this T image) where T : ImageFrame {
+		public static GZipImageFrame AsGZipEncoded<T>(this T image) where T : ImageFrame {
 			var ret = default(byte[]);
-			using (var inputMs = new ByteMemoryStream(image.Image))
-			using (var outputMs = new ByteMemoryStream(image.Image.Length / 2))
-			using (GZipStream compressionStream = new GZipStream(outputMs.MemoryStream, CompressionMode.Compress)) {
-				inputMs.MemoryStream.CopyTo(compressionStream);
+			using (var outputMs = new ByteMemoryStream(1024)) {
+				using (GZipStream compressionStream = new GZipStream(outputMs.MemoryStream, CompressionMode.Compress))
+				using (var inputMs = new ByteMemoryStream(image.Image)) {
+					inputMs.MemoryStream.CopyTo(compressionStream);
+				}
 				ret = outputMs.ReadBytes();
 			}
 			return new GZipImageFrame(ret);

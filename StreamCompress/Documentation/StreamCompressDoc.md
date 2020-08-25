@@ -8,6 +8,7 @@
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-UInt32- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.UInt32)')
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-UInt16- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.UInt16)')
   - [AsCompressed(val,maxValue,valueCount)](#M-StreamCompress-Utils-BitAndByteExtensions-AsCompressed-System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsCompressed(System.Byte[],System.Int32,System.Int32)')
+  - [AsDecompressed(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsDecompressed-System-Byte[]- 'StreamCompress.Utils.BitAndByteExtensions.AsDecompressed(System.Byte[])')
   - [AsInt(bytes,offset,count)](#M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsInt(System.Byte[],System.Int32,System.Int32)')
   - [AsUInt16(bytes,offset)](#M-StreamCompress-Utils-BitAndByteExtensions-AsUInt16-System-Byte[],System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsUInt16(System.Byte[],System.Int32)')
   - [Compare(b1,b2)](#M-StreamCompress-Utils-BitAndByteExtensions-Compare-System-Byte[],System-Byte[]- 'StreamCompress.Utils.BitAndByteExtensions.Compare(System.Byte[],System.Byte[])')
@@ -344,6 +345,23 @@ Compress byte array of int values to byte array, which use minimum amount space 
 | maxValue | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
 | valueCount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
 
+<a name='M-StreamCompress-Utils-BitAndByteExtensions-AsDecompressed-System-Byte[]-'></a>
+### AsDecompressed(val) `method`
+
+##### Summary
+
+Decompress bytes compressed by AsCompressed method
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| val | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') |  |
+
 <a name='M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32,System-Int32-'></a>
 ### AsInt(bytes,offset,count) `method`
 
@@ -584,7 +602,7 @@ This method has no parameters.
 
 ##### Summary
 
-Reads all bytes from memory stream
+Reads written bytes from memory stream
 
 ##### Returns
 

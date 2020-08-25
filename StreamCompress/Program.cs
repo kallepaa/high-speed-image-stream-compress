@@ -386,7 +386,7 @@ namespace StreamCompress {
 							 commandResults = SourceLooper<ImageFrame, GZipImageFrame>(cmdArgs, (index, a, image) => {
 								 return image
 								 .AsCroppedImage(a.AsCropSetup())
-								 .AsGZip();
+								 .AsGZipEncoded();
 							 });
 							 break;
 						 case Method.AsGZipDecoded:
@@ -399,7 +399,7 @@ namespace StreamCompress {
 								 return image
 								 .AsCroppedImage(a.AsCropSetup())
 								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full))
-								 .AsGZip();
+								 .AsGZipEncoded();
 							 });
 							 break;
 						 case Method.AsGrayScaleAsGZipDecoded:
@@ -464,6 +464,8 @@ namespace StreamCompress {
 					case Method.AsLZ78Encoded:
 					case Method.AsGrayScaleAsLZ78Encoded:
 					case Method.AsGrayScaleAsHuffmanEncoded:
+					case Method.AsGZipEncoded:
+					case Method.AsGrayScaleAsGZipEncoded:
 						var sfInfo = new FileInfo(sourceFile);
 						var dfInfo = new FileInfo(destFile);
 						var commandResult = new CommandResult {
@@ -477,6 +479,8 @@ namespace StreamCompress {
 					case Method.AsGrayScaleAsHuffmanDecoded:
 					case Method.AsLZ78Decoded:
 					case Method.AsGrayScaleAsLZ78Decoded:
+					case Method.AsGZipDecoded:
+					case Method.AsGrayScaleAsGZipDecoded:
 					default:
 						break;
 				}
