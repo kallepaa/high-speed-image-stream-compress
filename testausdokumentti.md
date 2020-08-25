@@ -33,7 +33,7 @@ Kaikki suorituskykymittauksen tulokset löytyvät [täältä](StreamCompressBenc
  
 Pakkausteho testattiin sekä värikuvalla ja harmaasävyisellä kuvalla, sekä niiden eri kooilla. 
 
-Käytetyt pakkaus metodit olivat
+Käytetyt pakkaus metodit olivat 
 
 **Harmaasävy**
 
@@ -70,5 +70,10 @@ Yksikkötestaukset voidaan ajaa Visual Studion kautta.
 
 #### Suoritusnopeus ja muistinkäyttö
 
-StreamCompressBenchmark kansiossa on oleva komentojonotiedoston ajamalla windows ympäristössä. Vastaa komentojonotiedosto ei valitettavasti ole Linux ja Mac ympäristöihin.
+Ajamalla StreamCompressBenchmark kansiossa oleva run.cmd komentojonotiedosto  windows ympäristössä. Vastaa komentojonotiedostoa ei valitettavasti ole Linux ja Mac ympäristöihin.
+
+#### Pakkausteho
+
+Ajamalla StreamCompress kansiossa oleva run.cmd komentojonotiedosto  windows ympäristössä. Vastaa komentojonotiedostoa ei valitettavasti ole Linux ja Mac ympäristöihin.
+
 
