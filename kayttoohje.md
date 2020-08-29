@@ -7,6 +7,16 @@
 5. Siirry hakemistoon
 6. Aja ohjelma 
 
+## Install .NET Core on Linux
+Ohjeet dotnet asennukseen löytyvät osoitteesta https://docs.microsoft.com/en-us/dotnet/core/install/linux
+
+## Install .NET Core on macOS
+Ohjeet dotnet asennukseen löytyvät osoitteesta https://docs.microsoft.com/en-us/dotnet/core/install/macos
+
+## Install .NET Core on Windows
+Ohjeet dotnet asennukseen löytyvät osoitteesta https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=netcore31
+
+
 ## Miten ohjelma suoritetaan, miten eri toiminnallisuuksia käytetään
 
 Ohjelma suoritetaan komentokehotteesta käynnistämällä ohjelma komennolla *StreamCompress [options]*. Alla listaus ohjelman vastaanottamista syötteistä.
