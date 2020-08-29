@@ -7,6 +7,9 @@
 5. Siirry hakemistoon
 6. Aja ohjelma 
 
+Koneelta tulisi löytyä .Net Core 2.1. runtime. Voit tarkistaa sen komennolla
+dotnet --list-runtimes.
+
 ## Install .NET Core on Linux
 Ohjeet dotnet asennukseen löytyvät osoitteesta https://docs.microsoft.com/en-us/dotnet/core/install/linux
 
