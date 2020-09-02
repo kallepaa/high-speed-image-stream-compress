@@ -7,11 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamCompress", "StreamCom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamCompressTest", "StreamCompressTest\StreamCompressTest.csproj", "{528BD9A3-0680-4362-B963-3275D645C922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamCompressBenchmark", "StreamCompressBenchmark\StreamCompressBenchmark.csproj", "{1C3A7CC6-1B89-46FF-B21B-283743E8CA78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamCompressBenchmark", "StreamCompressBenchmark\StreamCompressBenchmark.csproj", "{1C3A7CC6-1B89-46FF-B21B-283743E8CA78}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9C6D06B2-8627-4955-8CF1-47E3C36CFD11}"
 	ProjectSection(SolutionItems) = preProject
 		Enviroment.cs = Enviroment.cs
+		publish.cmd = publish.cmd
 	EndProjectSection
 EndProject
 Global

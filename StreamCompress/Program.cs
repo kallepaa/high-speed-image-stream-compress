@@ -85,7 +85,11 @@ namespace StreamCompress {
 			/// <summary>
 			/// 64 colors
 			/// </summary>
-			Quarter = 64
+			Quarter = 64,
+			/// <summary>
+			/// 32 colors
+			/// </summary>
+			HalfOfQuarter = 32
 		}
 
 		/// <summary>
@@ -302,7 +306,7 @@ namespace StreamCompress {
 							 commandResults = SourceLooper<ImageFrame, ImageFrameGrayScale>(cmdArgs, (index, a, image) => {
 								 return image
 								 .AsCroppedImage(a.AsCropSetup())
-								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault(GrayScaleColors.Full));
+								 .AsGrayScale((int)a.GrayScaleColors.GetValueOrDefault());
 							 });
 							 break;
 						 case Method.AsGrayScaleAsHuffmanEncoded:
@@ -499,7 +503,7 @@ namespace StreamCompress {
 				var min = Math.Min(SourceBytesLenght, DestinationBytesLenght);
 				var max = Math.Max(SourceBytesLenght, DestinationBytesLenght);
 				if (max > 0) {
-					return Math.Round(((1.00m - min / (decimal)max) * 100.00m), 2);
+					return Math.Round(((min / (decimal)max) * 100.00m), 2);
 				}
 				return null;
 			}

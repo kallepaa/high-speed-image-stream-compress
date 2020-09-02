@@ -21,5 +21,9 @@ namespace StreamCompress.Domain.Image {
 		/// Pixels to crop from bottom
 		/// </summary>
 		public int BottomPx { get; set; }
+
+		public bool IsAnyCropSet() {
+			return LeftPx > 0 || RightPx > 0 || TopPx > 0 || BottomPx > 0;
+		}
 	}
 }

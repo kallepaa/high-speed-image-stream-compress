@@ -1232,6 +1232,11 @@
             64 colors
             </summary>
         </member>
+        <member name="F:StreamCompress.Program.GrayScaleColors.HalfOfQuarter">
+            <summary>
+            32 colors
+            </summary>
+        </member>
         <member name="T:StreamCompress.Program.LZCompressionDictionary">
             <summary>
             LZ compression dictionary types

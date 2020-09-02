@@ -85,6 +85,7 @@
 - [GrayScaleColors](#T-StreamCompress-Program-GrayScaleColors 'StreamCompress.Program.GrayScaleColors')
   - [Full](#F-StreamCompress-Program-GrayScaleColors-Full 'StreamCompress.Program.GrayScaleColors.Full')
   - [Half](#F-StreamCompress-Program-GrayScaleColors-Half 'StreamCompress.Program.GrayScaleColors.Half')
+  - [HalfOfQuarter](#F-StreamCompress-Program-GrayScaleColors-HalfOfQuarter 'StreamCompress.Program.GrayScaleColors.HalfOfQuarter')
   - [Quarter](#F-StreamCompress-Program-GrayScaleColors-Quarter 'StreamCompress.Program.GrayScaleColors.Quarter')
 - [HashTableItem\`1](#T-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1')
   - [#ctor(searchKey,codeWord,m)](#M-StreamCompress-Domain-LZ-HashTable`1-HashTableItem`1-#ctor-System-Byte[],`1,System-Int32- 'StreamCompress.Domain.LZ.HashTable`1.HashTableItem`1.#ctor(System.Byte[],`1,System.Int32)')
@@ -1401,6 +1402,13 @@ Gray scale image color counts
 ##### Summary
 
 128 colors
+
+<a name='F-StreamCompress-Program-GrayScaleColors-HalfOfQuarter'></a>
+### HalfOfQuarter `constants`
+
+##### Summary
+
+32 colors
 
 <a name='F-StreamCompress-Program-GrayScaleColors-Quarter'></a>
 ### Quarter `constants`

@@ -1,0 +1,80 @@
+cd T:\Users\Kalle\Documents\Source\Opiskelu\high-speed-image-stream-compress\Publish\win-x64
+set testData=T:\Temp\Demo
+
+dotnet StreamCompress.dll -h
+
+* Useamman kuvan koodaus yhdellä komennolla. --start-index --count
+* Kuvan kroppaus 
+  --crop-left-px <crop-left-px>                                                                                                                                                                   
+  --crop-right-px <crop-right-px>                                                                                                                                                                 
+  --crop-top-px <crop-top-px>
+  --crop-bottom-px <crop-bottom-px>
+
+* Harmaasävymuunnos
+AsGrayScale
+
+Harmaasävyjen määrä
+--gray-scale-colors <Full|Half|Quarter>
+
+GZip koodaukset vertailuja varten
+
+AsGrayScaleAsGZipDecoded
+AsGrayScaleAsGZipEncoded
+AsGZipDecoded
+AsGZipEncoded
+
+Huffman koodaus vain harmaasävyiset kuvat
+AsGrayScaleAsHuffmanDecoded
+AsGrayScaleAsHuffmanEncoded
+
+LZ78 koodaus väri ja harmaasävykuvat + eri hakemistot HashTable (prime), Trie (dynaaminen), Trie256 (staattinen)
+AsGrayScaleAsLZ78Decoded
+AsGrayScaleAsLZ78Encoded
+AsLZ78Decoded
+AsLZ78Encoded
+
+Demokäskyt
+
+Harmaasävy
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-full.bmp --method AsGrayScale --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-half.bmp --method AsGrayScale --gray-scale-colors Half --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-quarter.bmp --method AsGrayScale --gray-scale-colors Quarter --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-half-of-quarter.bmp --method AsGrayScale --gray-scale-colors HalfOfQuarter --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+
+Harmaasävy kropattuna
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-as-cropped-full.bmp --method AsGrayScale --crop-left-px 432 --crop-right-px 464 --crop-top-px 16 --crop-bottom-px 96 --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+
+Harmaasävy enkoodaus ja dekoodaus
+Huffman
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-huffman-encoded --method AsGrayScaleAsHuffmanEncoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --source-file-suffix as-gray-scale-huffman-encoded --destination-file-suffix as-gray-scale-huffman-decoded.bmp --method AsGrayScaleAsHuffmanDecoded --source-path %testData% --destination-path %testData%
+
+LZ78
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-lz78-encoded --method AsGrayScaleAsLZ78Encoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --source-file-suffix as-gray-scale-lz78-encoded --destination-file-suffix as-gray-scale-lz78-decoded.bmp --method AsGrayScaleAsLZ78Decoded --source-path %testData% --destination-path %testData%
+
+GZip
+dotnet StreamCompress.dll --destination-file-suffix as-gray-scale-gzip-encoded --method AsGrayScaleAsGzipEncoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --source-file-suffix as-gray-scale-gzip-encoded --destination-file-suffix as-gray-scale-gzip-decoded.bmp --method AsGrayScaleAsGzipDecoded --source-path %testData% --destination-path %testData%
+
+Värikuva enkoodaus ja dekoodaus
+
+LZ78
+Hashtable
+dotnet StreamCompress.dll --lz-compression-dictionary HashTable --lz-compression-hash-table-prime 12289  --destination-file-suffix lz78-hash-table-encoded --method AsLZ78Encoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --lz-compression-dictionary HashTable --lz-compression-hash-table-prime 12289  --source-file-suffix lz78-hash-table-encoded --destination-file-suffix lz78-hash-table-decoded.bmp --method AsLZ78Decoded --source-path %testData% --destination-path %testData%
+
+Trie
+dotnet StreamCompress.dll --lz-compression-dictionary Trie --lz-compression-trie-initial-capacity 1  --destination-file-suffix lz78-trie-encoded --method AsLZ78Encoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --lz-compression-dictionary Trie --lz-compression-trie-initial-capacity 1  --source-file-suffix lz78-trie-encoded --destination-file-suffix lz78-trie-decoded.bmp --method AsLZ78Decoded --source-path %testData% --destination-path %testData%
+
+Trie256
+dotnet StreamCompress.dll --lz-compression-dictionary Trie256 --destination-file-suffix lz78-trie-256-encoded --method AsLZ78Encoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --lz-compression-dictionary Trie256 --source-file-suffix lz78-trie-256-encoded --destination-file-suffix lz78-trie-256-decoded.bmp --method AsLZ78Decoded --source-path %testData% --destination-path %testData%
+
+GZip
+dotnet StreamCompress.dll --destination-file-suffix gzip-encoded --method AsGzipEncoded --source-path %testData% --source-file-suffix original.bmp --destination-path %testData%
+dotnet StreamCompress.dll --source-file-suffix gzip-encoded --destination-file-suffix gzip-decoded.bmp --method AsGzipDecoded --source-path %testData% --destination-path %testData%
+
+
+

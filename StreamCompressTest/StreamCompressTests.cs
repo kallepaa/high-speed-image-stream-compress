@@ -14,6 +14,7 @@ using System.Text;
 using Xunit;
 using StreamCompress.Shared;
 using StreamCompress.DomainExtensions.GZip;
+using static StreamCompress.Program;
 
 namespace StreamCompressTest {
 	public class StreamCompressTests {
@@ -439,6 +440,19 @@ namespace StreamCompressTest {
 			}
 
 
+			[Theory]
+			[InlineData(GrayScaleColors.Full)]
+			[InlineData(GrayScaleColors.Half)]
+			[InlineData(GrayScaleColors.Quarter)]
+			public void AsGrayScale(GrayScaleColors color) {
+				var i = 1;
+				var sourceFile = Common.GetSourceImagePath(i);
+				var image = ImageFrame
+					.FromFile(sourceFile)
+					.AsGrayScale((int)color);
+			}
+
+
 		}
 
 		public class ByteAndBitOperationTests {
@@ -544,22 +558,27 @@ namespace StreamCompressTest {
 			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie)]
 			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "as-lz78-dic-trie-256-encoded", false, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
 			[InlineData(Program.Method.AsLZ78Encoded, Common.SOURCE_FILE_SUFFIX, "cropped-as-lz78-dic-trie-256-encoded", true, Program.Method.AsLZ78Decoded, Program.LZCompressionDictionary.Trie256)]
+			[InlineData(Program.Method.AsGrayScale, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-full.bmp", false, null, null, GrayScaleColors.Full)]
+			[InlineData(Program.Method.AsGrayScale, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-half.bmp", false, null, null, GrayScaleColors.Half)]
+			[InlineData(Program.Method.AsGrayScale, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-quarter.bmp", false, null, null, GrayScaleColors.Quarter)]
+			[InlineData(Program.Method.AsGrayScale, Common.SOURCE_FILE_SUFFIX, "as-gray-scale-half-ofquarter.bmp", false, null, null, GrayScaleColors.HalfOfQuarter)]
 			public void AllMethods(
 				Program.Method method,
 				string sourceFileSuffix,
 				string destinationFileSuffix,
 				bool crop = false,
 				Program.Method? decodeMethod = null,
-				Program.LZCompressionDictionary? compDic = null) {
+				Program.LZCompressionDictionary? compDic = null,
+				GrayScaleColors? colors = null) {
 
 				var sourcePath = Common.GetSourcePath();
 				var destinationPath = Common.GetDestinationPath();
 
 
-				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop, compDic);
+				_allMethods(method, sourcePath, sourceFileSuffix, destinationPath, destinationFileSuffix, crop, compDic, colors);
 
 				if (decodeMethod.HasValue) {
-					_allMethods(decodeMethod.Value, destinationPath, destinationFileSuffix, destinationPath, destinationFileSuffix + "-decoded.bmp", false, compDic);
+					_allMethods(decodeMethod.Value, destinationPath, destinationFileSuffix, destinationPath, destinationFileSuffix + "-decoded.bmp", false, compDic, colors);
 				}
 			}
 
@@ -570,7 +589,8 @@ namespace StreamCompressTest {
 				string destinationPath,
 				string destinationFileSuffix,
 				bool crop = false,
-				Program.LZCompressionDictionary? compDic = null
+				Program.LZCompressionDictionary? compDic = null,
+				GrayScaleColors? colors = null
 				) {
 
 				var args = new List<string> {
@@ -590,12 +610,14 @@ namespace StreamCompressTest {
 					method.ToString()
 				};
 
+
+
 				if (compDic.HasValue) {
 					args.AddRange(new[] { "--lz-compression-dictionary", compDic.Value.ToString() });
 
 					switch (compDic.Value) {
 						case Program.LZCompressionDictionary.HashTable:
-							args.AddRange(new[] { "--lz-compression-dictionary", "12289" });
+							args.AddRange(new[] { "--lz-compression-hash-table-prime", "12289" });
 							break;
 						case Program.LZCompressionDictionary.Trie:
 							args.AddRange(new[] { "--lz-compression-trie-initial-capacity", "1" });
@@ -606,6 +628,10 @@ namespace StreamCompressTest {
 							throw new ArgumentException();
 					}
 
+				}
+
+				if (colors.HasValue) {
+					args.AddRange(new[] { "--gray-scale-colors", colors.Value.ToString() });
 				}
 
 				switch (method) {

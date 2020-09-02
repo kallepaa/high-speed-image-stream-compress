@@ -74,7 +74,8 @@ namespace StreamCompress.DomainExtensions.Image {
 					var blue = image.Image[pixelPos];
 					var red = image.Image[pixelPos + 2];
 					var grayIndex = (int)(red * redLinear + green * greenLinear + blue * blueLinear);
-					grayIndex -= (grayIndex % colorCount);
+					var mod = (grayIndex % colorCount);
+					grayIndex -= mod;
 					var grayIndexByte = (byte)grayIndex;
 					newImage[destIndex++] = grayIndexByte;
 				}
@@ -95,6 +96,11 @@ namespace StreamCompress.DomainExtensions.Image {
 		/// <param name="cropSetup">Crop setup</param>
 		/// <returns>Cropped image</returns>
 		public static ImageFrame AsCroppedImage(this ImageFrame image, CropSetup cropSetup) {
+
+			if (!cropSetup.IsAnyCropSet()) {
+				return image;
+			}
+
 			var newWidthPx = image.ImageWidthPx - cropSetup.LeftPx - cropSetup.RightPx;
 			var newHeightPx = image.ImageHeightPx - cropSetup.TopPx - cropSetup.BottomPx;
 
