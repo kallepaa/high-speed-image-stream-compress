@@ -10,6 +10,10 @@ Yksikkötestaukseen on käytetty XUnit testauskehikkoa. Yksikkötestauksissa tes
 
 ReportGenerator tallensin raportin ulkoasun tiedostot hakemistoon *coveragereport*, jonka voi katsella <a href="https://htmlpreview.github.io/?https://github.com/kallepaa/high-speed-image-stream-compress/blob/master/StreamCompressTest/coveragereport/index.html" target="_blank">tästä linkistä</a>
 
+Testejä yhteensä 84 ja kattavuus ~ 97 %
+
+![Yksikkötestit](yksikko-testit.png) Yksikkötestit
+
 ### Suorituskykytestaus
 
 Suorituskykytestauksissa vertailuna käytettiin .Net Core Frameworkin omaa GZip toteutusta, jonka on ohjelmassa yhtenä pakkausvaihtoehtona.

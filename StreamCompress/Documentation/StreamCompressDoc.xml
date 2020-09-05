@@ -674,6 +674,11 @@
             Pixels to crop from bottom
             </summary>
         </member>
+        <member name="M:StreamCompress.Domain.Image.CropSetup.IsAnyCropSet">
+            <summary>
+            Returns true when any of crop values is set greater than 0
+            </summary>
+        </member>
         <member name="T:StreamCompress.Domain.Image.ImageFrame">
             <summary>
             Presents single image frame 
@@ -1422,6 +1427,14 @@
             <param name="offset">Source offset</param>
             <returns>4 bytes as 16 bit integer</returns>
         </member>
+        <member name="M:StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.Int32,System.Int32)">
+            <summary>
+            Converts int 32 bit value as byte array which lenght is defined in given count of bytes param
+            </summary>
+            <param name="val">Int 32 val</param>
+            <param name="countOfBytes">Lenght of return byte array</param>
+            <returns>Byte array</returns>
+        </member>
         <member name="M:StreamCompress.Utils.BitAndByteExtensions.CopyBytesTo(System.Byte[],System.Int32,System.Byte[])">
             <summary>
             Copies bytes from source to destionation array
@@ -1491,6 +1504,11 @@
         <member name="T:StreamCompress.Utils.ByteMemoryStream">
             <summary>
             Wraps MemoryStream 
+            </summary>
+        </member>
+        <member name="F:StreamCompress.Utils.ByteMemoryStream.MemoryStream">
+            <summary>
+            MemoryStream 
             </summary>
         </member>
         <member name="M:StreamCompress.Utils.ByteMemoryStream.#ctor(System.Int32)">

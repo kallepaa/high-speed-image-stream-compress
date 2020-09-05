@@ -7,6 +7,7 @@
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.Int32)')
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-UInt32- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.UInt32)')
   - [AsBytes(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-UInt16- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.UInt16)')
+  - [AsBytes(val,countOfBytes)](#M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsBytes(System.Int32,System.Int32)')
   - [AsCompressed(val,maxValue,valueCount)](#M-StreamCompress-Utils-BitAndByteExtensions-AsCompressed-System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsCompressed(System.Byte[],System.Int32,System.Int32)')
   - [AsDecompressed(val)](#M-StreamCompress-Utils-BitAndByteExtensions-AsDecompressed-System-Byte[]- 'StreamCompress.Utils.BitAndByteExtensions.AsDecompressed(System.Byte[])')
   - [AsInt(bytes,offset,count)](#M-StreamCompress-Utils-BitAndByteExtensions-AsInt-System-Byte[],System-Int32,System-Int32- 'StreamCompress.Utils.BitAndByteExtensions.AsInt(System.Byte[],System.Int32,System.Int32)')
@@ -22,6 +23,7 @@
 - [ByteMemoryStream](#T-StreamCompress-Utils-ByteMemoryStream 'StreamCompress.Utils.ByteMemoryStream')
   - [#ctor(initialSize)](#M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Int32- 'StreamCompress.Utils.ByteMemoryStream.#ctor(System.Int32)')
   - [#ctor(buffer)](#M-StreamCompress-Utils-ByteMemoryStream-#ctor-System-Byte[]- 'StreamCompress.Utils.ByteMemoryStream.#ctor(System.Byte[])')
+  - [MemoryStream](#F-StreamCompress-Utils-ByteMemoryStream-MemoryStream 'StreamCompress.Utils.ByteMemoryStream.MemoryStream')
   - [AddBytes(bytes)](#M-StreamCompress-Utils-ByteMemoryStream-AddBytes-System-Byte[]- 'StreamCompress.Utils.ByteMemoryStream.AddBytes(System.Byte[])')
   - [Dispose()](#M-StreamCompress-Utils-ByteMemoryStream-Dispose 'StreamCompress.Utils.ByteMemoryStream.Dispose')
   - [ReadBytes()](#M-StreamCompress-Utils-ByteMemoryStream-ReadBytes 'StreamCompress.Utils.ByteMemoryStream.ReadBytes')
@@ -46,6 +48,7 @@
   - [LeftPx](#P-StreamCompress-Domain-Image-CropSetup-LeftPx 'StreamCompress.Domain.Image.CropSetup.LeftPx')
   - [RightPx](#P-StreamCompress-Domain-Image-CropSetup-RightPx 'StreamCompress.Domain.Image.CropSetup.RightPx')
   - [TopPx](#P-StreamCompress-Domain-Image-CropSetup-TopPx 'StreamCompress.Domain.Image.CropSetup.TopPx')
+  - [IsAnyCropSet()](#M-StreamCompress-Domain-Image-CropSetup-IsAnyCropSet 'StreamCompress.Domain.Image.CropSetup.IsAnyCropSet')
 - [Extensions](#T-StreamCompress-DomainExtensions-GZip-Extensions 'StreamCompress.DomainExtensions.GZip.Extensions')
 - [Extensions](#T-StreamCompress-DomainExtensions-Huffman-Extensions 'StreamCompress.DomainExtensions.Huffman.Extensions')
 - [Extensions](#T-StreamCompress-DomainExtensions-Image-Extensions 'StreamCompress.DomainExtensions.Image.Extensions')
@@ -327,6 +330,24 @@ Value as byte array
 | ---- | ---- | ----------- |
 | val | [System.UInt16](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.UInt16 'System.UInt16') | Value |
 
+<a name='M-StreamCompress-Utils-BitAndByteExtensions-AsBytes-System-Int32,System-Int32-'></a>
+### AsBytes(val,countOfBytes) `method`
+
+##### Summary
+
+Converts int 32 bit value as byte array which lenght is defined in given count of bytes param
+
+##### Returns
+
+Byte array
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| val | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Int 32 val |
+| countOfBytes | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Lenght of return byte array |
+
 <a name='M-StreamCompress-Utils-BitAndByteExtensions-AsCompressed-System-Byte[],System-Int32,System-Int32-'></a>
 ### AsCompressed(val,maxValue,valueCount) `method`
 
@@ -574,6 +595,13 @@ Constructor for new memory stream
 | ---- | ---- | ----------- |
 | buffer | [System.Byte[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Byte[] 'System.Byte[]') | Initial data |
 
+<a name='F-StreamCompress-Utils-ByteMemoryStream-MemoryStream'></a>
+### MemoryStream `constants`
+
+##### Summary
+
+MemoryStream
+
 <a name='M-StreamCompress-Utils-ByteMemoryStream-AddBytes-System-Byte[]-'></a>
 ### AddBytes(bytes) `method`
 
@@ -767,6 +795,17 @@ Pixels to crop from right
 ##### Summary
 
 Pixels to crop from top
+
+<a name='M-StreamCompress-Domain-Image-CropSetup-IsAnyCropSet'></a>
+### IsAnyCropSet() `method`
+
+##### Summary
+
+Returns true when any of crop values is set greater than 0
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-StreamCompress-DomainExtensions-GZip-Extensions'></a>
 ## Extensions `type`
