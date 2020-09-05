@@ -88,6 +88,16 @@ Trie algoritmin totetukseen käytin Youtube videota [Trie], jossa kuvattiin Trie
 
 ## Suorituskyky- ja O-analyysivertailu (mikäli työ vertailupainotteinen)
 
+Määrittelyssä asetettiin tavoitteeksi, että yhden kuvan dekoodaaminen kestäisi alle 1 / 120 sek (~ 8.3 ms) ja käytännössä tätä nopeammin. Määrittelyssä ei ollut erikseen mainittu pakkaustehosta mitään, mutta toki senkin pitäisi liikkua jossain 40 - 60 % paikkeilla, jotta pakkaamisesta olisi jotain merkitystä.
+
+Huffman koodauksen pakkausteho liikkui 90 - 95  % paikkeilla kun taas LZ78 koodauksella päästiin 75 %.
+Toisaalta vertailuna käytetyööä .Net Core GZip pakkauksellakaan ei päästy alle 60% pakkaustehoihin testausaineistolla.
+
+Nopeudessa Huffman koodaus parempi kuin LZ78, vaikka LZ78 toteutettiin useampi hakemistototeutus. Kun harmaasävyinen kuva kropattiin 16 * 16 px jokaisesta suunnasta ja kuvan koko kroppauksen jälkeen oli 768 x 208 niin enkoodaus aika oli ~ 8 ms. GZip suoriutui vastaavasta syötteestä ajassa ~ 6 ms kuitenkin käyttäen enemmän muistia. LZ78 pakkaus hashtable hakemistototeutuksella suoritui 578 x 16 kuvasta ajassa  ~ 2 ms kun muissa tapauksissa aika oli ~ 20 ms tai enemmän.
+
+Kaikki suorituskykymittauksen tulokset löytyvät [täältä](StreamCompressBenchmark/results/StreamCompressBenchmark.report-github.md)
+
+Tavoitteiden kannalta merkittävin hyöty saatiin kuvan yksikertaisella kroppaamisella, jossa alkuperäisestä kuvasta säilytettiin vain oleellinen alue. Lisäksi kuvan muuntaminen harmaasävyiseksi pienentää kuvaa suoraan ~ 1 / 3 osaan kun yhden pikselin tiedon tallentamiseen käytetään vain 8 bittiä 24 bitin sijaan.
 
 ## Työn mahdolliset puutteet ja parannusehdotukset
 

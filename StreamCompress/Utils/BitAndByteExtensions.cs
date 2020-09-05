@@ -91,6 +91,12 @@ namespace StreamCompress.Utils {
 			return BitConverter.ToUInt16(bytes, offset);
 		}
 
+		/// <summary>
+		/// Converts int 32 bit value as byte array which lenght is defined in given count of bytes param
+		/// </summary>
+		/// <param name="val">Int 32 val</param>
+		/// <param name="countOfBytes">Lenght of return byte array</param>
+		/// <returns>Byte array</returns>
 		public static byte[] AsBytes(this int val, int countOfBytes) {
 
 			if (val < 0) {
